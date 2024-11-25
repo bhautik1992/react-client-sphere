@@ -41,7 +41,7 @@ export const ApiEndPoints = {
     trainingDetail: `admin/training/details`
   },
   dashboard: {
-    dashboardCount: `admin/count`
+    dashboardCount: `dashboard/count`
   },
   cms: {
     cmsList: `cms`,
@@ -49,7 +49,7 @@ export const ApiEndPoints = {
     cmsEdit: `cms/update`
   },
   profile: {
-    profileDetail: `user/get`,
+    profileDetail: `dashboard/user-profile`,
     editProfile: `user/update`
   },
   resource: {

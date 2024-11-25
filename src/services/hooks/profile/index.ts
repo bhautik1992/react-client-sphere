@@ -3,9 +3,9 @@ import { profileAPI } from 'services/api/profile';
 import { useFetch, useRequest } from '..';
 import { profileKey } from '../queryKeys';
 
-export const useProfileDetail = (id: number) => {
+export const useProfileDetail = () => {
   return useFetch({
-    queryFn: () => profileAPI.profileDetail(id),
+    queryFn: () => profileAPI.profileDetail(),
     queryKey: profileKey.profileDetail,
     queryOptions: {
       staleTime: Infinity

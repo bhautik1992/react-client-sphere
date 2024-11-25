@@ -4,9 +4,9 @@ import apiInstance from '..';
 import { IProfileEditReq, IProfileRes } from './types';
 
 export const profileAPI = {
-  async profileDetail(id: number): Promise<IProfileRes> {
+  async profileDetail(): Promise<IProfileRes> {
     return apiInstance
-      .get(`${ApiEndPoints.profile.profileDetail}/${id}`)
+      .get(`${ApiEndPoints.profile.profileDetail}`)
       .then((response) => {
         return response?.data;
       })

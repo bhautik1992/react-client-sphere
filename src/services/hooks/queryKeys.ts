@@ -1,5 +1,4 @@
 import { IConsentFormListReq } from 'services/api/consentForm/types';
-import { IDashboardReq } from 'services/api/dashboard/types';
 import { IIncidentReq } from 'services/api/incident/type';
 import { IResourceReq } from 'services/api/resources/types';
 import { ITrainingReq } from 'services/api/training/types';
@@ -83,11 +82,7 @@ export const trainingKeys = {
 };
 
 export const dashboardKey = {
-  dashboardCount: (data: IDashboardReq) => [
-    `dashboard-count`,
-    `${data?.endDate}`,
-    `${data?.startDate}`
-  ]
+  dashboardCount: [`dashboard-count`]
 };
 
 export const cmsKey = {

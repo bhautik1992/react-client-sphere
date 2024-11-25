@@ -1,13 +1,11 @@
 import { Wrapper } from './style';
 
 import { Button, Col, Row } from 'antd';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
 import { useProfileDetail } from 'services/hooks/profile';
-import { authStore } from 'services/store/auth';
 
 import { ROUTES } from 'utils/constants/routes';
 
@@ -19,15 +17,7 @@ const BreadcrumbsPath = [
 
 const MyProfile = () => {
   const navigate = useNavigate();
-  const { userData } = authStore((state) => state);
-  // const { data } = useProfileDetail(userData.id);
-  const { data } = useProfileDetail(userData?.id);
-
-  useEffect(() => {
-    if (userData) {
-      console.log('User data:', userData);
-    }
-  }, [userData]);
+  const { data } = useProfileDetail();
 
   return (
     <Wrapper>

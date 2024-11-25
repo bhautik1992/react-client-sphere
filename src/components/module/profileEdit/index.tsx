@@ -19,8 +19,7 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { actions, userData } = authStore.getState();
-  console.log('userData: ', userData);
-  const { data } = useProfileDetail(userData.id);
+  const { data } = useProfileDetail();
   const { mutate } = useProfileEdit();
 
   useEffect(() => {

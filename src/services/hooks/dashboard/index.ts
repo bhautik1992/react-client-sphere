@@ -1,13 +1,12 @@
 import { dashboardAPI } from 'services/api/dashboard';
-import { IDashboardReq } from 'services/api/dashboard/types';
 
 import { useFetch } from '..';
 import { dashboardKey } from '../queryKeys';
 
-export const useDashboard = (data: IDashboardReq) => {
+export const useDashboard = () => {
   return useFetch({
-    queryFn: () => dashboardAPI.dashboardCount(data),
-    queryKey: dashboardKey.dashboardCount(data),
+    queryFn: () => dashboardAPI.dashboardCount(),
+    queryKey: dashboardKey.dashboardCount,
     queryOptions: {
       staleTime: Infinity,
       refetchInterval: 10 * 60 * 1000, // 10 minutes

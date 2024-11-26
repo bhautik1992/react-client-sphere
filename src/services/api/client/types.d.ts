@@ -28,7 +28,7 @@ export interface IClient {
 
 export interface IClientReq {
   limit: number;
-  page: number;
+  offset: number;
   search?: string;
   sortOrder?: Key;
   sortBy?: Key;
@@ -42,6 +42,11 @@ export interface IAddClientReq {
   country: string;
   status: string;
   address: string;
+}
+
+export interface IClientRes {
+  result: IClient[];
+  recordsTotal: number;
 }
 
 export interface IAddClientRes {}

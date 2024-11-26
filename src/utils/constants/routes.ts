@@ -13,15 +13,15 @@ export const ROUTES = {
   clientManagement: `/clients`,
   clientView: `/clients/view-client`,
 
+  usersManagement: `/users-management`,
+  usersView: `/users-management/view-user`,
+  usersEdit: `/users-management/edit-user`,
+  usersAdd: `/users-management/add-user`,
+
   trainingMangement: `/training-management`,
   trainingView: `/training-management/view-training`,
   trainingAdd: `/training-management/add-training`,
   trainingEdit: `/training-management/edit-training`,
-
-  resourcesMangement: `/resources-management`,
-  resourcesView: `/resources-management/view-resource`,
-  resourcesEdit: `/resources-management/edit-resource`,
-  resourcesAdd: `/resources-management/add-resource`,
 
   dynamicPath: (path: string) => `/static-path/${path}`
 };

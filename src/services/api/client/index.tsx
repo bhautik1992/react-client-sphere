@@ -7,12 +7,13 @@ import {
   IAddClientRes,
   IClient,
   IClientReq,
+  IClientRes,
   IClientStatusReq,
   IEditClientReq
 } from './types';
 
 export const clientAPI = {
-  async clientList(data: IClientReq): Promise<IClient[]> {
+  async clientList(data: IClientReq): Promise<IClientRes> {
     return apiInstance
       .post(ApiEndPoints.client.clientList, data)
       .then((response) => {

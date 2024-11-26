@@ -2,12 +2,12 @@ import { IApiSuccess } from 'utils/Types';
 import { ApiEndPoints } from 'utils/constants';
 
 import apiInstance from '..';
-import { IResourceDetailRes, IResourceReq, IResourceRes, IResourceTypeRes } from './types';
+import { IAddUserReq, IAddUserRes, IEditUserReq, IUser, IUserReq, IUserRes } from './types';
 
-export const resourceAPI = {
-  async resourceList(data: IResourceReq): Promise<IResourceRes> {
+export const userAPI = {
+  async userList(data: IUserReq): Promise<IUserRes> {
     return apiInstance
-      .post(ApiEndPoints.resource.resourceList, data)
+      .post(ApiEndPoints.user.userList, data)
       .then((response) => {
         return response?.data;
       })
@@ -16,9 +16,9 @@ export const resourceAPI = {
       });
   },
 
-  async resourceDetail(id: string): Promise<IResourceDetailRes> {
+  async userDetail(id: number): Promise<IUser> {
     return apiInstance
-      .get(`${ApiEndPoints.resource.resourceDetail}/${id}`)
+      .get(`${ApiEndPoints.user.userDetail}/${id}`)
       .then((response) => {
         return response?.data;
       })
@@ -27,9 +27,9 @@ export const resourceAPI = {
       });
   },
 
-  async deleteResource(id: string): Promise<IApiSuccess<string>> {
+  async deleteUser(id: number): Promise<IApiSuccess<string>> {
     return apiInstance
-      .delete(`${ApiEndPoints.resource.resourceDelete}/${id}`)
+      .delete(`${ApiEndPoints.user.userDelete}/${id}`)
       .then((response) => {
         return response?.data;
       })
@@ -38,9 +38,9 @@ export const resourceAPI = {
       });
   },
 
-  async addEditResource(data: any): Promise<string> {
+  async addUser(data: IAddUserReq): Promise<IAddUserRes> {
     return apiInstance
-      .post(ApiEndPoints.resource.resourceAddEdit, data)
+      .post(ApiEndPoints.user.userAdd, data)
       .then((response) => {
         return response?.data;
       })
@@ -49,9 +49,9 @@ export const resourceAPI = {
       });
   },
 
-  async resourceTypeList(): Promise<IResourceTypeRes> {
+  async editUser(data: IEditUserReq): Promise<IAddUserRes> {
     return apiInstance
-      .post(ApiEndPoints.resource.resourceTypeList)
+      .post(`${ApiEndPoints.user.userEdit}/${data.id}`, data)
       .then((response) => {
         return response?.data;
       })

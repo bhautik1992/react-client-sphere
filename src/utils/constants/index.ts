@@ -29,18 +29,18 @@ export const ApiEndPoints = {
     addClient: `client/create`,
     editClient: `client/update`
   },
+  user: {
+    userList: `user/list`,
+    userDetail: `user/get`,
+    userAdd: `user/create`,
+    userEdit: `user/update`,
+    userDelete: `user/delete`
+  },
   training: {
     trainingList: `admin/training/list-training`,
     addTraining: `admin/training/add-training`,
     editTraining: `admin/training/edit-training`,
     deleteTraining: `admin/training/delete`,
     trainingDetail: `admin/training/details`
-  },
-  resource: {
-    resourceList: `admin/resource/list-resource`,
-    resourceDetail: `admin/resource/details`,
-    resourceAddEdit: `admin/resource/add-edit-resource`,
-    resourceDelete: `admin/resource/delete`,
-    resourceTypeList: `admin/resource/resource-type-list`
   }
 };

@@ -1,6 +1,6 @@
 import { IClientReq } from 'services/api/client/types';
-import { IResourceReq } from 'services/api/resources/types';
 import { ITrainingReq } from 'services/api/training/types';
+import { IUserReq } from 'services/api/users/types';
 
 export const authKeys = {
   authMutate: ['auth-mutate-key'],
@@ -13,7 +13,7 @@ export const clientKeys = {
   clientList: (data: IClientReq) => [
     `client-list`,
     `${data?.limit}`,
-    `${data?.page}`,
+    `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`
@@ -48,18 +48,17 @@ export const profileKey = {
   profileEdit: [`profile-edit`]
 };
 
-export const resourceKeys = {
-  resourceList: (data: IResourceReq) => [
-    `resource-list`,
+export const userKeys = {
+  userList: (data: IUserReq) => [
+    `user-list`,
     `${data?.limit}`,
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`
   ],
-  resourceDetail: (id: string) => [`resource-detail-${id}`],
-  resourceDelete: [`resource-delete`],
-  resourceAddEdit: [`add-edit-resource`],
-  resourceTypeList: [`resource-type-list`],
-  resourceImage: [`resource-image`]
+  userDetail: (id: number) => [`user-detail-${id}`],
+  userDelete: [`user-delete`],
+  userAdd: [`add-user`],
+  userEdit: [`edit-user`]
 };

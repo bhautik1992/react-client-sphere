@@ -8,7 +8,7 @@ export const DetailWrapper = styled.div`
   &.userDetail {
     margin-top: 60px;
   }
-  .incidentRow {
+  .userRow {
     justify-content: space-between;
     h4 {
       margin-bottom: 5px;
@@ -25,9 +25,6 @@ export const DetailWrapper = styled.div`
       font-style: normal;
       font-weight: 500;
       line-height: 22px;
-    }
-    .ant-image {
-      margin-right: 15px;
     }
   }
 `;

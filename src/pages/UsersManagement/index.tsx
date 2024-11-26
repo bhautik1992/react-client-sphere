@@ -3,29 +3,28 @@ import { Wrapper } from './style';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Form } from 'antd';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import useDebounce from '../../components/common/useDebounce';
 import { RenderTextInput } from 'components/common/FormField';
+import AddEditUserModal from 'components/common/Modal/AddUserModal';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
-import ResourcesManagementTable from 'components/module/resourcesManagement/ResourcesManagementTable';
+import UsersManagementTable from 'components/module/usersManagement/UsersManagementTable';
 
-import { IResourceReq } from 'services/api/resources/types';
-
-import { ROUTES } from 'utils/constants/routes';
+import { IUserReq } from 'services/api/users/types';
 
 const BreadcrumbsPath = [
   {
-    title: 'Resources Management'
+    title: 'Users Management'
   }
 ];
 
-const ResourcesManagement = () => {
+const UsersManagement = () => {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [args, setArgs] = useState<IResourceReq>({
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const [args, setArgs] = useState<IUserReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
@@ -36,7 +35,6 @@ const ResourcesManagement = () => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-
     setArgs((prev) => ({ ...prev, offset: 0 }));
   };
 
@@ -45,26 +43,29 @@ const ResourcesManagement = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">Resources Management</h2>
+          <h2 className="pageTitle">User Management</h2>
           <div className="pageHeaderButton">
             <Form form={form}>
               <RenderTextInput
                 size="middle"
-                placeholder="Search resources"
+                placeholder="Search user"
                 allowClear
                 prefix={<SearchOutlined style={{ color: '#0000ff' }} />}
                 onChange={onChange}
               />
             </Form>
-            <Button type="primary" onClick={() => navigate(ROUTES.resourcesAdd)}>
-              Add New
+            <Button type="primary" onClick={() => setIsOpen(true)}>
+              Add User
             </Button>
           </div>
         </div>
-        <ResourcesManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
+        <UsersManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
       </div>
+      {isOpen && (
+        <AddEditUserModal isOpen={Boolean(isOpen)} setIsOpen={(flag) => setIsOpen(!!flag)} />
+      )}
     </Wrapper>
   );
 };
 
-export default ResourcesManagement;
+export default UsersManagement;

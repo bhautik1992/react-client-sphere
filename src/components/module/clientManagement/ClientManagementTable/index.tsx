@@ -171,18 +171,18 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
         bordered
         columns={columns}
         dataSource={
-          (clientList ?? []).length > 0
-            ? clientList?.map((item) => ({ ...item, key: item.id }))
+          (clientList?.result ?? []).length > 0
+            ? clientList?.result.map((item) => ({ ...item, key: item.id }))
             : []
         }
-        currentPage={args.page === 0 ? 1 : args.page / 10 + 1}
+        currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
         onChange={(pagination, _, sorter, extra) => {
           const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
           const pageIndex = pagination?.current ?? 1;
           if (extra?.action === 'paginate') {
             setArgs({
               ...args,
-              page: (pageIndex - 1) * (pagination?.pageSize ?? 10),
+              offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
               limit: pagination?.pageSize ?? 10
             });
           } else {
@@ -190,13 +190,12 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
               ...args,
               sortBy: order ? columnKey : '',
               sortOrder: order?.replace('end', '') ?? '',
-              page: (pageIndex - 1) * args.limit
+              offset: (pageIndex - 1) * args.limit
             });
           }
         }}
         loading={isLoading}
-        total={clientList?.length ?? 10}
-        scroll={{ x: true }}
+        total={clientList?.recordsTotal ?? 10}
       />
       {isOpen && (
         <AddClientModal

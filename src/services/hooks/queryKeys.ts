@@ -1,53 +1,12 @@
 import { IClientReq } from 'services/api/client/types';
-import { IConsentFormListReq } from 'services/api/consentForm/types';
-import { IIncidentReq } from 'services/api/incident/type';
 import { IResourceReq } from 'services/api/resources/types';
 import { ITrainingReq } from 'services/api/training/types';
-import { IUserListReq } from 'services/api/user/types';
 
 export const authKeys = {
   authMutate: ['auth-mutate-key'],
   authForgotPsw: [`auth-forgot-password`],
   authResetPsw: [`auth-reset-password`],
   authChangePsw: [`auth-change-password`]
-};
-
-export const userKeys = {
-  userList: (data: IUserListReq) => [
-    `user-list-${data.offset ?? 0}`,
-    `${data.limit}`,
-    `${data.search ?? ''}`,
-    `${data.sortBy ?? ''}`,
-    `${data.sortOrder ?? ''}`
-  ],
-  userDetail: (id: string) => [`user-detail-${id}`],
-  userStatus: [`user-status-active-inactive`]
-};
-
-export const consentFormKeys = {
-  consentFormList: (data: IConsentFormListReq) => [
-    `consent-form-list-${data.offset ?? 0}`,
-    `${data.limit}`,
-    `${data.search ?? ''}`,
-    `${data.sortBy ?? ''}`,
-    `${data.sortOrder ?? ''}`
-  ],
-  consentFormDetail: (id: string) => [`consent-form-detail-${id}`]
-};
-
-export const incidentKeys = {
-  incidentList: (data: IIncidentReq) => [
-    `incident-list-${data.offset}-${data.userId ?? ''}-${data.volunteerId ?? ''}`,
-    `${data.limit ?? ''}`,
-    `${data.search ?? ''}`,
-    `${data.sortBy ?? ''}`,
-    `${data.sortOrder ?? ''}`,
-    `${data.status ?? []}`,
-    `${data.type ?? []}`
-  ],
-  incidentDelete: [`delete-incident`],
-  incidentDetail: (id: string) => [`incident-detail-${id}`],
-  incidentCommnetList: (id: string) => [`incident-comment-${id}`]
 };
 
 export const clientKeys = {
@@ -84,12 +43,6 @@ export const dashboardKey = {
   dashboardCount: [`dashboard-count`]
 };
 
-export const cmsKey = {
-  cmsList: [`cms-list`],
-  cmsDetail: (id: string) => [`cms-detail-${id}`],
-  cmsEdit: [`cms-edit`]
-};
-
 export const profileKey = {
   profileDetail: [`profile-detail`],
   profileEdit: [`profile-edit`]
@@ -109,8 +62,4 @@ export const resourceKeys = {
   resourceAddEdit: [`add-edit-resource`],
   resourceTypeList: [`resource-type-list`],
   resourceImage: [`resource-image`]
-};
-
-export const jsonFileKey = {
-  jsonFileType: (fileType: string) => [`json-file-${fileType}`]
 };

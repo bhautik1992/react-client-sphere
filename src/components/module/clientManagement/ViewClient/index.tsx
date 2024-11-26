@@ -83,7 +83,7 @@ const ViewClient = () => {
           </Popconfirm>
         </div>
         <DetailWrapper>
-          <Row className="incidentRow">
+          <Row className="clientRow">
             <Col xs={6}>
               <h4>Name</h4>
               <p>{clientData?.name ?? '-'}</p>
@@ -97,7 +97,7 @@ const ViewClient = () => {
               <p>{clientData?.phone ?? '-'}</p>
             </Col>
           </Row>
-          <Row className="incidentRow">
+          <Row className="clientRow">
             <Col xs={6}>
               <h4>Gender</h4>
               <p>{clientData?.gender ?? '-'}</p>
@@ -111,7 +111,7 @@ const ViewClient = () => {
               <p>{clientData?.address ?? '-'}</p>
             </Col>
           </Row>
-          <Row className="incidentRow">
+          <Row className="clientRow">
             <Col xs={6}>
               <h4>No. of Projects</h4>
               <p>{clientData?.projects?.length ?? '-'}</p>

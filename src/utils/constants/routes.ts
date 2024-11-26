@@ -10,9 +10,6 @@ export const ROUTES = {
   editMyProfile: `/edit-profile`,
   dashboard: `/dashboard`,
 
-  incidentManagement: `/incident`,
-  incidentView: `/incident/view-incident`,
-
   clientManagement: `/clients`,
   clientView: `/clients/view-client`,
 
@@ -25,14 +22,6 @@ export const ROUTES = {
   resourcesView: `/resources-management/view-resource`,
   resourcesEdit: `/resources-management/edit-resource`,
   resourcesAdd: `/resources-management/add-resource`,
-
-  supportCallNumber: `/support-call-number`,
-
-  cms: `/cms-management`,
-  editCms: `/cms-management/edit`,
-
-  consentForm: `/consent-form`,
-  consentFormView: `/consent-form/view`,
 
   dynamicPath: (path: string) => `/static-path/${path}`
 };

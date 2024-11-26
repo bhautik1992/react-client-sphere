@@ -15,16 +15,12 @@ export const ApiEndPoints = {
     forgotPassword: `auth/forgot-password`,
     changePassword: `auth/changePassword`
   },
-  user: {
-    userList: `admin/user/list-user`,
-    userDetail: `admin/user/details`,
-    userActiveInactive: `admin/user/active-inactive`
+  dashboard: {
+    dashboardCount: `dashboard/count`
   },
-  incident: {
-    incidentList: `admin/incident/list-incident`,
-    incidentDelete: `admin/incident/delete`,
-    incidentDetail: `admin/incident/details`,
-    incidentCommentList: `admin/incident/list-comment`
+  profile: {
+    profileDetail: `dashboard/user-profile`,
+    editProfile: `user/update`
   },
   client: {
     clientList: `client/list`,
@@ -40,33 +36,11 @@ export const ApiEndPoints = {
     deleteTraining: `admin/training/delete`,
     trainingDetail: `admin/training/details`
   },
-  dashboard: {
-    dashboardCount: `dashboard/count`
-  },
-  cms: {
-    cmsList: `cms`,
-    cmsDetail: `cms`,
-    cmsEdit: `cms/update`
-  },
-  profile: {
-    profileDetail: `dashboard/user-profile`,
-    editProfile: `user/update`
-  },
   resource: {
     resourceList: `admin/resource/list-resource`,
     resourceDetail: `admin/resource/details`,
     resourceAddEdit: `admin/resource/add-edit-resource`,
     resourceDelete: `admin/resource/delete`,
     resourceTypeList: `admin/resource/resource-type-list`
-  },
-  uploadImage: {
-    uploadImage: `upload-files`
-  },
-  json: {
-    jsonFile: `json`
-  },
-  consentForm: {
-    consentFormList: `consent-form/list`,
-    consentFormDetail: `consent-form/details`
   }
 };

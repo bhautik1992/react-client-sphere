@@ -5,7 +5,6 @@ export enum Role {
 
 export enum UploadFileEnum {
   'Profile' = 'profile',
-  'Incident' = 'incident',
   'Resource' = 'resource'
 }
 

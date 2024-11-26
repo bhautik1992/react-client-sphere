@@ -4,12 +4,8 @@ import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import Client from 'components/svg/Client';
-import Cms from 'components/svg/Cms';
 import Dashboard from 'components/svg/Dashboard';
-import FormOutline from 'components/svg/FormOutline';
-import Incident from 'components/svg/Incident';
 import ResourcesManagement from 'components/svg/ResourcesManagement';
-import Support from 'components/svg/Support';
 import TrainingPrograms from 'components/svg/TrainingPrograms';
 
 import { ROUTES } from 'utils/constants/routes';
@@ -38,12 +34,8 @@ function createMenuItem(
 const items = [
   createMenuItem(ROUTES.dashboard, 'Dashboard', '1', <Dashboard />),
   createMenuItem(ROUTES.clientManagement, 'Client Management', '3', <Client />),
-  createMenuItem(ROUTES.incidentManagement, 'Incident', '4', <Incident />),
   createMenuItem(ROUTES.trainingMangement, 'Training Programs', '5', <TrainingPrograms />),
-  createMenuItem(ROUTES.resourcesMangement, 'Resource Management', '6', <ResourcesManagement />),
-  createMenuItem(ROUTES.consentForm, 'Consent Form Management', '13', <FormOutline />),
-  createMenuItem(ROUTES.cms, 'CMS Management', '10', <Cms />),
-  createMenuItem(ROUTES.supportCallNumber, 'Support Call Number', '11', <Support />)
+  createMenuItem(ROUTES.resourcesMangement, 'Resource Management', '6', <ResourcesManagement />)
 ];
 
 function compareLinkAndReturnKey(items: any, currentPath: any): any {

@@ -8,7 +8,7 @@ export const DetailWrapper = styled.div`
   &.userDetail {
     margin-top: 60px;
   }
-  .incidentRow {
+  .clientRow {
     justify-content: space-between;
     h4 {
       margin-bottom: 5px;

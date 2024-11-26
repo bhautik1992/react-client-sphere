@@ -68,6 +68,3 @@ interface IOldResourceTypes {
 interface INewResourceType {
   newResourceType: string;
 }
-export interface IUploadImageRes {
-  name: string;
-}

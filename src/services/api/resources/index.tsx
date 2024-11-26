@@ -2,13 +2,7 @@ import { IApiSuccess } from 'utils/Types';
 import { ApiEndPoints } from 'utils/constants';
 
 import apiInstance from '..';
-import {
-  IResourceDetailRes,
-  IResourceReq,
-  IResourceRes,
-  IResourceTypeRes,
-  IUploadImageRes
-} from './types';
+import { IResourceDetailRes, IResourceReq, IResourceRes, IResourceTypeRes } from './types';
 
 export const resourceAPI = {
   async resourceList(data: IResourceReq): Promise<IResourceRes> {
@@ -64,16 +58,16 @@ export const resourceAPI = {
       .catch((error) => {
         throw error?.response?.data;
       });
-  },
-
-  async uploadImage(data: FormData): Promise<IUploadImageRes[]> {
-    return apiInstance
-      .post(`${ApiEndPoints.uploadImage.uploadImage}`, data)
-      .then((response) => {
-        return response?.data;
-      })
-      .catch((error) => {
-        throw error?.response?.data;
-      });
   }
+
+  // async uploadImage(data: FormData): Promise<IUploadImageRes[]> {
+  //   return apiInstance
+  //     .post(`${ApiEndPoints.uploadImage.uploadImage}`, data)
+  //     .then((response) => {
+  //       return response?.data;
+  //     })
+  //     .catch((error) => {
+  //       throw error?.response?.data;
+  //     });
+  // }
 };

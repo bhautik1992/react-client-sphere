@@ -8,7 +8,6 @@ import { isValidPhoneNumber } from 'react-phone-number-input';
 import { RenderPhoneNumber, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 
 import { IAddClientReq, IClient, IClientReq } from 'services/api/client/types';
-import { IClientDetail } from 'services/api/incident/type';
 import { useAddClient, useEditClient } from 'services/hooks/client';
 import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
 
@@ -99,12 +98,9 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
         });
 
         // set detail view
-        queryClient.setQueryData<IClientDetail>(
-          clientKeys.clientDetail(clientData?.id ?? 0),
-          () => {
-            return { ...res } as IClientDetail;
-          }
-        );
+        queryClient.setQueryData<IClient>(clientKeys.clientDetail(clientData?.id ?? 0), () => {
+          return { ...res } as IClient;
+        });
         handleClose();
       },
       onError: (err: IApiError) => {

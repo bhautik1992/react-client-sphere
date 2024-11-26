@@ -42,7 +42,7 @@ const ClientManagement = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">Client</h2>
+          <h2 className="pageTitle">Clients</h2>
           <div className="pageHeaderButton">
             <Form form={form}>
               <RenderTextInput

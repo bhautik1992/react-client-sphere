@@ -14,7 +14,7 @@ import { IUserReq } from 'services/api/users/types';
 
 const BreadcrumbsPath = [
   {
-    title: 'Users Management'
+    title: 'Users'
   }
 ];
 
@@ -43,7 +43,7 @@ const UsersManagement = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">User Management</h2>
+          <h2 className="pageTitle">Users</h2>
           <div className="pageHeaderButton">
             <Form form={form}>
               <RenderTextInput

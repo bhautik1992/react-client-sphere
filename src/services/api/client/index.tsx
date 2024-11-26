@@ -46,6 +46,17 @@ export const clientAPI = {
       });
   },
 
+  async deleteClient(id: number): Promise<IApiSuccess<string>> {
+    return apiInstance
+      .delete(`${ApiEndPoints.client.deleteClient}/${id}`)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  },
+
   async addClient(data: IAddClientReq): Promise<IAddClientRes> {
     return apiInstance
       .post(ApiEndPoints.client.addClient, data)

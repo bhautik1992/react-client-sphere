@@ -16,15 +16,8 @@ export const DetailWrapper = styled.div`
     audio {
       width: 400px;
     }
-    p {
-      line-height: 22px;
-    }
-    a {
-      color: #074992;
-      font-size: 16px;
-      font-style: normal;
-      font-weight: 500;
-      line-height: 22px;
+    .ant-image {
+      margin-right: 15px;
     }
   }
 `;

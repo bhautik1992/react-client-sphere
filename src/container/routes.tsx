@@ -13,11 +13,9 @@ const ChangePassword = lazy(() => import('../pages/Auth/ChangePassword'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const ClientList = lazy(() => import('../pages/ClientManagement/index'));
 const ClientView = lazy(() => import('../components/module/clientManagement/ViewClient'));
-const TrainingList = lazy(() => import('../pages/TrainingManagement/index'));
-const TrainingAdd = lazy(() => import('../components/module/trainingManagement/AddEditTraining'));
-const TrainingView = lazy(() => import('../components/module/trainingManagement/ViewTraining'));
+const CompanyList = lazy(() => import('../pages/CompanyManagement/index'));
+const CompanyView = lazy(() => import('../components/module/companyManagement/ViewCompany'));
 const UsersList = lazy(() => import('../pages/UsersManagement'));
-const UserAdd = lazy(() => import('../components/common/Modal/AddUserModal'));
 const UserView = lazy(() => import('../components/module/usersManagement/ViewUser'));
 const MyProfile = lazy(() => import('../pages/MyProfile'));
 const EditMyProfile = lazy(() => import('../components/module/profileEdit'));
@@ -47,19 +45,15 @@ const Routing = () => {
           <Route path="*" element={<Navigate to={ROUTES.clientManagement} replace={true} />} />
         </Route>
 
-        <Route path={ROUTES.trainingMangement} element={<Outlet />}>
-          <Route path={ROUTES.trainingMangement} element={<TrainingList />} />
-          <Route path={`${ROUTES.trainingView}/:id`} element={<TrainingView />} />
-          <Route path={`${ROUTES.trainingAdd}`} element={<TrainingAdd />} />
-          <Route path={`${ROUTES.trainingEdit}/:id`} element={<TrainingAdd />} />
-          <Route path="*" element={<Navigate to={ROUTES.trainingMangement} replace={true} />} />
+        <Route path={ROUTES.companyManagement} element={<Outlet />}>
+          <Route path={ROUTES.companyManagement} element={<CompanyList />} />
+          <Route path={`${ROUTES.companyView}/:id`} element={<CompanyView />} />
+          <Route path="*" element={<Navigate to={ROUTES.companyManagement} replace={true} />} />
         </Route>
 
         <Route path={ROUTES.usersManagement} element={<Outlet />}>
           <Route path={ROUTES.usersManagement} element={<UsersList />} />
           <Route path={`${ROUTES.usersView}/:id`} element={<UserView />} />
-          <Route path={`${ROUTES.usersAdd}`} element={<UserAdd />} />
-          <Route path={`${ROUTES.usersEdit}/:id`} element={<UserAdd />} />
           <Route path="*" element={<Navigate to={ROUTES.usersManagement} replace={true} />} />
         </Route>
 

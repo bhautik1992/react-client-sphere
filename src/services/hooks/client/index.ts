@@ -47,3 +47,10 @@ export const useClientStatus = () => {
     mutationKey: clientKeys.clientStatus
   });
 };
+
+export const useDeleteClient = () => {
+  return useRequest({
+    mutationFn: clientAPI.deleteClient,
+    mutationKey: clientKeys.companyDelete
+  });
+};

@@ -1,6 +1,18 @@
 import { Key } from 'react';
 
-import { IProject } from '../project/types';
+interface IProject {
+  id: number;
+  name: string;
+  description: string;
+  status: string;
+  amount: number;
+  startDate: string;
+  endDate: null;
+  createdAt: string;
+  updatedAt: string;
+  clientId: number;
+  companyId: number;
+}
 
 export interface IClient {
   id: number;
@@ -11,7 +23,7 @@ export interface IClient {
   country: string;
   gender: string;
   status: string;
-  projects: IProject[];
+  projects: project[];
 }
 
 export interface IClientReq {

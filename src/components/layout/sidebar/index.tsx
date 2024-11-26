@@ -4,8 +4,8 @@ import { useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import Client from 'components/svg/Client';
+import CompanyManagement from 'components/svg/CompanyManagement';
 import Dashboard from 'components/svg/Dashboard';
-import TrainingPrograms from 'components/svg/TrainingPrograms';
 import UsersManagement from 'components/svg/UsersManagement';
 
 import { ROUTES } from 'utils/constants/routes';
@@ -35,7 +35,7 @@ const items = [
   createMenuItem(ROUTES.dashboard, 'Dashboard', '1', <Dashboard />),
   createMenuItem(ROUTES.usersManagement, 'User Management', '2', <UsersManagement />),
   createMenuItem(ROUTES.clientManagement, 'Client Management', '3', <Client />),
-  createMenuItem(ROUTES.trainingMangement, 'Training Programs', '5', <TrainingPrograms />)
+  createMenuItem(ROUTES.companyManagement, 'Company Management', '5', <CompanyManagement />)
 ];
 
 function compareLinkAndReturnKey(items: any, currentPath: any): any {

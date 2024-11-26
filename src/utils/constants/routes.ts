@@ -15,13 +15,9 @@ export const ROUTES = {
 
   usersManagement: `/users-management`,
   usersView: `/users-management/view-user`,
-  usersEdit: `/users-management/edit-user`,
-  usersAdd: `/users-management/add-user`,
 
-  trainingMangement: `/training-management`,
-  trainingView: `/training-management/view-training`,
-  trainingAdd: `/training-management/add-training`,
-  trainingEdit: `/training-management/edit-training`,
+  companyManagement: `/company-management`,
+  companyView: `/company-management/view-company`,
 
   dynamicPath: (path: string) => `/static-path/${path}`
 };

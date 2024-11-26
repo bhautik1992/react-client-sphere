@@ -1,4 +1,4 @@
-import { DownOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, DownOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Popconfirm, Tag, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
@@ -7,10 +7,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import AddClientModal from 'components/common/Modal/AddClientModal';
+import CommonModal from 'components/common/Modal/CommonModal';
 import { CommonTable } from 'components/common/Table';
 
 import { IClient, IClientReq } from 'services/api/client/types';
-import { useClientList, useClientStatus } from 'services/hooks/client';
+import { useClientList, useClientStatus, useDeleteClient } from 'services/hooks/client';
 import { clientKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
@@ -26,7 +27,8 @@ interface IProps {
 const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate } = useClientStatus();
+  const { mutate: deleteMutate } = useDeleteClient();
+  const { mutate: statusMutate } = useClientStatus();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [clientData, setClientData] = useState<IClient | null>(null);
@@ -35,13 +37,34 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
     ...args,
     search: searchDebounce
   });
+
+  const handleDeleteModal = (id: number) => {
+    deleteMutate(id, {
+      onSuccess: () => {
+        // invalidate client list
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [clientKeys.clientList({ ...args, search: searchDebounce })].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+      },
+      onError: (err: IApiError) => {
+        message.error(err.message);
+      }
+    });
+  };
+
   const handleConfirm = (status: string, id: number) => {
     const data = {
       status: status === 'active' ? 'inactive' : 'active',
       clientId: id
     };
 
-    mutate(data, {
+    statusMutate(data, {
       onSuccess: (res) => {
         // invalidate client list
         queryClient.invalidateQueries({
@@ -159,6 +182,21 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
                 setClientData(record);
               }}
             />
+          </Tooltip>
+          <Tooltip title="Delete client" placement="top" trigger="hover">
+            <CommonModal
+              title="Delete"
+              content="Are you sure delete this client?"
+              type="confirm"
+              onConfirm={() => handleDeleteModal(record?.id)}
+            >
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<DeleteOutlined />}
+              />
+            </CommonModal>
           </Tooltip>
         </div>
       )

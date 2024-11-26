@@ -3,19 +3,19 @@ import { ApiEndPoints } from 'utils/constants';
 
 import apiInstance from '..';
 import {
-  IAddTrainingReq,
-  IAddTrainingRes,
-  IEditTrainingReq,
-  IEditTrainingRes,
-  ITraining,
-  ITrainingReq,
-  ITrainingRes
+  IAddClientReq,
+  IAddClientRes,
+  IClient,
+  IClientReq,
+  IClientRes,
+  IClientStatusReq,
+  IEditClientReq
 } from './types';
 
-export const trainningAPI = {
-  async trainingList(data: ITrainingReq): Promise<ITrainingRes> {
+export const clientAPI = {
+  async clientList(data: IClientReq): Promise<IClientRes> {
     return apiInstance
-      .post(ApiEndPoints.training.trainingList, data)
+      .post(ApiEndPoints.client.clientList, data)
       .then((response) => {
         return response?.data;
       })
@@ -24,9 +24,9 @@ export const trainningAPI = {
       });
   },
 
-  async trainingDetail(id: string): Promise<ITraining> {
+  async clientDetail(id: number): Promise<IClient> {
     return apiInstance
-      .get(`${ApiEndPoints.training.trainingDetail}/${id}`)
+      .get(`${ApiEndPoints.client.clientDetail}/${id}`)
       .then((response) => {
         return response?.data;
       })
@@ -35,9 +35,9 @@ export const trainningAPI = {
       });
   },
 
-  async deleteTraining(id: string): Promise<IApiSuccess<string>> {
+  async clientStatus(data: IClientStatusReq): Promise<IApiSuccess<string>> {
     return apiInstance
-      .delete(`${ApiEndPoints.training.deleteTraining}/${id}`)
+      .post(ApiEndPoints.client.clientActiveInactive, data)
       .then((response) => {
         return response?.data;
       })
@@ -46,9 +46,9 @@ export const trainningAPI = {
       });
   },
 
-  async addTraining(data: IAddTrainingReq): Promise<IAddTrainingRes> {
+  async addClient(data: IAddClientReq): Promise<IAddClientRes> {
     return apiInstance
-      .post(ApiEndPoints.training.addTraining, data)
+      .post(ApiEndPoints.client.addClient, data)
       .then((response) => {
         return response?.data;
       })
@@ -57,9 +57,9 @@ export const trainningAPI = {
       });
   },
 
-  async editTraining(data: IEditTrainingReq): Promise<IEditTrainingRes> {
+  async editClient(data: IEditClientReq): Promise<IAddClientRes> {
     return apiInstance
-      .post(ApiEndPoints.training.editTraining, data)
+      .post(`${ApiEndPoints.client.editClient}/${data.id}`, data)
       .then((response) => {
         return response?.data;
       })

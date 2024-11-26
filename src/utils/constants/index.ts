@@ -27,7 +27,8 @@ export const ApiEndPoints = {
     clientActiveInactive: `client/active-inactive`,
     clientDetail: `client/get`,
     addClient: `client/create`,
-    editClient: `client/update`
+    editClient: `client/update`,
+    deleteClient: `client/delete`
   },
   user: {
     userList: `user/list`,
@@ -36,11 +37,11 @@ export const ApiEndPoints = {
     userEdit: `user/update`,
     userDelete: `user/delete`
   },
-  training: {
-    trainingList: `admin/training/list-training`,
-    addTraining: `admin/training/add-training`,
-    editTraining: `admin/training/edit-training`,
-    deleteTraining: `admin/training/delete`,
-    trainingDetail: `admin/training/details`
+  company: {
+    companyList: `company/list`,
+    addCompany: `company/create`,
+    editCompany: `company/update`,
+    deleteCompany: `company/delete`,
+    companyDetail: `company/get`
   }
 };

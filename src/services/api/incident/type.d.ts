@@ -86,21 +86,15 @@ interface IUserDetail {
   createdAt: string;
 }
 
-interface IVolunteerDetail {
-  _id: string;
-  firstName: string;
-  lastName: string;
+interface IClientDetail {
+  id: number;
+  name: string;
   email: string;
-  phoneNumber: string;
-  designation: string;
-  birthDate: string;
+  phone: string;
   gender: string;
   country: string;
-  state: string;
-  city: string;
-  zipCode?: any;
   address: string;
-  createdAt: string;
+  status: string;
 }
 
 export interface IIncidentCommentRes {

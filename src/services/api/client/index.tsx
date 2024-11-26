@@ -3,19 +3,18 @@ import { ApiEndPoints } from 'utils/constants';
 
 import apiInstance from '..';
 import {
-  IAddVolunteerReq,
-  IAddVolunteerRes,
-  IEditVolunteerReq,
-  IVolunteer,
-  IVolunteerReq,
-  IVolunteerRes,
-  IVolunteerStatusReq
+  IAddClientReq,
+  IAddClientRes,
+  IClient,
+  IClientReq,
+  IClientStatusReq,
+  IEditClientReq
 } from './types';
 
-export const volunteerAPI = {
-  async volunteerList(data: IVolunteerReq): Promise<IVolunteerRes> {
+export const clientAPI = {
+  async clientList(data: IClientReq): Promise<IClient[]> {
     return apiInstance
-      .post(ApiEndPoints.volunteer.volunteerList, data)
+      .post(ApiEndPoints.client.clientList, data)
       .then((response) => {
         return response?.data;
       })
@@ -24,9 +23,9 @@ export const volunteerAPI = {
       });
   },
 
-  async volunteerDetail(id: string): Promise<IVolunteer> {
+  async clientDetail(id: number): Promise<IClient> {
     return apiInstance
-      .get(`${ApiEndPoints.volunteer.volunteerDetail}/${id}`)
+      .get(`${ApiEndPoints.client.clientDetail}/${id}`)
       .then((response) => {
         return response?.data;
       })
@@ -35,9 +34,9 @@ export const volunteerAPI = {
       });
   },
 
-  async volunteerStatus(data: IVolunteerStatusReq): Promise<IApiSuccess<string>> {
+  async clientStatus(data: IClientStatusReq): Promise<IApiSuccess<string>> {
     return apiInstance
-      .post(ApiEndPoints.volunteer.volunteerActiveInactive, data)
+      .post(ApiEndPoints.client.clientActiveInactive, data)
       .then((response) => {
         return response?.data;
       })
@@ -46,9 +45,9 @@ export const volunteerAPI = {
       });
   },
 
-  async addVolunteer(data: IAddVolunteerReq): Promise<IAddVolunteerRes> {
+  async addClient(data: IAddClientReq): Promise<IAddClientRes> {
     return apiInstance
-      .post(ApiEndPoints.volunteer.addVolunteer, data)
+      .post(ApiEndPoints.client.addClient, data)
       .then((response) => {
         return response?.data;
       })
@@ -57,9 +56,9 @@ export const volunteerAPI = {
       });
   },
 
-  async editVolunteer(data: IEditVolunteerReq): Promise<IAddVolunteerRes> {
+  async editClient(data: IEditClientReq): Promise<IAddClientRes> {
     return apiInstance
-      .post(ApiEndPoints.volunteer.editVolunteer, data)
+      .post(`${ApiEndPoints.client.editClient}/${data.id}`, data)
       .then((response) => {
         return response?.data;
       })

@@ -19,14 +19,7 @@ const AppContainer = () => (
   <ThemeConfig>
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <Suspense
-          fallback={
-            // <LoaderWrapper>
-            //   <h6 style={{ textAlign: 'center' }}>Loading</h6>
-            // </LoaderWrapper>
-            <Loader />
-          }
-        >
+        <Suspense fallback={<Loader />}>
           <BrowserRouter>
             <GlobalStyle />
             <Routes />

@@ -6,68 +6,66 @@ import { useState } from 'react';
 
 import useDebounce from '../../components/common/useDebounce';
 import { RenderTextInput } from 'components/common/FormField';
-import AddVolunteerModal from 'components/common/Modal/AddVolunteerModal';
+import AddClientModal from 'components/common/Modal/AddClientModal';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
-import VolenteerManagementTable from 'components/module/volunteerManagement/VolunteerManagementTable';
+import ClientManagementTable from 'components/module/clientManagement/ClientManagementTable';
 
-import { IVolunteerReq } from 'services/api/volunteer/types';
+import { IClientReq } from 'services/api/client/types';
 
 const BreadcrumbsPath = [
   {
-    title: 'Responders'
+    title: 'Clients'
   }
 ];
 
-const VolunteerManagement = () => {
+const ClientManagement = () => {
   const [form] = Form.useForm();
 
   const [searchValue, setSearchValue] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const searchDebounce = useDebounce(searchValue);
-  const [args, setArgs] = useState<IVolunteerReq>({
+  const [args, setArgs] = useState<IClientReq>({
     limit: 10,
-    offset: 0,
+    page: 1,
     sortBy: '',
     sortOrder: ''
   });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
-
     setArgs((prev) => ({ ...prev, offset: 0 }));
   };
-  console.log('🚀 ~ args:', args);
 
   return (
     <Wrapper>
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">Responders</h2>
+          <h2 className="pageTitle">Client</h2>
           <div className="pageHeaderButton">
             <Form form={form}>
               <RenderTextInput
                 size="middle"
-                placeholder="Search responder"
+                placeholder="Search client"
                 allowClear
                 prefix={<SearchOutlined style={{ color: '#0000ff' }} />}
                 onChange={onChange}
               />
             </Form>
             <Button type="primary" onClick={() => setIsOpen(true)}>
-              Add Responder
+              Add Client
             </Button>
           </div>
         </div>
-        <VolenteerManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
+        <ClientManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
       </div>
 
       {isOpen && (
-        <AddVolunteerModal isOpen={Boolean(isOpen)} setIsOpen={(flag) => setIsOpen(!!flag)} />
+        <AddClientModal isOpen={Boolean(isOpen)} setIsOpen={(flag) => setIsOpen(!!flag)} />
       )}
     </Wrapper>
   );
 };
 
-export default VolunteerManagement;
+export default ClientManagement;

@@ -10,7 +10,7 @@ export const LoadingIcon = () => (
       </mask>
     </defs>
     <g strokeLinecap="round" strokeWidth="8" strokeDasharray="32 32">
-      <g stroke="hsl(28,100%,46.1%)">
+      <g stroke="hsl(240, 100%, 50%)">
         <line className="pl__line1" x1="4" y1="48" x2="4" y2="80" />
         <line className="pl__line2" x1="19" y1="48" x2="19" y2="80" />
         <line className="pl__line3" x1="34" y1="48" x2="34" y2="80" />

@@ -10,14 +10,11 @@ export const ROUTES = {
   editMyProfile: `/edit-profile`,
   dashboard: `/dashboard`,
 
-  userManagement: `/users`,
-  userView: `/users/view-user`,
-
   incidentManagement: `/incident`,
   incidentView: `/incident/view-incident`,
 
-  volunteerManagement: `/responders`,
-  volunteerView: `/responders/view-responder`,
+  clientManagement: `/clients`,
+  clientView: `/clients/view-client`,
 
   trainingMangement: `/training-management`,
   trainingView: `/training-management/view-training`,

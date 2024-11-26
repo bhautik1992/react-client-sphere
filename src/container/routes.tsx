@@ -11,13 +11,11 @@ const SignIn = lazy(() => import('../pages/Auth/SignIn'));
 const ForgotPassword = lazy(() => import('../pages/Auth/ForgotPassword'));
 const ChangePassword = lazy(() => import('../pages/Auth/ChangePassword'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
-const UserList = lazy(() => import('../pages/UserManagement'));
-const UserView = lazy(() => import('../components/module/userManagement/ViewUser'));
-const VolunteerList = lazy(() => import('../pages/VolunteerManagement/index'));
-const VolunteerView = lazy(() => import('../components/module/volunteerManagement/ViewVolunteer'));
+const ClientList = lazy(() => import('../pages/ClientManagement/index'));
+const ClientView = lazy(() => import('../components/module/clientManagement/ViewClient'));
 const IncidentList = lazy(() => import('../pages/IncidentManagement/index'));
 const IncidentView = lazy(() => import('../components/module/incidentManagement/ViewIncident'));
-const TrainingList = lazy(() => import('../pages/TrainingManagement/index'));
+const TrainingList = lazy(() => import('../pages/ClientManagement/index'));
 const TrainingAdd = lazy(() => import('../components/module/trainingManagement/AddEditTraining'));
 const TrainingView = lazy(() => import('../components/module/trainingManagement/ViewTraining'));
 const ResourcesList = lazy(() => import('../pages/ResourcesManagement'));
@@ -55,22 +53,16 @@ const Routing = () => {
         <Route path={ROUTES.myProfile} element={<MyProfile />} />
         <Route path={ROUTES.editMyProfile} element={<EditMyProfile />} />
 
-        <Route path={ROUTES.userManagement} element={<Outlet />}>
-          <Route path={ROUTES.userManagement} element={<UserList />} />
-          <Route path={`${ROUTES.userView}/:id`} element={<UserView />} />
-          <Route path="*" element={<Navigate to={ROUTES.userManagement} replace={true} />} />
-        </Route>
-
         <Route path={ROUTES.consentForm} element={<Outlet />}>
           <Route path={ROUTES.consentForm} element={<ConsentFormManagement />} />
           <Route path={`${ROUTES.consentFormView}/:id`} element={<ContentFormView />} />
           <Route path="*" element={<Navigate to={ROUTES.consentForm} replace={true} />} />
         </Route>
 
-        <Route path={ROUTES.volunteerManagement} element={<Outlet />}>
-          <Route path={ROUTES.volunteerManagement} element={<VolunteerList />} />
-          <Route path={`${ROUTES.volunteerView}/:id`} element={<VolunteerView />} />
-          <Route path="*" element={<Navigate to={ROUTES.volunteerManagement} replace={true} />} />
+        <Route path={ROUTES.clientManagement} element={<Outlet />}>
+          <Route path={ROUTES.clientManagement} element={<ClientList />} />
+          <Route path={`${ROUTES.clientView}/:id`} element={<ClientView />} />
+          <Route path="*" element={<Navigate to={ROUTES.clientManagement} replace={true} />} />
         </Route>
 
         <Route path={ROUTES.incidentManagement} element={<Outlet />}>

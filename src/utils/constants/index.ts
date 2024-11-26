@@ -26,12 +26,12 @@ export const ApiEndPoints = {
     incidentDetail: `admin/incident/details`,
     incidentCommentList: `admin/incident/list-comment`
   },
-  volunteer: {
-    volunteerList: `admin/volunteer/list-volunteer`,
-    volunteerActiveInactive: `admin/volunteer/active-inactive`,
-    volunteerDetail: `admin/volunteer/details`,
-    addVolunteer: `admin/volunteer/add-volunteer`,
-    editVolunteer: `admin/volunteer/edit-volunteer`
+  client: {
+    clientList: `client/list`,
+    clientActiveInactive: `client/active-inactive`,
+    clientDetail: `client/get`,
+    addClient: `client/create`,
+    editClient: `client/update`
   },
   training: {
     trainingList: `admin/training/list-training`,
@@ -69,9 +69,4 @@ export const ApiEndPoints = {
     consentFormList: `consent-form/list`,
     consentFormDetail: `consent-form/details`
   }
-};
-
-export const JsonFileType = {
-  incidentType: `incident_types.json`,
-  responderCategory: `responder_categories.json`
 };

@@ -1,9 +1,9 @@
+import { IClientReq } from 'services/api/client/types';
 import { IConsentFormListReq } from 'services/api/consentForm/types';
 import { IIncidentReq } from 'services/api/incident/type';
 import { IResourceReq } from 'services/api/resources/types';
 import { ITrainingReq } from 'services/api/training/types';
 import { IUserListReq } from 'services/api/user/types';
-import { IVolunteerReq } from 'services/api/volunteer/types';
 
 export const authKeys = {
   authMutate: ['auth-mutate-key'],
@@ -50,20 +50,19 @@ export const incidentKeys = {
   incidentCommnetList: (id: string) => [`incident-comment-${id}`]
 };
 
-export const volunteerKeys = {
-  volunteerList: (data: IVolunteerReq) => [
-    `volunteer-list`,
+export const clientKeys = {
+  clientList: (data: IClientReq) => [
+    `client-list`,
     `${data?.limit}`,
-    `${data?.offset}`,
+    `${data?.page}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`,
-    `${data?.category ?? ''}`
+    `${data?.sortOrder ?? ''}`
   ],
-  volunteerDetail: (id: string) => [`volunteer-detail-${id}`],
-  volunteerStatus: [`volunteer-status`],
-  volunteerAdd: [`add-volunteer`],
-  volunteerEdit: [`edit-volunteer`]
+  clientDetail: (id: number) => [`client-detail-${id}`],
+  clientStatus: [`client-status`],
+  clientAdd: [`add-client`],
+  clientEdit: [`edit-client`]
 };
 
 export const trainingKeys = {

@@ -441,7 +441,6 @@ export const RenderPhoneNumber = (props: any) => {
         <PhoneInput
           className="phoneInput"
           placeholder={props.placeholder}
-          defaultCountry="US"
           onChange={props.onChange}
           value={props.value}
           international

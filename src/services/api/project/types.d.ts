@@ -1,32 +1,23 @@
 import { Key } from 'react';
 
+import { IClient } from '../client/types';
+import { ICompany } from '../company/types';
+
 interface IProject {
   id: number;
   name: string;
   description: string;
-  status: string;
   amount: number;
   startDate: string;
-  endDate: null;
+  endDate: string;
+  status: string;
   createdAt: string;
   updatedAt: string;
-  clientId: number;
-  companyId: number;
+  client: IClient;
+  company: ICompany;
 }
 
-export interface IClient {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  address: string;
-  country: string;
-  gender: string;
-  status: string;
-  projects: project[];
-}
-
-export interface IClientReq {
+export interface IProjectReq {
   limit: number;
   offset: number;
   search?: string;
@@ -34,28 +25,29 @@ export interface IClientReq {
   sortBy?: Key;
 }
 
-export interface IAddClientReq {
+export interface IAddProjectReq {
   name: string;
-  email: string;
-  phone: string;
-  gender: string;
-  country: string;
+  description: string;
   status: string;
-  address: string;
+  amount: number;
+  startDate: string;
+  endDate: string;
+  clientId: number;
+  companyId: number;
 }
 
-export interface IClientRes {
-  result: IClient[];
+export interface IProjectRes {
+  result: IProject[];
   recordsTotal: number;
 }
 
-export interface IAddClientRes {}
+export interface IAddProjectRes {}
 
-export interface IEditClientReq extends IAddClientReq {
+export interface IEditProjectReq extends IAddProjectReq {
   id: number;
 }
 
-export interface IClientStatusReq {
-  clientId: number;
+export interface IProjectStatusReq {
+  projectId: number;
   status: string;
 }

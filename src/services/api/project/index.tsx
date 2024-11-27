@@ -3,19 +3,19 @@ import { ApiEndPoints } from 'utils/constants';
 
 import apiInstance from '..';
 import {
-  IAddClientReq,
-  IAddClientRes,
-  IClient,
-  IClientReq,
-  IClientRes,
-  IClientStatusReq,
-  IEditClientReq
+  IAddProjectReq,
+  IAddProjectRes,
+  IEditProjectReq,
+  IProject,
+  IProjectReq,
+  IProjectRes,
+  IProjectStatusReq
 } from './types';
 
-export const clientAPI = {
-  async clientList(data: IClientReq): Promise<IClientRes> {
+export const projectAPI = {
+  async projectList(data: IProjectReq): Promise<IProjectRes> {
     return apiInstance
-      .post(ApiEndPoints.client.clientList, data)
+      .post(ApiEndPoints.project.projectList, data)
       .then((response) => {
         return response?.data;
       })
@@ -24,9 +24,9 @@ export const clientAPI = {
       });
   },
 
-  async clientDetail(id: number): Promise<IClient> {
+  async projectDetail(id: number): Promise<IProject> {
     return apiInstance
-      .get(`${ApiEndPoints.client.clientDetail}/${id}`)
+      .get(`${ApiEndPoints.project.projectDetail}/${id}`)
       .then((response) => {
         return response?.data;
       })
@@ -35,9 +35,9 @@ export const clientAPI = {
       });
   },
 
-  async clientStatus(data: IClientStatusReq): Promise<IApiSuccess<string>> {
+  async deleteProject(id: number): Promise<IApiSuccess<string>> {
     return apiInstance
-      .post(ApiEndPoints.client.clientActiveInactive, data)
+      .delete(`${ApiEndPoints.project.deleteProject}/${id}`)
       .then((response) => {
         return response?.data;
       })
@@ -46,9 +46,9 @@ export const clientAPI = {
       });
   },
 
-  async addClient(data: IAddClientReq): Promise<IAddClientRes> {
+  async projectStatus(data: IProjectStatusReq): Promise<IApiSuccess<string>> {
     return apiInstance
-      .post(ApiEndPoints.client.addClient, data)
+      .post(ApiEndPoints.project.projectStatus, data)
       .then((response) => {
         return response?.data;
       })
@@ -57,9 +57,20 @@ export const clientAPI = {
       });
   },
 
-  async editClient(data: IEditClientReq): Promise<IAddClientRes> {
+  async addProject(data: IAddProjectReq): Promise<IAddProjectRes> {
     return apiInstance
-      .post(`${ApiEndPoints.client.editClient}/${data.id}`, data)
+      .post(ApiEndPoints.project.addProject, data)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  },
+
+  async editProject(data: IEditProjectReq): Promise<IAddProjectRes> {
+    return apiInstance
+      .post(`${ApiEndPoints.project.editProject}/${data.id}`, data)
       .then((response) => {
         return response?.data;
       })

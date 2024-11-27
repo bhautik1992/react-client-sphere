@@ -1,6 +1,6 @@
 import { DetailWrapper } from './style';
 
-import { Col, Row } from 'antd';
+import { Col, Row, Tooltip } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import StyledBreadcrumb from 'components/layout/breadcrumb';
@@ -47,11 +47,27 @@ const ViewCompany = () => {
           <Row className="companyRow">
             <Col xs={6}>
               <h4>Country</h4>
-              <p>{data?.country ?? '-'}</p>
+              <p>{data?.country?.name ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>No. of Projects</h4>
-              <p>{data?.projects?.length ?? '-'}</p>
+              <Tooltip
+                title={
+                  data?.projects?.length ? (
+                    <div>
+                      {data.projects.map((project, index) => (
+                        <div key={index}>{project.name}</div>
+                      ))}
+                    </div>
+                  ) : (
+                    'No projects available'
+                  )
+                }
+                placement="left"
+                trigger="hover"
+              >
+                <p>{data?.projects?.length ?? '-'}</p>
+              </Tooltip>
             </Col>
             <Col xs={6}></Col>
           </Row>

@@ -1,5 +1,6 @@
 import { IClientReq } from 'services/api/client/types';
 import { ICompanyReq } from 'services/api/company/types';
+import { IProjectReq } from 'services/api/project/types';
 import { IUserReq } from 'services/api/users/types';
 
 export const authKeys = {
@@ -25,6 +26,22 @@ export const clientKeys = {
   companyDelete: [`company-delete`]
 };
 
+export const projectKeys = {
+  projectList: (data: IProjectReq) => [
+    `project-list`,
+    `${data?.limit}`,
+    `${data?.offset}`,
+    `${data?.search ?? ''}`,
+    `${data?.sortBy ?? ''}`,
+    `${data?.sortOrder ?? ''}`
+  ],
+  projectDetail: (id: number) => [`project-detail-${id}`],
+  projectAdd: [`add-project`],
+  projectEdit: [`edit-project`],
+  projectDelete: [`project-delete`],
+  projectStatus: [`project-status`]
+};
+
 export const companyKeys = {
   companyList: (data: ICompanyReq) => [
     `company-list`,
@@ -41,7 +58,14 @@ export const companyKeys = {
 };
 
 export const dashboardKey = {
-  dashboardCount: [`dashboard-count`]
+  dashboardCount: [`dashboard-count`],
+  dashboardClient: [`dashboard-client`],
+  dashboardCompany: [`dashboard-company`]
+};
+
+export const countryKey = {
+  countryList: [`country-list`],
+  countryAdd: [`country-add`]
 };
 
 export const profileKey = {

@@ -2,7 +2,7 @@ import { DetailWrapper } from './style';
 
 import { DownOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Col, Popconfirm, Row, Tag, message } from 'antd';
+import { Col, Popconfirm, Row, Tag, Tooltip, message } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import StyledBreadcrumb from 'components/layout/breadcrumb';
@@ -104,7 +104,7 @@ const ViewClient = () => {
             </Col>
             <Col xs={6}>
               <h4>Country</h4>
-              <p>{clientData?.country ?? '-'}</p>
+              <p>{clientData?.country?.name ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Address</h4>
@@ -114,7 +114,23 @@ const ViewClient = () => {
           <Row className="clientRow">
             <Col xs={6}>
               <h4>No. of Projects</h4>
-              <p>{clientData?.projects?.length ?? '-'}</p>
+              <Tooltip
+                title={
+                  clientData?.projects?.length ? (
+                    <div>
+                      {clientData.projects.map((project, index) => (
+                        <div key={index}>{project.name}</div>
+                      ))}
+                    </div>
+                  ) : (
+                    'No projects available'
+                  )
+                }
+                placement="left"
+                trigger="hover"
+              >
+                <p>{clientData?.projects?.length ?? '-'}</p>
+              </Tooltip>
             </Col>
           </Row>
         </DetailWrapper>

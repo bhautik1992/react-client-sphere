@@ -16,3 +16,25 @@ export const useDashboard = () => {
     }
   });
 };
+
+export const useDashboardClient = () => {
+  return useFetch({
+    queryFn: () => dashboardAPI.dashboardClient(),
+    queryKey: dashboardKey.dashboardClient,
+    queryOptions: {
+      staleTime: Infinity,
+      retry: false
+    }
+  });
+};
+
+export const useDashboardCompany = () => {
+  return useFetch({
+    queryFn: () => dashboardAPI.dashboardCompany(),
+    queryKey: dashboardKey.dashboardCompany,
+    queryOptions: {
+      staleTime: Infinity,
+      retry: false
+    }
+  });
+};

@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Client from 'components/svg/Client';
 import CompanyManagement from 'components/svg/CompanyManagement';
 import Dashboard from 'components/svg/Dashboard';
+import ProjectManagement from 'components/svg/ProjectManagement';
 import UsersManagement from 'components/svg/UsersManagement';
 
 import { ROUTES } from 'utils/constants/routes';
@@ -35,6 +36,7 @@ const items = [
   createMenuItem(ROUTES.dashboard, 'Dashboard', '1', <Dashboard />),
   createMenuItem(ROUTES.usersManagement, 'User Management', '2', <UsersManagement />),
   createMenuItem(ROUTES.clientManagement, 'Client Management', '3', <Client />),
+  createMenuItem(ROUTES.projectManagement, 'Project Management', '4', <ProjectManagement />),
   createMenuItem(ROUTES.companyManagement, 'Company Management', '5', <CompanyManagement />)
 ];
 

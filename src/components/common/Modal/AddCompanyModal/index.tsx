@@ -4,10 +4,11 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Form, Modal, ModalProps, Row, message } from 'antd';
 import React, { useState } from 'react';
 
-import { RenderTextInput } from 'components/common/FormField';
+import { RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 
 import { IAddCompanyReq, ICompany, ICompanyReq } from 'services/api/company/types';
 import { useAddCompany, useEditCompany } from 'services/hooks/company';
+import { useCountryList } from 'services/hooks/country';
 import { companyKeys, dashboardKey } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
@@ -31,6 +32,13 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
   const { mutate: editMutate, isLoading: isEditLoading } = useEditCompany();
 
   const [open, setOpen] = useState<boolean>(false);
+  const { data: countryList } = useCountryList();
+  const countryOptions = countryList?.map((item) => {
+    return {
+      label: item.name,
+      value: item.id
+    };
+  });
 
   const handleClose = (_?: unknown, reason?: string) => {
     if (reason === 'backdropClick') return;
@@ -124,7 +132,7 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
           name: companyData?.name ?? '',
           email: companyData?.email ?? '',
           address: companyData?.address ?? null,
-          country: companyData?.country ?? null
+          countryId: companyData?.country?.id ?? null
         }}
       >
         <Row gutter={[0, 30]}>
@@ -175,17 +183,17 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
               }
             ]}
           />
-          <RenderTextInput
+          <RenderSelectInput
             col={{ xs: 24 }}
-            name="country"
-            placeholder="Enter country"
+            name="countryId"
+            placeholder="Please select country"
             label="Country"
-            allowClear="allowClear"
-            size="middle"
+            allowClear={true}
+            optionLabel={countryOptions}
             rules={[
               {
                 required: true,
-                message: 'Please enter country'
+                message: 'Please select country'
               }
             ]}
           />

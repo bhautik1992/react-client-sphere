@@ -1,51 +1,52 @@
-import { DeleteOutlined, DownOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Popconfirm, Tag, Tooltip, message } from 'antd';
+import { Button, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { SorterResult } from 'antd/es/table/interface';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import AddClientModal from 'components/common/Modal/AddClientModal';
+import AddProjectModal from 'components/common/Modal/AddProjectModal';
 import CommonModal from 'components/common/Modal/CommonModal';
 import { CommonTable } from 'components/common/Table';
 
-import { IClient, IClientReq } from 'services/api/client/types';
-import { useClientList, useClientStatus, useDeleteClient } from 'services/hooks/client';
-import { clientKeys } from 'services/hooks/queryKeys';
+import { IProject, IProjectReq } from 'services/api/project/types';
+import { useDeleteProject, useProjectList, useProjectStatus } from 'services/hooks/project';
+import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
+import { DATE_FORMAT } from 'utils/constants/dayjs';
 import { ROUTES } from 'utils/constants/routes';
-import { renderTagColor } from 'utils/renderColor';
+import ProjectStatusDropdown from 'utils/projectStatusDropDown';
 
 interface IProps {
   searchDebounce: string;
-  args: IClientReq;
-  setArgs: React.Dispatch<React.SetStateAction<IClientReq>>;
+  args: IProjectReq;
+  setArgs: React.Dispatch<React.SetStateAction<IProjectReq>>;
 }
 
-const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { mutate: deleteMutate } = useDeleteClient();
-  const { mutate: statusMutate } = useClientStatus();
+  const { mutate: deleteMutate } = useDeleteProject();
+  const { mutate: statusMutate } = useProjectStatus();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [clientData, setClientData] = useState<IClient | null>(null);
+  const [projectData, setProjectData] = useState<IProject | null>(null);
 
-  const { data: clientList, isLoading } = useClientList({
+  const { data: projectList, isLoading } = useProjectList({
     ...args,
     search: searchDebounce
   });
-
   const handleDeleteModal = (id: number) => {
     deleteMutate(id, {
       onSuccess: () => {
-        // invalidate client list
+        // invalidate project list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [clientKeys.clientList({ ...args, search: searchDebounce })].some((key) => {
+            return [projectKeys.projectList({ ...args, search: searchDebounce })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -61,16 +62,16 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
 
   const handleConfirm = (status: string, id: number) => {
     const data = {
-      status: status === 'active' ? 'inactive' : 'active',
-      clientId: id
+      status,
+      projectId: id
     };
 
     statusMutate(data, {
       onSuccess: (res) => {
-        // invalidate client list
+        // invalidate project list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [clientKeys.clientList({ ...args, search: searchDebounce })].some((key) => {
+            return [projectKeys.projectList({ ...args, search: searchDebounce })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -78,8 +79,8 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
           }
         });
         // set status in client detail
-        queryClient.setQueryData<IClient>(clientKeys.clientDetail(id ?? 0), () => {
-          return { ...res } as unknown as IClient;
+        queryClient.setQueryData<IProject>(projectKeys.projectDetail(id ?? 0), () => {
+          return { ...res } as unknown as IProject;
         });
       },
       onError: (err: IApiError) => {
@@ -88,7 +89,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
     });
   };
 
-  const columns: ColumnsType<IClient> = [
+  const columns: ColumnsType<IProject> = [
     {
       title: 'Name',
       dataIndex: 'name',
@@ -96,64 +97,62 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       sorter: true
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
-      sorter: true
+      title: 'Start Date',
+      dataIndex: 'startDate',
+      key: 'startDate',
+      sorter: true,
+      render: (_, record: IProject) => (
+        <>{record?.startDate ? dayjs(record?.startDate).format(DATE_FORMAT) : '-'}</>
+      )
     },
 
     {
-      title: 'Phone number',
-      dataIndex: 'phone',
-      key: 'phone',
+      title: 'End Date',
+      dataIndex: 'endDate',
+      key: 'endDate',
       sorter: true,
-      render: (_, record: IClient) => (
-        <>{record?.phone && record?.phone?.length > 0 ? record?.phone : '-'}</>
+      render: (_, record: IProject) => (
+        <>{record?.endDate ? dayjs(record?.endDate).format(DATE_FORMAT) : '-'}</>
       )
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      width: 200,
+      title: 'Amount',
+      dataIndex: 'amount',
+      key: 'amount',
       sorter: true,
-      render: (_, record: IClient) => (
-        <>{record?.address && record?.address?.length > 0 ? record?.address : '-'}</>
-      )
+      render: (_, record: IProject) => <>{record?.amount ? `₹ ${record?.amount}` : '-'}</>
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
-      key: 'gender',
-      sorter: true,
-      render: (_, record: IClient) => <>{record?.gender ?? '-'}</>
+      title: 'Client Name',
+      dataIndex: 'client.name',
+      key: 'client.name',
+      sorter: false,
+      render: (_, record: IProject) => <>{record?.client?.name ?? '-'}</>
+    },
+    {
+      title: 'Company Name',
+      dataIndex: 'company.name',
+      key: 'company.name',
+      sorter: false,
+      render: (_, record: IProject) => <>{record?.company?.name ?? '-'}</>
     },
     {
       title: 'Country',
       dataIndex: 'country',
       key: 'country',
-      sorter: true,
-      render: (_, record: IClient) => <>{record?.country?.name ?? '-'}</>
+      sorter: false,
+      render: (_, record: IProject) => <>{record?.client?.country?.name ?? '-'}</>
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (_, record: IClient) => (
-        <Popconfirm
-          title="Status"
-          placement="left"
-          description={`Are you sure to ${
-            record?.status === 'active' ? 'inactive' : 'active'
-          } this client?`}
-          okText="Yes"
-          cancelText="No"
-          onConfirm={() => handleConfirm(record?.status, record?.id)}
-        >
-          <Tag className="table-status-tag" color={renderTagColor(record?.status === 'active')}>
-            {record?.status === 'active' ? 'Active' : 'Inactive'} <DownOutlined />
-          </Tag>
-        </Popconfirm>
+      render: (_, record: IProject) => (
+        <ProjectStatusDropdown
+          status={record.status}
+          projectId={record.id}
+          onStatusChange={(newStatus, projectId) => handleConfirm(newStatus, projectId)}
+        />
       )
     },
     {
@@ -161,18 +160,18 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: IClient) => (
+      render: (_, record: IProject) => (
         <div className="d-flex flex-row">
-          <Tooltip title="View client" placement="top" trigger="hover">
+          <Tooltip title="View project" placement="top" trigger="hover">
             <Button
               type="text"
               size="small"
               className="cta_btn table_cta_btn"
               icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.clientView}/${record?.id}`)}
+              onClick={() => navigate(`${ROUTES.projectView}/${record?.id}`)}
             />
           </Tooltip>
-          <Tooltip title="Edit client" placement="top" trigger="hover">
+          <Tooltip title="Edit project" placement="top" trigger="hover">
             <Button
               type="text"
               size="small"
@@ -180,14 +179,14 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
               icon={<EditOutlined />}
               onClick={() => {
                 setIsOpen(true);
-                setClientData(record);
+                setProjectData(record);
               }}
             />
           </Tooltip>
-          <Tooltip title="Delete client" placement="top" trigger="hover">
+          <Tooltip title="Delete project" placement="top" trigger="hover">
             <CommonModal
               title="Delete"
-              content="Are you sure delete this client?"
+              content="Are you sure delete this project?"
               type="confirm"
               onConfirm={() => handleDeleteModal(record?.id)}
             >
@@ -210,8 +209,8 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
         bordered
         columns={columns}
         dataSource={
-          (clientList?.result ?? []).length > 0
-            ? clientList?.result.map((item) => ({ ...item, key: item.id }))
+          (projectList?.result ?? []).length > 0
+            ? projectList?.result.map((item) => ({ ...item, key: item.id }))
             : []
         }
         currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
@@ -234,17 +233,17 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
           }
         }}
         loading={isLoading}
-        total={clientList?.recordsTotal ?? 10}
+        total={projectList?.recordsTotal ?? 10}
       />
       {isOpen && (
-        <AddClientModal
+        <AddProjectModal
           isOpen={Boolean(isOpen)}
           setIsOpen={(flag) => setIsOpen(!!flag)}
-          clientData={clientData}
+          projectData={projectData}
         />
       )}
     </>
   );
 };
 
-export default ClientManagementTable;
+export default ProjectManagementTable;

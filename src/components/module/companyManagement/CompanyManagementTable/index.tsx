@@ -76,7 +76,8 @@ const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       title: 'Country',
       dataIndex: 'country',
       key: 'country',
-      sorter: true
+      sorter: true,
+      render: (_, record: ICompany) => <>{record?.country?.name ?? '-'}</>
     },
     {
       title: 'Actions',

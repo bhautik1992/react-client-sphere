@@ -8,7 +8,7 @@ export const DetailWrapper = styled.div`
   &.userDetail {
     margin-top: 60px;
   }
-  .clientRow {
+  .projectRow {
     justify-content: space-between;
     h4 {
       margin-bottom: 5px;
@@ -18,9 +18,6 @@ export const DetailWrapper = styled.div`
     }
     .ant-image {
       margin-right: 15px;
-    }
-    .ant-tooltip-inner {
-      white-space: pre-wrap;
     }
   }
 `;

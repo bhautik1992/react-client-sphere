@@ -11,12 +11,14 @@ const SignIn = lazy(() => import('../pages/Auth/SignIn'));
 const ForgotPassword = lazy(() => import('../pages/Auth/ForgotPassword'));
 const ChangePassword = lazy(() => import('../pages/Auth/ChangePassword'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
-const ClientList = lazy(() => import('../pages/ClientManagement/index'));
-const ClientView = lazy(() => import('../components/module/clientManagement/ViewClient'));
-const CompanyList = lazy(() => import('../pages/CompanyManagement/index'));
-const CompanyView = lazy(() => import('../components/module/companyManagement/ViewCompany'));
 const UsersList = lazy(() => import('../pages/UsersManagement'));
 const UserView = lazy(() => import('../components/module/usersManagement/ViewUser'));
+const ClientList = lazy(() => import('../pages/ClientManagement/index'));
+const ClientView = lazy(() => import('../components/module/clientManagement/ViewClient'));
+const ProjectList = lazy(() => import('../pages/ProjectManagement/index'));
+const ProjectView = lazy(() => import('../components/module/projectManagement/ViewProject'));
+const CompanyList = lazy(() => import('../pages/CompanyManagement/index'));
+const CompanyView = lazy(() => import('../components/module/companyManagement/ViewCompany'));
 const MyProfile = lazy(() => import('../pages/MyProfile'));
 const EditMyProfile = lazy(() => import('../components/module/profileEdit'));
 
@@ -39,22 +41,28 @@ const Routing = () => {
         <Route path={ROUTES.myProfile} element={<MyProfile />} />
         <Route path={ROUTES.editMyProfile} element={<EditMyProfile />} />
 
+        <Route path={ROUTES.usersManagement} element={<Outlet />}>
+          <Route path={ROUTES.usersManagement} element={<UsersList />} />
+          <Route path={`${ROUTES.usersView}/:id`} element={<UserView />} />
+          <Route path="*" element={<Navigate to={ROUTES.usersManagement} replace={true} />} />
+        </Route>
+
         <Route path={ROUTES.clientManagement} element={<Outlet />}>
           <Route path={ROUTES.clientManagement} element={<ClientList />} />
           <Route path={`${ROUTES.clientView}/:id`} element={<ClientView />} />
           <Route path="*" element={<Navigate to={ROUTES.clientManagement} replace={true} />} />
         </Route>
 
+        <Route path={ROUTES.projectManagement} element={<Outlet />}>
+          <Route path={ROUTES.projectManagement} element={<ProjectList />} />
+          <Route path={`${ROUTES.projectView}/:id`} element={<ProjectView />} />
+          <Route path="*" element={<Navigate to={ROUTES.projectManagement} replace={true} />} />
+        </Route>
+
         <Route path={ROUTES.companyManagement} element={<Outlet />}>
           <Route path={ROUTES.companyManagement} element={<CompanyList />} />
           <Route path={`${ROUTES.companyView}/:id`} element={<CompanyView />} />
           <Route path="*" element={<Navigate to={ROUTES.companyManagement} replace={true} />} />
-        </Route>
-
-        <Route path={ROUTES.usersManagement} element={<Outlet />}>
-          <Route path={ROUTES.usersManagement} element={<UsersList />} />
-          <Route path={`${ROUTES.usersView}/:id`} element={<UserView />} />
-          <Route path="*" element={<Navigate to={ROUTES.usersManagement} replace={true} />} />
         </Route>
 
         <Route path={ROUTES.default} element={<Navigate replace to={ROUTES.dashboard} />} />

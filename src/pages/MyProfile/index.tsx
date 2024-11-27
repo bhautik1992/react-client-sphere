@@ -29,18 +29,18 @@ const MyProfile = () => {
             Edit Profile
           </Button>
         </div>
-        <Row gutter={[0, 30]} className="profileDetail">
-          <Col xs={18}>
-            <Row gutter={[0, 40]} className="detailRow">
-              <Col xs={12}>
+        <Row gutter={[16, 30]} className="profileDetail">
+          <Col xs={24}>
+            <Row gutter={[16, 40]} className="detailRow">
+              <Col xs={8}>
                 <h4>First Name</h4>
                 <p>{data?.first_name ?? '-'}</p>
               </Col>
-              <Col xs={12}>
+              <Col xs={8}>
                 <h4>Last Name</h4>
                 <p>{data?.last_name ?? '-'}</p>
               </Col>
-              <Col xs={12}>
+              <Col xs={8}>
                 <h4>Email Address</h4>
                 <p>{data?.email ?? '-'}</p>
               </Col>

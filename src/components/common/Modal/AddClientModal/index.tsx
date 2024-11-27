@@ -9,6 +9,7 @@ import { RenderPhoneNumber, RenderSelectInput, RenderTextInput } from 'component
 
 import { IAddClientReq, IClient, IClientReq } from 'services/api/client/types';
 import { useAddClient, useEditClient } from 'services/hooks/client';
+import { useCountryList } from 'services/hooks/country';
 import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
@@ -34,11 +35,17 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
 
+  const { data: countryList } = useCountryList();
+  const countryOptions = countryList?.map((item) => {
+    return {
+      label: item.name,
+      value: item.id
+    };
+  });
+
   const handleClose = (_?: unknown, reason?: string) => {
     if (reason === 'backdropClick') return;
-
     setOpen(false);
-
     setIsOpen?.(false);
   };
 
@@ -130,7 +137,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
           phone: clientData?.phone ?? null,
           gender: clientData?.gender ?? null,
           address: clientData?.address ?? null,
-          country: clientData?.country ?? null,
+          countryId: clientData?.country?.id ?? null,
           status: clientData?.status ?? null
         }}
       >
@@ -220,17 +227,17 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
               }
             ]}
           />
-          <RenderTextInput
+          <RenderSelectInput
             col={{ xs: 24 }}
-            name="country"
-            placeholder="Enter your country"
+            name="countryId"
+            placeholder="Please select country"
             label="Country"
-            allowClear="allowClear"
-            size="middle"
+            allowClear={true}
+            optionLabel={countryOptions}
             rules={[
               {
                 required: true,
-                message: 'Please enter your country'
+                message: 'Please select country'
               }
             ]}
           />

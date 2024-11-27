@@ -1,5 +1,6 @@
 import { Key } from 'react';
 
+import { ICountry } from '../country/types';
 import { IProject } from '../project/types';
 
 export interface IClient {
@@ -8,7 +9,7 @@ export interface IClient {
   email: string;
   phone: string;
   address: string;
-  country: string;
+  country: ICountry;
   gender: string;
   status: string;
   projects: IProject[];
@@ -27,7 +28,7 @@ export interface IAddClientReq {
   email: string;
   phone: string;
   gender: string;
-  country: string;
+  countryId: number;
   status: string;
   address: string;
 }

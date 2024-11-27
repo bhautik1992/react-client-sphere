@@ -10,14 +10,17 @@ export const ROUTES = {
   editMyProfile: `/edit-profile`,
   dashboard: `/dashboard`,
 
-  clientManagement: `/clients`,
-  clientView: `/clients/view-client`,
+  clientManagement: `/clients-management`,
+  clientView: `/clients-management/view-client`,
 
   usersManagement: `/users-management`,
   usersView: `/users-management/view-user`,
 
   companyManagement: `/company-management`,
   companyView: `/company-management/view-company`,
+
+  projectManagement: `/project-management`,
+  projectView: `/project-management/view-project`,
 
   dynamicPath: (path: string) => `/static-path/${path}`
 };

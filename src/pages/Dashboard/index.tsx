@@ -18,7 +18,7 @@ const Dashboard = () => {
   const { data } = useDashboard();
   return (
     <>
-      <Meta title="Building Bridges Application - Dashboard" />
+      <Meta title="Client Sphere - Dashboard" />
       <Wrapper>
         <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
         <ContentHeader pageTitle="Dashboard" />

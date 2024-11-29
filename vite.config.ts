@@ -8,6 +8,10 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    port: 5173,
+    host: '0.0.0.0'
+  },
   build: {
     outDir: 'build'
   },
@@ -24,9 +28,9 @@ export default defineConfig({
         display: 'standalone',
         scope: '/',
         start_url: '/',
-        name: 'Building Bridge Admin panel',
-        short_name: 'Building Bridge Admin',
-        description: 'Building Bridge Communication',
+        name: 'client Sphere',
+        short_name: 'client Sphere',
+        description: 'client Sphere',
         icons: [
           {
             src: 'icons/icon-192x192.png',

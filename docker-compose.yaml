@@ -1,0 +1,21 @@
+version: '3.6'
+
+services:
+  #  admin services
+  react-client-sphere:
+    container_name: react-client-sphere-container
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      VITE_REACT_APP_NAME: ClientSphere
+      VITE_REACT_APP_API_BASE: http://localhost:3000
+    ports:
+      - '5173:5173'
+    networks:
+      - new-network
+    command: ['npm', 'run', 'start', '--', '--host']
+
+networks:
+  new-network:
+    driver: bridge

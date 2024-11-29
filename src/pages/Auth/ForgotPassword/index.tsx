@@ -36,7 +36,7 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <>
-      <Meta title="Building Bridges Application - Forgot Password" />
+      <Meta title="Client Sphere - Forgot Password" />
       <AuthLayout>
         <Wrapper>
           <div className="formTitle">

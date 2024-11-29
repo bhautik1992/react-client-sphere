@@ -2,7 +2,7 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Row, message } from 'antd';
 import { Wrapper } from 'pages/Auth/Auth.Styled';
 import { useState } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import AuthLayout from 'components/common/AuthLayout';
 import { RenderCheckBox, RenderPasswordInput, RenderTextInput } from 'components/common/FormField';
@@ -106,7 +106,7 @@ const SignIn: React.FC = () => {
                     >
                       Remember me
                     </RenderCheckBox>
-                    <Link to={ROUTES?.forgotPassword}>Forgot your password?</Link>
+                    {/* <Link to={ROUTES?.forgotPassword}>Forgot your password?</Link> */}
                   </div>
                 </Col>
                 <Col xs={24}>

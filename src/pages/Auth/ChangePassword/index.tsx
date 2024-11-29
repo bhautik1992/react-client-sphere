@@ -7,8 +7,8 @@ import { RenderPasswordInput } from 'components/common/FormField';
 import ContentHeader from 'components/layout/contentHeader';
 
 import { IChangePasswordForm } from 'services/api/auth/types';
-import { Role } from 'services/api/types';
 import { useChangePassword } from 'services/hooks/auth';
+import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
 import pattern from 'utils/constants/pattern';
@@ -19,12 +19,14 @@ import { Wrapper } from '../Auth.Styled';
 const ChangePassword = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
+  const { userData } = authStore((state) => state);
+  console.log('userData: ', userData);
 
   const { mutate } = useChangePassword();
 
   const [passwordValidation, setPasswordValidation] = useState({
     minLength: false,
-    maxLangth: false,
+    maxLength: false,
     containsUppercase: false,
     containsLowercase: false,
     containsNumber: false,
@@ -34,7 +36,7 @@ const ChangePassword = () => {
   const validatePassword = (value: string) => {
     const validations = {
       minLength: value.length >= 8,
-      maxLangth: value.length < 15,
+      maxLength: value.length < 15,
       containsUppercase: /[A-Z]/.test(value),
       containsLowercase: /[a-z]/.test(value),
       containsNumber: /\d/.test(value),
@@ -43,7 +45,7 @@ const ChangePassword = () => {
     setPasswordValidation(validations);
     return Promise.all([
       Promise.resolve(validations.minLength ? '' : 'Password must be at least 8 characters'),
-      Promise.resolve(validations.maxLangth ? '' : 'Password must be less then 15 characters'),
+      Promise.resolve(validations.maxLength ? '' : 'Password must be less then 15 characters'),
       Promise.resolve(
         validations.containsUppercase ? '' : 'Password must contain an uppercase letter'
       ),
@@ -57,9 +59,9 @@ const ChangePassword = () => {
 
   const onSubmit = (value: IChangePasswordForm) => {
     const data = {
-      password: value?.oldPassword,
-      newPassword: value?.newPassword,
-      userType: Role?.ADMIN
+      current_password: value?.current_password,
+      new_password: value?.new_password,
+      id: +userData.id
     };
     mutate(data, {
       onSuccess: () => {
@@ -82,10 +84,10 @@ const ChangePassword = () => {
               <Row gutter={[0, 30]} justify={'center'}>
                 <RenderPasswordInput
                   col={{ xs: 13 }}
-                  name="oldPassword"
-                  label="Old Password"
+                  name="current_password"
+                  label="Current Password"
                   required={true}
-                  placeholder="Enter your old password "
+                  placeholder="Enter your current password "
                   type="password"
                   size="middle"
                   prefix={<LockOutlined style={{ color: '#0000ff' }} />}
@@ -93,7 +95,7 @@ const ChangePassword = () => {
                     () => ({
                       validator: (_: any, value: string) => {
                         if (!value) {
-                          return Promise.reject(new Error('Please enter your old password'));
+                          return Promise.reject(new Error('Please enter your current password'));
                         } else if (!pattern.strong_password.test(value)) {
                           return Promise.reject(
                             new Error(
@@ -109,7 +111,7 @@ const ChangePassword = () => {
                 />
                 <RenderPasswordInput
                   col={{ xs: 13 }}
-                  name="newPassword"
+                  name="new_password"
                   required={true}
                   placeholder="Enter your new password "
                   type="password"
@@ -125,7 +127,7 @@ const ChangePassword = () => {
                         } else {
                           setPasswordValidation({
                             minLength: false,
-                            maxLangth: false,
+                            maxLength: false,
                             containsUppercase: false,
                             containsLowercase: false,
                             containsNumber: false,
@@ -149,7 +151,7 @@ const ChangePassword = () => {
                   rules={[
                     ({ getFieldValue }: { getFieldValue: any }) => ({
                       validator(_: any, value: any) {
-                        if (value && getFieldValue('newPassword') === value) {
+                        if (value && getFieldValue('new_password') === value) {
                           return Promise.resolve();
                         } else if (!value) {
                           return Promise.reject(new Error('Please enter your confirm password'));
@@ -176,7 +178,7 @@ const ChangePassword = () => {
                     </Col>
                     <Col xs={13}>
                       <span className="valid">
-                        {passwordValidation.maxLangth ? (
+                        {passwordValidation.maxLength ? (
                           <CheckCircleOutlined className="success" />
                         ) : (
                           <CloseCircleOutlined className="error" />

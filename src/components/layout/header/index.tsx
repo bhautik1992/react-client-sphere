@@ -12,7 +12,8 @@ import { StyledLayout } from '../Layout.Styled';
 const Header = () => {
   const navigate = useNavigate();
   const {
-    actions: { authFail }
+    actions: { authFail },
+    userData
   } = authStore((state) => state);
   const onLogout = () => {
     authFail();
@@ -55,20 +56,25 @@ const Header = () => {
           <h2 className="header-title">Dashboard</h2>
         </Col> */}
         <Col xs={24} className="d-flex align-items-center justify-content-end">
-          <Dropdown
-            menu={{ items }}
-            trigger={['click']}
-            className="layout-header-dropdown"
-            overlayClassName="layout-header-dropdown"
-          >
-            <Link to="" onClick={(e) => e.preventDefault()}>
-              <Avatar
-                size="large"
-                src={toAbsoluteUrl('/icons/user_thumbnail.svg')}
-                className="profile-avatar"
-              />
-            </Link>
-          </Dropdown>
+          <div className="d-flex align-items-center">
+            <span style={{ marginRight: '15px', fontWeight: 500, fontSize: '16px' }}>
+              {userData?.first_name}
+            </span>
+            <Dropdown
+              menu={{ items }}
+              trigger={['click']}
+              className="layout-header-dropdown"
+              overlayClassName="layout-header-dropdown"
+            >
+              <Link to="" onClick={(e) => e.preventDefault()}>
+                <Avatar
+                  size="large"
+                  src={toAbsoluteUrl('/icons/user_thumbnail.svg')}
+                  className="profile-avatar"
+                />
+              </Link>
+            </Dropdown>
+          </div>
         </Col>
       </Row>
     </StyledLayout.Header>

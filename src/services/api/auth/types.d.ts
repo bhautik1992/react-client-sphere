@@ -23,13 +23,13 @@ export interface IResetPasswordReq {
 }
 
 export interface IChangePasswordReq {
-  password: string;
-  newPassword: string;
-  userType: string;
+  id: number;
+  current_password: string;
+  new_password: string;
 }
 
 export interface IChangePasswordForm {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
 }

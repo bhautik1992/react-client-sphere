@@ -3,6 +3,7 @@ import { ButtonWrapper } from './style';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Form, Modal, ModalProps, Row, message } from 'antd';
 import { useState } from 'react';
+import { isValidPhoneNumber } from 'react-phone-number-input';
 
 import { RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 
@@ -121,16 +122,17 @@ const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
         autoComplete="off"
         className="signInForm"
         initialValues={{
-          first_name: userData?.first_name ?? '',
-          last_name: userData?.last_name ?? null,
+          firstName: userData?.firstName ?? '',
+          lastName: userData?.lastName ?? null,
           email: userData?.email ?? '',
+          phone: userData?.phone ?? null,
           role: userData?.role ?? null
         }}
       >
         <Row gutter={[0, 30]}>
           <RenderTextInput
             col={{ xs: 24 }}
-            name="first_name"
+            name="firstName"
             placeholder="Enter your first name"
             label="First name"
             allowClear="allowClear"
@@ -144,7 +146,7 @@ const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
           />
           <RenderTextInput
             col={{ xs: 24 }}
-            name="last_name"
+            name="lastName"
             placeholder="Enter your last name"
             label="Last name"
             allowClear="allowClear"
@@ -173,6 +175,27 @@ const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
                 type: 'email',
                 message: 'Please enter valid email address'
               }
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 24 }}
+            name="phone"
+            placeholder="Enter your phone number"
+            label="Phone number"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              () => ({
+                validator: (_: any, value: string) => {
+                  if (!value) {
+                    return Promise.reject(new Error('Please enter your phone number'));
+                  } else if (!value || isValidPhoneNumber(value, 'IN')) {
+                    return Promise.resolve();
+                  } else {
+                    return Promise.reject(new Error('Please enter valid phone number'));
+                  }
+                }
+              })
             ]}
           />
           <RenderSelectInput

@@ -1,12 +1,13 @@
-import { countryAPI } from 'services/api/country';
+import { countryStateCityAPI } from 'services/api/country';
+import { ICityReq, IStateReq } from 'services/api/country/types';
 
-import { useFetch, useRequest } from '..';
-import { countryKey } from '../queryKeys';
+import { useFetch } from '..';
+import { countryStateCityKey } from '../queryKeys';
 
 export const useCountryList = () => {
   return useFetch({
-    queryFn: () => countryAPI.countryList(),
-    queryKey: countryKey.countryList,
+    queryFn: () => countryStateCityAPI.countryList(),
+    queryKey: countryStateCityKey.countryList,
     queryOptions: {
       staleTime: Infinity,
       retry: false
@@ -14,9 +15,26 @@ export const useCountryList = () => {
   });
 };
 
-export const useAddCountry = () => {
-  return useRequest({
-    mutationFn: countryAPI.addCountry,
-    mutationKey: countryKey.countryAdd
+export const useStateList = (data: IStateReq) => {
+  return useFetch({
+    queryFn: () => countryStateCityAPI.stateList(data),
+    queryKey: countryStateCityKey.stateList(data),
+    queryOptions: {
+      staleTime: Infinity,
+      retry: false,
+      enabled: !!data.countryCode
+    }
+  });
+};
+
+export const useCityList = (data: ICityReq) => {
+  return useFetch({
+    queryFn: () => countryStateCityAPI.cityList(data),
+    queryKey: countryStateCityKey.cityList(data),
+    queryOptions: {
+      staleTime: Infinity,
+      retry: false,
+      enabled: !!data.stateCode
+    }
   });
 };

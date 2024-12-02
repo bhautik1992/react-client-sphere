@@ -54,8 +54,9 @@ export const ApiEndPoints = {
     deleteCompany: `company/delete`,
     companyDetail: `company/get`
   },
-  country: {
-    countryList: `country/list`,
-    addCountry: `country/create`
+  country_state_city: {
+    countryList: `country-state-city/country-list`,
+    stateList: `country-state-city/state-list`,
+    cityList: `country-state-city/city-list`
   }
 };

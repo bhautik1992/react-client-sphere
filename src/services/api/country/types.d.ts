@@ -1,17 +1,26 @@
-export interface ICountryRes {
-  id: number;
-  name: string;
-}
-
-export interface IAddCountryReq {
-  name: string;
-}
-
-export interface IAddCountryRes {}
-
 export interface ICountry {
-  id: number;
   name: string;
-  createdAt: string;
-  updatedAt: string;
+  isoCode: string;
+  currency: string;
+}
+
+export interface IState {
+  name: string;
+  isoCode: string;
+  countryCode: string;
+}
+
+export interface ICity {
+  name: string;
+  countryCode: string;
+  stateCode: string;
+}
+
+export interface IStateReq {
+  countryCode: string;
+}
+
+export interface ICityReq {
+  countryCode: string;
+  stateCode: string;
 }

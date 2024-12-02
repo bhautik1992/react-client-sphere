@@ -8,8 +8,9 @@ import { isValidPhoneNumber } from 'react-phone-number-input';
 import { RenderPhoneNumber, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 
 import { IAddClientReq, IClient, IClientReq } from 'services/api/client/types';
+import { ICity, ICountry, IState } from 'services/api/country/types';
 import { useAddClient, useEditClient } from 'services/hooks/client';
-import { useCountryList } from 'services/hooks/country';
+import { useCityList, useCountryList, useStateList } from 'services/hooks/country';
 import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
@@ -35,13 +36,45 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
 
-  const { data: countryList } = useCountryList();
-  const countryOptions = countryList?.map((item) => {
-    return {
-      label: item.name,
-      value: item.id
-    };
+  const { data: countryOptions } = useCountryList();
+  // Country changes
+  const [countryCode, setCountryCode] = useState<string>(clientData?.countryCode ?? '');
+  const [stateOptions, setStateOptions] = useState<IState[]>([]);
+
+  const { data: stateList } = useStateList({
+    countryCode: countryCode
   });
+
+  React.useEffect(() => {
+    if (stateList) {
+      setStateOptions(stateList);
+    }
+  }, [stateList]);
+
+  const handleCountryChange = (countryCode: string) => {
+    setCountryCode(countryCode);
+    setStateOptions([]);
+  };
+
+  // State changes
+  const [stateCode, setStateCode] = useState<string>(clientData?.stateCode ?? '');
+  const [cityOptions, setCityOptions] = useState<ICity[]>([]);
+
+  const { data: cityList } = useCityList({
+    countryCode: countryCode,
+    stateCode: stateCode
+  });
+
+  React.useEffect(() => {
+    if (cityList) {
+      setCityOptions(cityList);
+    }
+  }, [cityList]);
+
+  const handleStateChange = (stateCode: string) => {
+    setStateCode(stateCode);
+    setCityOptions([]);
+  };
 
   const handleClose = (_?: unknown, reason?: string) => {
     if (reason === 'backdropClick') return;
@@ -132,27 +165,45 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
         autoComplete="off"
         className="signInForm"
         initialValues={{
-          name: clientData?.name ?? '',
+          firstName: clientData?.firstName ?? '',
+          lastName: clientData?.lastName ?? '',
           email: clientData?.email ?? '',
           phone: clientData?.phone ?? null,
+          companyName: clientData?.companyName ?? null,
           gender: clientData?.gender ?? null,
           address: clientData?.address ?? null,
-          countryId: clientData?.country?.id ?? null,
+          countryCode: clientData?.countryCode ?? null,
+          stateCode: clientData?.stateCode ?? null,
+          cityName: clientData?.cityName ?? null,
           status: clientData?.status ?? null
         }}
       >
         <Row gutter={[0, 30]}>
           <RenderTextInput
             col={{ xs: 24 }}
-            name="name"
-            placeholder="Enter your name"
-            label="Name"
+            name="firstName"
+            placeholder="Enter your first name"
+            label="First name"
             allowClear="allowClear"
             size="middle"
             rules={[
               {
                 required: true,
-                message: 'Please enter your name'
+                message: 'Please enter your first name'
+              }
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 24 }}
+            name="lastName"
+            placeholder="Enter your last name"
+            label="Last name"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your last name'
               }
             ]}
           />
@@ -196,6 +247,20 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
               })
             ]}
           />
+          <RenderTextInput
+            col={{ xs: 24 }}
+            name="companyName"
+            placeholder="Enter your company name"
+            label="Company name"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your company name'
+              }
+            ]}
+          />
           <RenderSelectInput
             col={{ xs: 24 }}
             name="gender"
@@ -229,15 +294,56 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
           />
           <RenderSelectInput
             col={{ xs: 24 }}
-            name="countryId"
+            name="countryCode"
             placeholder="Please select country"
             label="Country"
             allowClear={true}
-            optionLabel={countryOptions}
+            optionLabel={countryOptions?.map((country: ICountry) => ({
+              label: country.name,
+              value: country.isoCode
+            }))}
+            onSelect={handleCountryChange}
             rules={[
               {
                 required: true,
                 message: 'Please select country'
+              }
+            ]}
+          />
+          <RenderSelectInput
+            col={{ xs: 24 }}
+            name="stateCode"
+            placeholder="Please select state"
+            label="State"
+            allowClear={true}
+            disabled={!stateOptions.length}
+            optionLabel={stateOptions?.map((state: IState) => ({
+              label: state.name,
+              value: state.isoCode
+            }))}
+            onSelect={handleStateChange}
+            rules={[
+              {
+                required: true,
+                message: 'Please select state'
+              }
+            ]}
+          />
+          <RenderSelectInput
+            col={{ xs: 24 }}
+            name="cityName"
+            placeholder="Please select city"
+            label="City"
+            allowClear={true}
+            disabled={!cityOptions.length}
+            optionLabel={cityOptions?.map((city: ICity) => ({
+              label: city.name,
+              value: city.name
+            }))}
+            rules={[
+              {
+                required: true,
+                message: 'Please select city'
               }
             ]}
           />

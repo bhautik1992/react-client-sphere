@@ -25,8 +25,8 @@ const EditProfile = () => {
   useEffect(() => {
     if (!data) return;
     form.setFieldsValue({
-      ['firstName']: data?.first_name ?? '',
-      ['lastName']: data?.last_name ?? '',
+      ['firstName']: data?.firstName ?? '',
+      ['lastName']: data?.lastName ?? '',
       ['email']: data?.email ?? ''
     });
   }, [form, data]);
@@ -35,8 +35,8 @@ const EditProfile = () => {
     const editData: IProfileEditReq = {
       id: data?.id ?? 0,
       email: value?.email,
-      first_name: value?.firstName,
-      last_name: value?.lastName
+      firstName: value?.firstName,
+      lastName: value?.lastName
     };
 
     mutate(editData, {

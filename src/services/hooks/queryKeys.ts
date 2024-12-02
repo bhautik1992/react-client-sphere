@@ -1,5 +1,6 @@
 import { IClientReq } from 'services/api/client/types';
 import { ICompanyReq } from 'services/api/company/types';
+import { ICityReq, IStateReq } from 'services/api/country/types';
 import { IProjectReq } from 'services/api/project/types';
 import { IUserReq } from 'services/api/users/types';
 
@@ -63,9 +64,10 @@ export const dashboardKey = {
   dashboardCompany: [`dashboard-company`]
 };
 
-export const countryKey = {
+export const countryStateCityKey = {
   countryList: [`country-list`],
-  countryAdd: [`country-add`]
+  stateList: (data: IStateReq) => [`state-list`, `${data?.countryCode}`],
+  cityList: (data: ICityReq) => [`city-list`, `${data?.countryCode}`, `${data?.stateCode}`]
 };
 
 export const profileKey = {

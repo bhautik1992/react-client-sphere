@@ -5,11 +5,17 @@ import { IProject } from '../project/types';
 
 export interface IClient {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   address: string;
-  country: ICountry;
+  companyName: string;
+  countryCode: string;
+  countryName: string;
+  stateCode: string;
+  stateName: string;
+  cityName: string;
   gender: string;
   status: string;
   projects: IProject[];
@@ -24,11 +30,15 @@ export interface IClientReq {
 }
 
 export interface IAddClientReq {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
+  companyName: string;
   gender: string;
-  countryId: number;
+  countryCode: string;
+  stateCode: string;
+  cityName: string;
   status: string;
   address: string;
 }

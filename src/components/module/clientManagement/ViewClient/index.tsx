@@ -85,26 +85,26 @@ const ViewClient = () => {
         <DetailWrapper>
           <Row className="clientRow">
             <Col xs={6}>
-              <h4>Name</h4>
-              <p>{clientData?.name ?? '-'}</p>
+              <h4>First Name</h4>
+              <p>{clientData?.firstName ?? '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Email Address</h4>
+              <h4>Last Name</h4>
+              <p>{clientData?.lastName ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Email</h4>
               <p>{clientData?.email ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Phone</h4>
-              <p>{clientData?.phone ?? '-'}</p>
             </Col>
           </Row>
           <Row className="clientRow">
             <Col xs={6}>
-              <h4>Gender</h4>
-              <p>{clientData?.gender ?? '-'}</p>
+              <h4>Phone</h4>
+              <p>{clientData?.phone ?? '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Country</h4>
-              <p>{clientData?.country?.name ?? '-'}</p>
+              <h4>Gender</h4>
+              <p>{clientData?.gender ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Address</h4>
@@ -112,6 +112,24 @@ const ViewClient = () => {
             </Col>
           </Row>
           <Row className="clientRow">
+            <Col xs={6}>
+              <h4>Country</h4>
+              <p>{clientData?.countryName ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>State</h4>
+              <p>{clientData?.stateName ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>City</h4>
+              <p>{clientData?.cityName ?? '-'}</p>
+            </Col>
+          </Row>
+          <Row className="clientRow">
+            <Col xs={6}>
+              <h4>Company Name</h4>
+              <p>{clientData?.companyName ?? '-'}</p>
+            </Col>
             <Col xs={6}>
               <h4>No. of Projects</h4>
               <Tooltip
@@ -132,6 +150,7 @@ const ViewClient = () => {
                 <p>{clientData?.projects?.length ?? '-'}</p>
               </Tooltip>
             </Col>
+            <Col xs={6}></Col>
           </Row>
         </DetailWrapper>
       </div>

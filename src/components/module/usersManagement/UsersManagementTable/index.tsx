@@ -56,20 +56,26 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
   const columns: ColumnsType<IUser> = [
     {
       title: 'First name',
-      dataIndex: 'first_name',
-      key: 'first_name',
+      dataIndex: 'firstName',
+      key: 'firstName',
       sorter: true
     },
     {
       title: 'Last name',
-      dataIndex: 'last_name',
-      key: 'last_name',
+      dataIndex: 'lastName',
+      key: 'lastName',
       sorter: true
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
+      sorter: true
+    },
+    {
+      title: 'Phone',
+      dataIndex: 'phone',
+      key: 'phone',
       sorter: true
     },
     {

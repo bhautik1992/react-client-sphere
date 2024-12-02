@@ -34,11 +34,11 @@ const MyProfile = () => {
             <Row gutter={[16, 40]} className="detailRow">
               <Col xs={8}>
                 <h4>First Name</h4>
-                <p>{data?.first_name ?? '-'}</p>
+                <p>{data?.firstName ?? '-'}</p>
               </Col>
               <Col xs={8}>
                 <h4>Last Name</h4>
-                <p>{data?.last_name ?? '-'}</p>
+                <p>{data?.lastName ?? '-'}</p>
               </Col>
               <Col xs={8}>
                 <h4>Email Address</h4>

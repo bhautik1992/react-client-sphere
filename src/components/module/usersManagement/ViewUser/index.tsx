@@ -34,11 +34,11 @@ const ViewUser = () => {
           <Row className="userRow">
             <Col xs={6}>
               <h4>First Name</h4>
-              <p>{data?.first_name ?? '-'}</p>
+              <p>{data?.firstName ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Last Name</h4>
-              <p>{data?.last_name ?? '-'}</p>
+              <p>{data?.lastName ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Email</h4>
@@ -47,9 +47,14 @@ const ViewUser = () => {
           </Row>
           <Row className="userRow">
             <Col xs={6}>
+              <h4>Phone</h4>
+              <p>{data?.phone ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
               <h4>Role</h4>
               <p>{RoleData.find((role) => role.value === data?.role)?.label ?? '-'}</p>
             </Col>
+            <Col xs={6}></Col>
           </Row>
         </DetailWrapper>
       </div>

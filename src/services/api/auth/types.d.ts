@@ -5,8 +5,8 @@ export interface ISignInReq {
 
 export interface ISignInRes {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   access_token: string;
 }
@@ -24,12 +24,12 @@ export interface IResetPasswordReq {
 
 export interface IChangePasswordReq {
   id: number;
-  current_password: string;
-  new_password: string;
+  currentPassword: string;
+  newPassword: string;
 }
 
 export interface IChangePasswordForm {
-  current_password: string;
-  new_password: string;
-  confirm_password: string;
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }

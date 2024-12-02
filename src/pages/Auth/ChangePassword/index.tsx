@@ -59,8 +59,8 @@ const ChangePassword = () => {
 
   const onSubmit = (value: IChangePasswordForm) => {
     const data = {
-      current_password: value?.current_password,
-      new_password: value?.new_password,
+      currentPassword: value?.currentPassword,
+      newPassword: value?.newPassword,
       id: +userData.id
     };
     mutate(data, {
@@ -84,7 +84,7 @@ const ChangePassword = () => {
               <Row gutter={[0, 30]} justify={'center'}>
                 <RenderPasswordInput
                   col={{ xs: 13 }}
-                  name="current_password"
+                  name="currentPassword"
                   label="Current Password"
                   required={true}
                   placeholder="Enter your current password "
@@ -111,7 +111,7 @@ const ChangePassword = () => {
                 />
                 <RenderPasswordInput
                   col={{ xs: 13 }}
-                  name="new_password"
+                  name="newPassword"
                   required={true}
                   placeholder="Enter your new password "
                   type="password"
@@ -151,7 +151,7 @@ const ChangePassword = () => {
                   rules={[
                     ({ getFieldValue }: { getFieldValue: any }) => ({
                       validator(_: any, value: any) {
-                        if (value && getFieldValue('new_password') === value) {
+                        if (value && getFieldValue('newPassword') === value) {
                           return Promise.resolve();
                         } else if (!value) {
                           return Promise.reject(new Error('Please enter your confirm password'));

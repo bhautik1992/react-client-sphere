@@ -2,9 +2,10 @@ import { Key } from 'react';
 
 export interface IUser {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
   role: string;
 }
 
@@ -23,17 +24,19 @@ export interface IUserReq {
 
 export interface IUserDetailRes {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
   role: string;
 }
 
 export interface IAddUserReq {
   id?: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  phone: string;
   role: string;
 }
 

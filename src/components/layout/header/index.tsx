@@ -58,7 +58,7 @@ const Header = () => {
         <Col xs={24} className="d-flex align-items-center justify-content-end">
           <div className="d-flex align-items-center">
             <span style={{ marginRight: '15px', fontWeight: 500, fontSize: '16px' }}>
-              {userData?.first_name}
+              {userData?.firstName}
             </span>
             <Dropdown
               menu={{ items }}

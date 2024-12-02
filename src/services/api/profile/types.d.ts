@@ -1,7 +1,7 @@
 export interface IProfileRes {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   createdAt: string;
   updatedAt: string;
@@ -9,7 +9,7 @@ export interface IProfileRes {
 
 export interface IProfileEditReq {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   email: string;
 }

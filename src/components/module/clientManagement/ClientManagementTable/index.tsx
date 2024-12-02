@@ -90,9 +90,15 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
 
   const columns: ColumnsType<IClient> = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: 'First name',
+      dataIndex: 'firstName',
+      key: 'firstName',
+      sorter: true
+    },
+    {
+      title: 'Last name',
+      dataIndex: 'lastName',
+      key: 'lastName',
       sorter: true
     },
     {
@@ -110,6 +116,12 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       render: (_, record: IClient) => (
         <>{record?.phone && record?.phone?.length > 0 ? record?.phone : '-'}</>
       )
+    },
+    {
+      title: 'Company name',
+      dataIndex: 'companyName',
+      key: 'companyName',
+      sorter: true
     },
     {
       title: 'Address',
@@ -130,10 +142,9 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
     },
     {
       title: 'Country',
-      dataIndex: 'country',
-      key: 'country',
-      sorter: true,
-      render: (_, record: IClient) => <>{record?.country?.name ?? '-'}</>
+      dataIndex: 'countryName',
+      key: 'countryName',
+      render: (_, record: IClient) => <>{record?.countryName ?? '-'}</>
     },
     {
       title: 'Status',

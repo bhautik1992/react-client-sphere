@@ -2,7 +2,7 @@ import { DownOutlined } from '@ant-design/icons';
 import { Button, Popover, Select, Tag } from 'antd';
 import React, { useState } from 'react';
 
-import { ProjectStatus } from './constants/project-enum';
+import { ProjectStatus } from './constants/enum';
 import { renderTagColor } from './renderColor';
 
 const ProjectStatusDropdown: React.FC<{

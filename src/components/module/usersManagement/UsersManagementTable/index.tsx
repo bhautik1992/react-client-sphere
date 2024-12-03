@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { SorterResult } from 'antd/es/table/interface';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +16,8 @@ import { userKeys } from 'services/hooks/queryKeys';
 import { useDeleteUser, useUserList } from 'services/hooks/user';
 
 import { IApiError } from 'utils/Types';
+import { DATE_FORMAT } from 'utils/constants/dayjs';
+import { UserRole } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
@@ -55,6 +58,12 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
 
   const columns: ColumnsType<IUser> = [
     {
+      title: 'User Code',
+      dataIndex: 'userCode',
+      key: 'userCode',
+      sorter: true
+    },
+    {
       title: 'First name',
       dataIndex: 'firstName',
       key: 'firstName',
@@ -67,9 +76,15 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
       sorter: true
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: 'Personal Email',
+      dataIndex: 'personalEmail',
+      key: 'personalEmail',
+      sorter: true
+    },
+    {
+      title: 'Company Email',
+      dataIndex: 'companyEmail',
+      key: 'companyEmail',
       sorter: true
     },
     {
@@ -82,13 +97,50 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
+      sorter: true,
+      render: (_, record: IUser) => (
+        <>{UserRole.find((role) => role.value === record?.role)?.label ?? '-'}</>
+      )
+    },
+    {
+      title: 'Department',
+      dataIndex: 'department',
+      key: 'department',
       sorter: true
+    },
+    {
+      title: 'Designation',
+      dataIndex: 'designation',
+      key: 'designation',
+      sorter: true
+    },
+    {
+      title: 'Date of joining',
+      dataIndex: 'joiningDate',
+      key: 'joiningDate',
+      render: (_, record: IUser) => (
+        <>{record?.joiningDate ? dayjs(record?.joiningDate).format(DATE_FORMAT) : '-'}</>
+      )
+    },
+    {
+      title: 'Date of birth',
+      dataIndex: 'dateOfBirth',
+      key: 'dateOfBirth',
+      render: (_, record: IUser) => (
+        <>{record?.dateOfBirth ? dayjs(record?.dateOfBirth).format(DATE_FORMAT) : '-'}</>
+      )
+    },
+    {
+      title: 'Reporting person',
+      dataIndex: 'reportingPerson',
+      key: 'reportingPerson'
     },
     {
       title: 'Actions',
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
+      width: 100,
       render: (_, record: IUser) => (
         <>
           <Tooltip title="View user" placement="top" trigger="hover">

@@ -13,6 +13,7 @@ import { CommonTable } from 'components/common/Table';
 import { IClient, IClientReq } from 'services/api/client/types';
 import { useClientList, useClientStatus, useDeleteClient } from 'services/hooks/client';
 import { clientKeys } from 'services/hooks/queryKeys';
+import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
 import { ROUTES } from 'utils/constants/routes';
@@ -27,6 +28,8 @@ interface IProps {
 const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+
+  const { userData } = authStore((state) => state);
 
   const { mutate: deleteMutate } = useDeleteClient();
   const { mutate: statusMutate } = useClientStatus();
@@ -118,27 +121,30 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       )
     },
     {
+      title: 'Designation',
+      dataIndex: 'designation',
+      key: 'designation',
+      sorter: true,
+      render: (_, record: IClient) => <>{record?.designation ?? '-'}</>
+    },
+    {
       title: 'Company name',
       dataIndex: 'companyName',
       key: 'companyName',
       sorter: true
     },
     {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      width: 200,
+      title: 'Client Company Name',
+      dataIndex: 'clientCompanyName',
+      key: 'clientCompanyName',
       sorter: true,
-      render: (_, record: IClient) => (
-        <>{record?.address && record?.address?.length > 0 ? record?.address : '-'}</>
-      )
+      render: (_, record: IClient) => <>{record?.clientCompanyName ?? '-'}</>
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
-      key: 'gender',
-      sorter: true,
-      render: (_, record: IClient) => <>{record?.gender ?? '-'}</>
+      title: 'Account Manager',
+      dataIndex: 'accountManager',
+      key: 'accountManager',
+      render: (_, record: IClient) => <>{record?.accountManager ?? '-'}</>
     },
     {
       title: 'Country',
@@ -252,6 +258,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
           isOpen={Boolean(isOpen)}
           setIsOpen={(flag) => setIsOpen(!!flag)}
           clientData={clientData}
+          userData={userData}
         />
       )}
     </>

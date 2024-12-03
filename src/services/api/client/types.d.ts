@@ -9,8 +9,12 @@ export interface IClient {
   lastName: string;
   email: string;
   phone: string;
-  address: string;
+  designation: string;
   companyName: string;
+  clientCompanyName: string;
+  accountManager: string;
+  webSite: string;
+  address: string;
   countryCode: string;
   countryName: string;
   stateCode: string;
@@ -18,6 +22,7 @@ export interface IClient {
   cityName: string;
   gender: string;
   status: string;
+  zipCode: string;
   projects: IProject[];
 }
 
@@ -34,13 +39,18 @@ export interface IAddClientReq {
   lastName: string;
   email: string;
   phone: string;
+  designation: string;
   companyName: string;
+  clientCompanyName: string;
+  accountManager: string;
+  webSite: string;
   gender: string;
   countryCode: string;
   stateCode: string;
   cityName: string;
   status: string;
   address: string;
+  zipCode: string;
 }
 
 export interface IClientRes {

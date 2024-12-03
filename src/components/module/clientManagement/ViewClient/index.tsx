@@ -131,6 +131,10 @@ const ViewClient = () => {
               <p>{clientData?.companyName ?? '-'}</p>
             </Col>
             <Col xs={6}>
+              <h4>Client Company Name</h4>
+              <p>{clientData?.clientCompanyName ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
               <h4>No. of Projects</h4>
               <Tooltip
                 title={
@@ -150,7 +154,20 @@ const ViewClient = () => {
                 <p>{clientData?.projects?.length ?? '-'}</p>
               </Tooltip>
             </Col>
-            <Col xs={6}></Col>
+          </Row>
+          <Row className="clientRow">
+            <Col xs={6}>
+              <h4>Designation</h4>
+              <p>{clientData?.designation ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Account Manager</h4>
+              <p>{clientData?.accountManager ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Website</h4>
+              <p>{clientData?.webSite ?? '-'}</p>
+            </Col>
           </Row>
         </DetailWrapper>
       </div>

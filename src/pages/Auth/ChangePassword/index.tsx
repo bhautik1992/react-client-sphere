@@ -20,7 +20,6 @@ const ChangePassword = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { userData } = authStore((state) => state);
-  console.log('userData: ', userData);
 
   const { mutate } = useChangePassword();
 

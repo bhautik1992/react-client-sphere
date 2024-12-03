@@ -5,8 +5,14 @@ import { Button, Form, Modal, ModalProps, Row, message } from 'antd';
 import React, { useState } from 'react';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 
-import { RenderPhoneNumber, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
+import {
+  RenderPhoneNumber,
+  RenderSelectInput,
+  RenderTextArea,
+  RenderTextInput
+} from 'components/common/FormField';
 
+import { ISignInRes } from 'services/api/auth/types';
 import { IAddClientReq, IClient, IClientReq } from 'services/api/client/types';
 import { ICity, ICountry, IState } from 'services/api/country/types';
 import { useAddClient, useEditClient } from 'services/hooks/client';
@@ -19,13 +25,16 @@ interface IAddClientModalProps {
   isOpen?: boolean;
   setIsOpen?: (k?: boolean) => void;
   clientData?: IClient | null;
+  userData?: ISignInRes | null;
 }
 
 const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
   className,
+  width = 1300,
   isOpen,
   setIsOpen,
-  clientData
+  clientData,
+  userData
 }) => {
   const [form] = Form.useForm();
   const queryClient = useQueryClient();
@@ -157,6 +166,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
       onCancel={handleClose}
       destroyOnClose={true}
       centered
+      width={width}
       footer={[]}
     >
       <Form
@@ -169,18 +179,25 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
           lastName: clientData?.lastName ?? '',
           email: clientData?.email ?? '',
           phone: clientData?.phone ?? null,
+          designation: clientData?.designation ?? null,
           companyName: clientData?.companyName ?? null,
+          clientCompanyName: clientData?.clientCompanyName ?? null,
+          accountManager: clientData?.accountManager
+            ? clientData?.accountManager
+            : userData?.firstName + ' ' + userData?.lastName,
+          webSite: clientData?.webSite ?? null,
           gender: clientData?.gender ?? null,
           address: clientData?.address ?? null,
           countryCode: clientData?.countryCode ?? null,
           stateCode: clientData?.stateCode ?? null,
           cityName: clientData?.cityName ?? null,
+          zipCode: clientData?.zipCode ?? null,
           status: clientData?.status ?? null
         }}
       >
-        <Row gutter={[0, 30]}>
+        <Row gutter={[16, 30]}>
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="firstName"
             placeholder="Enter your first name"
             label="First name"
@@ -194,7 +211,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             ]}
           />
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="lastName"
             placeholder="Enter your last name"
             label="Last name"
@@ -208,7 +225,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             ]}
           />
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="email"
             placeholder="Enter your email address"
             label="Email address"
@@ -227,7 +244,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             ]}
           />
           <RenderPhoneNumber
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="phone"
             placeholder="Enter your phone number "
             label="Phone number"
@@ -236,9 +253,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             rules={[
               () => ({
                 validator: (_: any, value: string) => {
-                  if (!value) {
-                    return Promise.reject(new Error('Please enter your phone number'));
-                  } else if (!value || isValidPhoneNumber(value)) {
+                  if (!value || isValidPhoneNumber(value)) {
                     return Promise.resolve();
                   } else {
                     return Promise.reject(new Error('Please enter valid phone number'));
@@ -248,12 +263,27 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             ]}
           />
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
+            name="designation"
+            placeholder="Enter your designation"
+            label="Designation"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your designation'
+              }
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
             name="companyName"
             placeholder="Enter your company name"
             label="Company name"
             allowClear="allowClear"
             size="middle"
+            disabled={Boolean(clientData?.companyName)}
             rules={[
               {
                 required: true,
@@ -261,8 +291,39 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
               }
             ]}
           />
+          <RenderTextInput
+            col={{ xs: 12 }}
+            name="clientCompanyName"
+            placeholder="Enter your client company name"
+            label="Client company name"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your client company name'
+              }
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
+            name="accountManager"
+            placeholder="Enter your account manager"
+            label="Account manager"
+            allowClear="allowClear"
+            size="middle"
+            disabled={Boolean(
+              clientData?.accountManager || userData?.firstName + ' ' + userData?.lastName
+            )}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your account manager'
+              }
+            ]}
+          />
           <RenderSelectInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="gender"
             placeholder="Please select your gender"
             label="Gender"
@@ -278,8 +339,25 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
               }
             ]}
           />
-          <RenderTextInput
-            col={{ xs: 24 }}
+          <RenderSelectInput
+            col={{ xs: 12 }}
+            name="status"
+            placeholder="Please select your status"
+            label="Status"
+            allowClear={true}
+            optionLabel={[
+              { label: 'Active', value: 'active' },
+              { label: 'Inactive', value: 'inactive' }
+            ]}
+            rules={[
+              {
+                required: true,
+                message: 'Please select your status'
+              }
+            ]}
+          />
+          <RenderTextArea
+            col={{ xs: 12 }}
             name="address"
             placeholder="Enter your address"
             label="Address"
@@ -293,7 +371,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             ]}
           />
           <RenderSelectInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="countryCode"
             placeholder="Please select country"
             label="Country"
@@ -312,7 +390,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             ]}
           />
           <RenderSelectInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="stateCode"
             placeholder="Please select state"
             label="State"
@@ -332,7 +410,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             ]}
           />
           <RenderSelectInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="cityName"
             placeholder="Please select city"
             label="City"
@@ -350,22 +428,13 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
               }
             ]}
           />
-          <RenderSelectInput
-            col={{ xs: 24 }}
-            name="status"
-            placeholder="Please select your status"
-            label="Status"
-            allowClear={true}
-            optionLabel={[
-              { label: 'Active', value: 'active' },
-              { label: 'Inactive', value: 'inactive' }
-            ]}
-            rules={[
-              {
-                required: true,
-                message: 'Please select your status'
-              }
-            ]}
+          <RenderTextInput
+            col={{ xs: 12 }}
+            name="zipCode"
+            placeholder="Enter your zip code"
+            label="Zip code"
+            allowClear="allowClear"
+            size="middle"
           />
         </Row>
         <ButtonWrapper>

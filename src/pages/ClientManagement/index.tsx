@@ -11,6 +11,7 @@ import StyledBreadcrumb from 'components/layout/breadcrumb';
 import ClientManagementTable from 'components/module/clientManagement/ClientManagementTable';
 
 import { IClientReq } from 'services/api/client/types';
+import { authStore } from 'services/store/auth';
 
 const BreadcrumbsPath = [
   {
@@ -20,6 +21,7 @@ const BreadcrumbsPath = [
 
 const ClientManagement = () => {
   const [form] = Form.useForm();
+  const { userData } = authStore((state) => state);
 
   const [searchValue, setSearchValue] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -62,7 +64,11 @@ const ClientManagement = () => {
       </div>
 
       {isOpen && (
-        <AddClientModal isOpen={Boolean(isOpen)} setIsOpen={(flag) => setIsOpen(!!flag)} />
+        <AddClientModal
+          isOpen={Boolean(isOpen)}
+          setIsOpen={(flag) => setIsOpen(!!flag)}
+          userData={userData}
+        />
       )}
     </Wrapper>
   );

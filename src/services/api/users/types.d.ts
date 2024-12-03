@@ -4,9 +4,18 @@ export interface IUser {
   id: number;
   firstName: string;
   lastName: string;
-  email: string;
-  phone: string;
   role: string;
+  personalEmail: string;
+  companyEmail: string;
+  phone: string;
+  department: string;
+  designation: string;
+  joiningDate: string;
+  dateOfBirth: string;
+  reportingPerson: string;
+  userCode: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IUserRes {
@@ -22,22 +31,19 @@ export interface IUserReq {
   sortBy?: Key;
 }
 
-export interface IUserDetailRes {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  role: string;
-}
-
 export interface IAddUserReq {
   id?: number;
   firstName: string;
   lastName: string;
-  email: string;
-  phone: string;
   role: string;
+  personalEmail: string;
+  companyEmail: string;
+  phone: string;
+  department: string;
+  designation: string;
+  joiningDate: string;
+  dateOfBirth: string;
+  reportingPerson: string;
 }
 
 export interface IEditUserReq extends IAddUserReq {

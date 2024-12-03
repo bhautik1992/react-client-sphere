@@ -14,7 +14,7 @@ import { dashboardKey, projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, CurrencyType, ProjectStatus } from 'utils/constants/project-enum';
+import { BillingType, CurrencyType, ProjectStatus } from 'utils/constants/enum';
 
 interface IAddProjectModalProps {
   isOpen?: boolean;

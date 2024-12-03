@@ -2,17 +2,19 @@ import { ButtonWrapper } from './style';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Form, Modal, ModalProps, Row, message } from 'antd';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { isValidPhoneNumber } from 'react-phone-number-input';
 
-import { RenderSelectInput, RenderTextInput } from 'components/common/FormField';
+import { RenderDatePicker, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 
 import { IAddUserReq, IUser, IUserReq } from 'services/api/users/types';
 import { dashboardKey, userKeys } from 'services/hooks/queryKeys';
 import { useAddUser, useEditUser } from 'services/hooks/user';
 
 import { IApiError } from 'utils/Types';
-import { RoleData } from 'utils/constants/role';
+import { DATE_FORMAT } from 'utils/constants/dayjs';
+import { Department, UserRole } from 'utils/constants/enum';
 
 interface IAddUserModalProps {
   isOpen?: boolean;
@@ -22,6 +24,7 @@ interface IAddUserModalProps {
 
 const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
   className,
+  width = 1100,
   isOpen,
   setIsOpen,
   userData
@@ -115,6 +118,7 @@ const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
       destroyOnClose={true}
       centered
       footer={[]}
+      width={width}
     >
       <Form
         onFinish={onSubmit}
@@ -122,16 +126,22 @@ const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
         autoComplete="off"
         className="signInForm"
         initialValues={{
-          firstName: userData?.firstName ?? '',
+          firstName: userData?.firstName ?? null,
           lastName: userData?.lastName ?? null,
-          email: userData?.email ?? '',
+          personalEmail: userData?.personalEmail ?? null,
+          companyEmail: userData?.companyEmail ?? null,
           phone: userData?.phone ?? null,
-          role: userData?.role ?? null
+          role: userData?.role ?? null,
+          department: userData?.department ?? null,
+          designation: userData?.designation ?? null,
+          joiningDate: userData?.joiningDate ? dayjs(userData?.joiningDate) : null,
+          dateOfBirth: userData?.dateOfBirth ? dayjs(userData?.dateOfBirth) : null,
+          reportingPerson: userData?.reportingPerson ?? null
         }}
       >
-        <Row gutter={[0, 30]}>
+        <Row gutter={[16, 30]}>
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="firstName"
             placeholder="Enter your first name"
             label="First name"
@@ -145,7 +155,7 @@ const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
             ]}
           />
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="lastName"
             placeholder="Enter your last name"
             label="Last name"
@@ -159,26 +169,43 @@ const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
             ]}
           />
           <RenderTextInput
-            col={{ xs: 24 }}
-            name="email"
-            placeholder="Enter your email address"
-            label="Email address"
+            col={{ xs: 12 }}
+            name="personalEmail"
+            placeholder="Enter your personal email"
+            label="Personal Email"
             allowClear="allowClear"
             size="middle"
-            disabled={Boolean(userData?.email)}
             rules={[
               {
                 required: true,
-                message: 'Please enter your email address'
+                message: 'Please enter your personal email'
               },
               {
                 type: 'email',
-                message: 'Please enter valid email address'
+                message: 'Please enter valid personal email'
               }
             ]}
           />
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
+            name="companyEmail"
+            placeholder="Enter your company email"
+            label="Company Email"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your company email'
+              },
+              {
+                type: 'email',
+                message: 'Please enter valid company email'
+              }
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
             name="phone"
             placeholder="Enter your phone number"
             label="Phone number"
@@ -199,16 +226,80 @@ const AddEditUserModal: React.FC<IAddUserModalProps & ModalProps> = ({
             ]}
           />
           <RenderSelectInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="role"
             placeholder="Please select your role"
             label="Role"
             allowClear={true}
-            optionLabel={RoleData}
+            optionLabel={UserRole}
             rules={[
               {
                 required: true,
                 message: 'Please select your role'
+              }
+            ]}
+          />
+          <RenderSelectInput
+            col={{ xs: 12 }}
+            name="department"
+            placeholder="Please select your department"
+            label="Department"
+            allowClear={true}
+            optionLabel={Department}
+            rules={[
+              {
+                required: true,
+                message: 'Please select your department'
+              }
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
+            name="designation"
+            placeholder="Please enter your designation"
+            label="Designation"
+            allowClear={true}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your designation'
+              }
+            ]}
+          />
+          <RenderDatePicker
+            col={{ xs: 12 }}
+            name="joiningDate"
+            placeholder="Select your joining date"
+            label="Joining Date"
+            allowClear="allowClear"
+            size="middle"
+            format={DATE_FORMAT}
+            rules={[
+              {
+                required: true,
+                message: 'Please select your joining date'
+              }
+            ]}
+          />
+          <RenderDatePicker
+            col={{ xs: 12 }}
+            name="dateOfBirth"
+            placeholder="Select your date of birth"
+            label="Date of Birth"
+            allowClear={true}
+            size="middle"
+            format={DATE_FORMAT}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
+            name="reportingPerson"
+            placeholder="Please enter your reporting person"
+            label="Reporting Person"
+            allowClear={true}
+            rules={[
+              {
+                required: true,
+                message: 'Please enter your reporting person'
               }
             ]}
           />

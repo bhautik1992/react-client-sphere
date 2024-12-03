@@ -1,3 +1,14 @@
+export const UserRole = [
+  {
+    value: 'admin',
+    label: 'Admin'
+  },
+  {
+    value: 'user',
+    label: 'User'
+  }
+];
+
 export const ProjectStatus = [
   {
     value: 'not_started',
@@ -52,5 +63,24 @@ export const CurrencyType = [
   {
     value: 'AUD',
     label: 'AUD'
+  }
+];
+
+export const Department = [
+  {
+    value: 'development',
+    label: 'Development'
+  },
+  {
+    value: 'design',
+    label: 'Design'
+  },
+  {
+    value: 'testing',
+    label: 'Testing'
+  },
+  {
+    value: 'marketing',
+    label: 'Marketing'
   }
 ];

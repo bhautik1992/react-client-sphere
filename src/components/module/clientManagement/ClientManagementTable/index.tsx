@@ -153,6 +153,20 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       render: (_, record: IClient) => <>{record?.countryName ?? '-'}</>
     },
     {
+      title: 'Projects',
+      dataIndex: 'projects',
+      key: 'projects',
+      render: (_, record: IClient) => <>{record?.projects?.length ?? 0}</>
+    },
+    {
+      title: 'Active Projects',
+      dataIndex: 'projects',
+      key: 'projects',
+      render: (_, record: IClient) => (
+        <>{record?.projects?.filter((p) => p.status === 'started').length ?? 0}</>
+      )
+    },
+    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',

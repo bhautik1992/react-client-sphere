@@ -7,14 +7,17 @@ interface IProject {
   id: number;
   name: string;
   description: string;
-  amount: number;
+  status: string;
   startDate: string;
   endDate: string;
-  status: string;
+  billingType: string;
+  hourlyMonthlyRate: number;
+  projectHours: number;
+  currency: string;
+  amount: number;
+  client: IClient;
   createdAt: string;
   updatedAt: string;
-  client: IClient;
-  company: ICompany;
 }
 
 export interface IProjectReq {
@@ -29,11 +32,14 @@ export interface IAddProjectReq {
   name: string;
   description: string;
   status: string;
-  amount: number;
   startDate: string;
   endDate: string;
+  billingType: string;
+  hourlyMonthlyRate: number;
+  projectHours: number;
+  currency: string;
+  amount: number;
   clientId: number;
-  companyId: number;
 }
 
 export interface IProjectRes {

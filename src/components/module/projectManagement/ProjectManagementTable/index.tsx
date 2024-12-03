@@ -17,6 +17,7 @@ import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
+import { BillingType } from 'utils/constants/project-enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/projectStatusDropDown';
 
@@ -116,32 +117,45 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       )
     },
     {
-      title: 'Amount',
-      dataIndex: 'amount',
-      key: 'amount',
-      sorter: true,
-      render: (_, record: IProject) => <>{record?.amount ? `₹ ${record?.amount}` : '-'}</>
-    },
-    {
       title: 'Client Name',
-      dataIndex: 'client.name',
-      key: 'client.name',
+      dataIndex: 'client.firstName',
+      key: 'client.firstName',
       sorter: false,
-      render: (_, record: IProject) => <>{record?.client?.name ?? '-'}</>
+      render: (_, record: IProject) => (
+        <>
+          {record?.client?.firstName ?? '-'} {record?.client?.lastName ?? '-'}
+        </>
+      )
     },
     {
       title: 'Company Name',
-      dataIndex: 'company.name',
-      key: 'company.name',
+      dataIndex: 'client.companyName',
+      key: 'client.companyName',
       sorter: false,
-      render: (_, record: IProject) => <>{record?.company?.name ?? '-'}</>
+      render: (_, record: IProject) => <>{record?.client?.companyName ?? '-'}</>
     },
     {
-      title: 'Country',
-      dataIndex: 'country',
-      key: 'country',
+      title: 'Billing Type',
+      dataIndex: 'billingType',
+      key: 'billingType',
       sorter: false,
-      render: (_, record: IProject) => <>{record?.client?.country?.name ?? '-'}</>
+      render: (_, record: IProject) => (
+        <>{BillingType.find((item) => item.value === record.billingType)?.label ?? '-'}</>
+      )
+    },
+    {
+      title: 'Hourly Rate',
+      dataIndex: 'hourlyMonthlyRate',
+      key: 'hourlyMonthlyRate',
+      sorter: false,
+      render: (_, record: IProject) => <>{record?.hourlyMonthlyRate ?? '-'}</>
+    },
+    {
+      title: 'Project Hours',
+      dataIndex: 'projectHours',
+      key: 'projectHours',
+      sorter: false,
+      render: (_, record: IProject) => <>{record?.projectHours ?? '-'}</>
     },
     {
       title: 'Status',

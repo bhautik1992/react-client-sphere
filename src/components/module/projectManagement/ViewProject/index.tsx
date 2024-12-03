@@ -13,7 +13,7 @@ import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { ProjectStatus } from 'utils/constants/project-status';
+import { BillingType, ProjectStatus } from 'utils/constants/project-enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/projectStatusDropDown';
 
@@ -86,8 +86,8 @@ const ViewProject = () => {
               <p>{projectData?.description ?? '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Amount</h4>
-              <p>{projectData?.amount ? `₹ ${projectData?.amount}` : '-'}</p>
+              <h4>Status</h4>
+              <p>{ProjectStatus.find((item) => item.value == projectData?.status)?.label}</p>
             </Col>
           </Row>
           <Row className="projectRow">
@@ -102,59 +102,79 @@ const ViewProject = () => {
               <p>{projectData?.endDate ? dayjs(projectData?.endDate).format(DATE_FORMAT) : '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Status</h4>
-              <p>{ProjectStatus.find((item) => item.value == projectData?.status)?.label}</p>
+              <h4>Billing Type</h4>
+              <p>
+                {BillingType.find((item) => item.value == projectData?.billingType)?.label ?? '-'}
+              </p>
+            </Col>
+          </Row>
+          <Row className="projectRow">
+            <Col xs={6}>
+              <h4>Hourly Rate</h4>
+              <p>{projectData?.hourlyMonthlyRate ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Project Hours</h4>
+              <p>{projectData?.projectHours ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Amount</h4>
+              <p>{projectData?.amount ?? '-'}</p>
             </Col>
           </Row>
           <Divider orientation="left">Client Details</Divider>
           <Row className="projectRow">
             <Col xs={6}>
-              <h4>Name</h4>
-              <p>{projectData?.client?.name ?? '-'}</p>
+              <h4>First Name</h4>
+              <p>{projectData?.client?.firstName ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Last Name</h4>
+              <p>{projectData?.client?.lastName ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Email</h4>
               <p>{projectData?.client?.email}</p>
             </Col>
+          </Row>
+          <Row className="projectRow">
             <Col xs={6}>
               <h4>Address</h4>
               <p>{projectData?.client?.address ?? '-'}</p>
             </Col>
-          </Row>
-          <Row className="projectRow">
             <Col xs={6}>
               <h4>Phone</h4>
               <p>{projectData?.client?.phone ?? '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Country</h4>
-              <p>{projectData?.client?.country?.name ?? '-'}</p>
+              <h4>Company Name</h4>
+              <p>{projectData?.client?.companyName ?? '-'}</p>
             </Col>
+          </Row>
+          <Row className="projectRow">
+            <Col xs={6}>
+              <h4>Country</h4>
+              <p>{projectData?.client?.companyName ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>State</h4>
+              <p>{projectData?.client?.stateName ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>City</h4>
+              <p>{projectData?.client?.cityName ?? '-'}</p>
+            </Col>
+          </Row>
+          <Row className="projectRow">
             <Col xs={6}>
               <h4>Status</h4>
               <p>{projectData?.client?.status === 'active' ? 'Active' : 'Inactive'}</p>
             </Col>
-          </Row>
-          <Divider orientation="left">Company Details</Divider>
-          <Row className="projectRow">
             <Col xs={6}>
-              <h4>Name</h4>
-              <p>{projectData?.company?.name ?? '-'}</p>
+              <h4>Gender</h4>
+              <p>{projectData?.client?.gender === 'male' ? 'Male' : 'Female'}</p>
             </Col>
-            <Col xs={6}>
-              <h4>Email</h4>
-              <p>{projectData?.company?.email ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Address</h4>
-              <p>{projectData?.company?.address ?? '-'}</p>
-            </Col>
-          </Row>
-          <Row className="projectRow">
-            <Col xs={6}>
-              <h4>Country</h4>
-              <p>{projectData?.company?.country?.name ?? '-'}</p>
-            </Col>
+            <Col xs={6}></Col>
           </Row>
         </DetailWrapper>
       </div>

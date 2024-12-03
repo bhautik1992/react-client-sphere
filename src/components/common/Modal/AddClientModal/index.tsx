@@ -298,6 +298,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             placeholder="Please select country"
             label="Country"
             allowClear={true}
+            showSearch={true}
             optionLabel={countryOptions?.map((country: ICountry) => ({
               label: country.name,
               value: country.isoCode
@@ -315,6 +316,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             name="stateCode"
             placeholder="Please select state"
             label="State"
+            showSearch={true}
             allowClear={true}
             disabled={!stateOptions.length}
             optionLabel={stateOptions?.map((state: IState) => ({
@@ -334,6 +336,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
             name="cityName"
             placeholder="Please select city"
             label="City"
+            showSearch={true}
             allowClear={true}
             disabled={!cityOptions.length}
             optionLabel={cityOptions?.map((city: ICity) => ({

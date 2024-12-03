@@ -8,13 +8,13 @@ import React, { useState } from 'react';
 import { RenderDatePicker, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 
 import { IAddProjectReq, IProject, IProjectReq } from 'services/api/project/types';
-import { useDashboardClient, useDashboardCompany } from 'services/hooks/dashboard';
+import { useDashboardClient } from 'services/hooks/dashboard';
 import { useAddProject, useEditProject } from 'services/hooks/project';
 import { dashboardKey, projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { ProjectStatus } from 'utils/constants/project-status';
+import { BillingType, CurrencyType, ProjectStatus } from 'utils/constants/project-enum';
 
 interface IAddProjectModalProps {
   isOpen?: boolean;
@@ -37,16 +37,8 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
   const [open, setOpen] = useState<boolean>(false);
 
   const { data: clientList } = useDashboardClient();
-  const { data: companyList } = useDashboardCompany();
 
   const clientListOption = clientList?.map((item) => {
-    return {
-      label: item.name,
-      value: item.id
-    };
-  });
-
-  const companyListOption = companyList?.map((item) => {
     return {
       label: item.name,
       value: item.id
@@ -146,16 +138,20 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
           name: projectData?.name ?? '',
           description: projectData?.description ?? '',
           status: projectData?.status ?? null,
-          amount: projectData?.amount ?? null,
           startDate: projectData?.startDate ? dayjs(projectData?.startDate) : null,
           endDate: projectData?.endDate ? dayjs(projectData?.endDate) : null,
           clientId: projectData?.client.id ?? null,
-          companyId: projectData?.company.id ?? null
+          companyName: projectData?.client.companyName ?? null,
+          billingType: projectData?.billingType ?? null,
+          hourlyMonthlyRate: projectData?.hourlyMonthlyRate ?? null,
+          projectHours: projectData?.projectHours ?? null,
+          currency: projectData?.currency ?? null,
+          amount: projectData?.amount ?? null
         }}
       >
-        <Row gutter={[0, 30]}>
+        <Row gutter={[20, 30]}>
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="name"
             placeholder="Enter project name"
             label="Name"
@@ -169,7 +165,7 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
             ]}
           />
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="description"
             placeholder="Enter project description"
             label="Description"
@@ -183,7 +179,7 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
             ]}
           />
           <RenderSelectInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
             name="status"
             placeholder="Please select project status"
             label="Status"
@@ -196,13 +192,134 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
               }
             ]}
           />
+          <RenderDatePicker
+            col={{ xs: 12 }}
+            // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isAfter(new Date())}
+            name="startDate"
+            placeholder="Enter project start date"
+            label="Start Date"
+            allowClear="allowClear"
+            size="middle"
+            format={DATE_FORMAT}
+            rules={[
+              {
+                required: true,
+                message: 'Please select project start date'
+              }
+            ]}
+          />
+          <RenderDatePicker
+            col={{ xs: 12 }}
+            // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(new Date())}
+            name="endDate"
+            placeholder="Enter project end date"
+            label="End Date"
+            allowClear="allowClear"
+            size="middle"
+            format={DATE_FORMAT}
+          />
+          <RenderSelectInput
+            col={{ xs: 12 }}
+            name="clientId"
+            placeholder="Please select client"
+            label="Client"
+            allowClear={true}
+            optionLabel={clientListOption}
+            disabled={Boolean(projectData?.client.id)}
+            rules={[
+              {
+                required: true,
+                message: 'Please select client'
+              }
+            ]}
+          />
+          <RenderSelectInput
+            col={{ xs: 12 }}
+            name="companyName"
+            placeholder="Please enter company name"
+            label="Company"
+            allowClear={true}
+            disabled={true}
+          />
+          <RenderSelectInput
+            col={{ xs: 12 }}
+            name="billingType"
+            placeholder="Please select billing type"
+            label="Billing Type"
+            allowClear={true}
+            optionLabel={BillingType}
+          />
           <RenderTextInput
-            col={{ xs: 24 }}
+            col={{ xs: 12 }}
+            name="hourlyMonthlyRate"
+            placeholder="Enter project hourly rate"
+            label="Hourly/Monthly Rate"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              () => ({
+                validator: (_: any, value: string) => {
+                  const regex = /^[0-9]*$/;
+                  if (!regex.test(value)) {
+                    return Promise.reject(new Error('Please enter valid hourly rate'));
+                  }
+                  if (+value <= 0) {
+                    return Promise.reject(new Error('Hourly rate must be greater than 0'));
+                  }
+                  return Promise.resolve();
+                }
+              })
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
+            name="projectHours"
+            placeholder="Enter project hours"
+            label="Project Hours"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              () => ({
+                validator: (_: any, value: string) => {
+                  const regex = /^[0-9]*$/;
+                  if (!regex.test(value)) {
+                    return Promise.reject(new Error('Please enter valid project hours'));
+                  }
+                  if (+value <= 0) {
+                    return Promise.reject(new Error('Project hours must be greater than 0'));
+                  }
+                  return Promise.resolve();
+                }
+              })
+            ]}
+          />
+          <RenderSelectInput
+            col={{ xs: 12 }}
+            name="currency"
+            placeholder="Please select currency"
+            label="Currency"
+            allowClear={true}
+            optionLabel={CurrencyType}
+            rules={[
+              {
+                required: true,
+                message: 'Please select currency'
+              }
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
             name="amount"
             placeholder="Enter project amount"
             label="Amount"
             allowClear="allowClear"
             size="middle"
+            disabled={
+              form.getFieldValue('billingType') !== 'fixed' && form.getFieldValue('projectHours')
+            }
+            value={String(
+              form.getFieldValue('hourlyMonthlyRate') * form.getFieldValue('projectHours')
+            )}
             rules={[
               () => ({
                 validator: (_: any, value: string) => {
@@ -219,61 +336,6 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
                   return Promise.resolve();
                 }
               })
-            ]}
-          />
-          <RenderDatePicker
-            col={{ xs: 24 }}
-            // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isAfter(new Date())}
-            name="startDate"
-            placeholder="Enter project start date"
-            label="Start Date"
-            allowClear="allowClear"
-            size="middle"
-            format={DATE_FORMAT}
-            rules={[
-              {
-                required: true,
-                message: 'Please select project start date'
-              }
-            ]}
-          />
-          <RenderDatePicker
-            col={{ xs: 24 }}
-            // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(new Date())}
-            name="endDate"
-            placeholder="Enter project end date"
-            label="End Date"
-            allowClear="allowClear"
-            size="middle"
-            format={DATE_FORMAT}
-          />
-          <RenderSelectInput
-            col={{ xs: 24 }}
-            name="clientId"
-            placeholder="Please select client"
-            label="Client"
-            allowClear={true}
-            optionLabel={clientListOption}
-            disabled={Boolean(projectData?.client.id)}
-            rules={[
-              {
-                required: true,
-                message: 'Please select client'
-              }
-            ]}
-          />
-          <RenderSelectInput
-            col={{ xs: 24 }}
-            name="companyId"
-            placeholder="Please select company"
-            label="Company"
-            allowClear={true}
-            optionLabel={companyListOption}
-            rules={[
-              {
-                required: true,
-                message: 'Please select company'
-              }
             ]}
           />
         </Row>

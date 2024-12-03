@@ -15,12 +15,12 @@ export const ProjectStatus = [
     label: 'Not Started'
   },
   {
-    value: 'start',
-    label: 'Start'
+    value: 'started',
+    label: 'Started'
   },
   {
-    value: 'in_progress',
-    label: 'In Progress'
+    value: 'pending',
+    label: 'Pending'
   },
   {
     value: 'completed',

@@ -120,6 +120,17 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
           }
         });
 
+        // client list dashboard
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [dashboardKey.dashboardClient].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+
         handleClose();
       },
       onError: (err: IApiError) => {

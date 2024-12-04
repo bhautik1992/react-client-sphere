@@ -13,7 +13,7 @@ import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, ProjectStatus } from 'utils/constants/enum';
+import { BillingType, InvoiceStatus, ProjectStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/projectStatusDropDown';
 
@@ -121,6 +121,20 @@ const ViewProject = () => {
               <h4>Amount</h4>
               <p>{projectData?.amount ?? '-'}</p>
             </Col>
+          </Row>
+          <Row className="projectRow">
+            <Col xs={6}>
+              <h4>Invoice Status</h4>
+              <p>
+                {InvoiceStatus.find((item) => item.value == projectData?.invoiceStatus)?.label ??
+                  '-'}
+              </p>
+            </Col>
+            <Col xs={6}>
+              <h4>Project Manager</h4>
+              <p>{projectData?.projectManager ?? '-'}</p>
+            </Col>
+            <Col xs={6}></Col>
           </Row>
           <Divider orientation="left">Client Details</Divider>
           <Row className="projectRow">

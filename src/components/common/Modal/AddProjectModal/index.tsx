@@ -14,7 +14,7 @@ import { dashboardKey, projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, CurrencyType, ProjectStatus } from 'utils/constants/enum';
+import { BillingType, CurrencyType, InvoiceStatus, ProjectStatus } from 'utils/constants/enum';
 
 interface IAddProjectModalProps {
   isOpen?: boolean;
@@ -24,6 +24,7 @@ interface IAddProjectModalProps {
 
 const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
   className,
+  width = 1300,
   isOpen,
   setIsOpen,
   projectData
@@ -40,7 +41,7 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
 
   const clientListOption = clientList?.map((item) => {
     return {
-      label: item.name,
+      label: item.firstName + ' ' + item.lastName,
       value: item.id
     };
   });
@@ -51,12 +52,41 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
     setIsOpen?.(false);
   };
 
+  const handleClientChange = (clientId: number) => {
+    form.setFieldsValue({
+      companyName: clientList?.find((item) => item.id === clientId)?.companyName,
+      clientCompanyName: clientList?.find((item) => item.id === clientId)?.clientCompanyName
+    });
+  };
+
+  const handleBillingTypeChange = () => {
+    form.setFieldsValue({
+      hourlyMonthlyRate: '',
+      projectHours: '',
+      amount: ''
+    });
+  };
+
+  const handleHourlyMonthlyRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    form.setFieldsValue({
+      amount: String(+e.target.value * (form.getFieldValue('projectHours') || 0))
+    });
+  };
+
+  const handleProjectHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    form.setFieldsValue({
+      amount: String(+e.target.value * (form.getFieldValue('hourlyMonthlyRate') || 0))
+    });
+  };
+
   const onSubmit = (value: IAddProjectReq) => {
     value.amount = +value.amount;
     return projectData?.id ? editProject(value) : addProject(value);
   };
 
   const addProject = (value: IAddProjectReq) => {
+    value.hourlyMonthlyRate = +value.hourlyMonthlyRate;
+    value.projectHours = +value.projectHours;
     mutate(value, {
       onSuccess: () => {
         // invalidate project list
@@ -92,7 +122,9 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
   const editProject = (value: IAddProjectReq) => {
     const data = {
       ...value,
-      id: projectData?.id ?? 0
+      id: projectData?.id ?? 0,
+      projectHours: +value.projectHours,
+      hourlyMonthlyRate: +value.hourlyMonthlyRate
     };
     editMutate(data, {
       onSuccess: (res) => {
@@ -127,6 +159,7 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
       onCancel={handleClose}
       destroyOnClose={true}
       centered
+      width={width}
       footer={[]}
     >
       <Form
@@ -142,7 +175,10 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
           endDate: projectData?.endDate ? dayjs(projectData?.endDate) : null,
           clientId: projectData?.client.id ?? null,
           companyName: projectData?.client.companyName ?? null,
-          billingType: projectData?.billingType ?? null,
+          clientCompanyName: projectData?.client.clientCompanyName ?? null,
+          InvoiceStatus: projectData?.invoiceStatus ?? null,
+          projectManager: projectData?.projectManager ?? null,
+          billingType: projectData?.billingType ?? 'fixed',
           hourlyMonthlyRate: projectData?.hourlyMonthlyRate ?? null,
           projectHours: projectData?.projectHours ?? null,
           currency: projectData?.currency ?? null,
@@ -226,6 +262,7 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
             allowClear={true}
             optionLabel={clientListOption}
             disabled={Boolean(projectData?.client.id)}
+            onSelect={handleClientChange}
             rules={[
               {
                 required: true,
@@ -233,13 +270,63 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
               }
             ]}
           />
-          <RenderSelectInput
+          <RenderTextInput
             col={{ xs: 12 }}
             name="companyName"
-            placeholder="Please enter company name"
-            label="Company"
+            placeholder="Company name"
+            label="Company Name"
             allowClear={true}
             disabled={true}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
+            name="clientCompanyName"
+            placeholder="Client company name"
+            label="Client Company Name"
+            allowClear={true}
+            disabled={true}
+          />
+          <RenderSelectInput
+            col={{ xs: 12 }}
+            name="invoiceStatus"
+            placeholder="Please select invoice status"
+            label="Invoice Status"
+            allowClear={true}
+            optionLabel={InvoiceStatus}
+            rules={[
+              {
+                required: true,
+                message: 'Please select invoice status'
+              }
+            ]}
+          />
+          <RenderTextInput
+            col={{ xs: 12 }}
+            name="projectManager"
+            placeholder="Enter project manager"
+            label="Project Manager"
+            allowClear="allowClear"
+            size="middle"
+            rules={[
+              {
+                required: true,
+                message: 'Please enter project manager'
+              }
+            ]}
+          />
+          <RenderSelectInput
+            col={{ xs: 12 }}
+            name="currency"
+            placeholder="Please select currency"
+            label="Currency"
+            allowClear={true}
+            optionLabel={CurrencyType}
+            rules={[
+              {
+                required: true,
+                message: 'Please select currency'
+              }
+            ]}
           />
           <RenderSelectInput
             col={{ xs: 12 }}
@@ -248,6 +335,13 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
             label="Billing Type"
             allowClear={true}
             optionLabel={BillingType}
+            rules={[
+              {
+                required: true,
+                message: 'Please select billing type'
+              }
+            ]}
+            onChange={handleBillingTypeChange}
           />
           <RenderTextInput
             col={{ xs: 12 }}
@@ -256,6 +350,7 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
             label="Hourly/Monthly Rate"
             allowClear="allowClear"
             size="middle"
+            onChange={handleHourlyMonthlyRateChange}
             rules={[
               () => ({
                 validator: (_: any, value: string) => {
@@ -278,6 +373,7 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
             label="Project Hours"
             allowClear="allowClear"
             size="middle"
+            onChange={handleProjectHoursChange}
             rules={[
               () => ({
                 validator: (_: any, value: string) => {
@@ -293,20 +389,6 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
               })
             ]}
           />
-          <RenderSelectInput
-            col={{ xs: 12 }}
-            name="currency"
-            placeholder="Please select currency"
-            label="Currency"
-            allowClear={true}
-            optionLabel={CurrencyType}
-            rules={[
-              {
-                required: true,
-                message: 'Please select currency'
-              }
-            ]}
-          />
           <RenderTextInput
             col={{ xs: 12 }}
             name="amount"
@@ -314,12 +396,7 @@ const AddProjectModal: React.FC<IAddProjectModalProps & ModalProps> = ({
             label="Amount"
             allowClear="allowClear"
             size="middle"
-            disabled={
-              form.getFieldValue('billingType') !== 'fixed' && form.getFieldValue('projectHours')
-            }
-            value={String(
-              form.getFieldValue('hourlyMonthlyRate') * form.getFieldValue('projectHours')
-            )}
+            disabled={true}
             rules={[
               () => ({
                 validator: (_: any, value: string) => {

@@ -84,3 +84,14 @@ export const Department = [
     label: 'Marketing'
   }
 ];
+
+export const InvoiceStatus = [
+  {
+    value: 'pending',
+    label: 'Pending'
+  },
+  {
+    value: 'paid',
+    label: 'Paid'
+  }
+];

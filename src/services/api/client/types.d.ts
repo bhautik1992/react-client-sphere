@@ -1,5 +1,6 @@
 import { Key } from 'react';
 
+import { ICompany } from '../company/types';
 import { ICountry } from '../country/types';
 import { IProject } from '../project/types';
 
@@ -10,7 +11,7 @@ export interface IClient {
   email: string;
   phone: string;
   designation: string;
-  companyName: string;
+  company: ICompany;
   clientCompanyName: string;
   accountManager: string;
   webSite: string;
@@ -23,6 +24,7 @@ export interface IClient {
   gender: string;
   status: string;
   zipCode: string;
+  skypeId: string;
   projects: IProject[];
 }
 
@@ -40,7 +42,7 @@ export interface IAddClientReq {
   email: string;
   phone: string;
   designation: string;
-  companyName: string;
+  companyId: number;
   clientCompanyName: string;
   accountManager: string;
   webSite: string;
@@ -51,6 +53,7 @@ export interface IAddClientReq {
   status: string;
   address: string;
   zipCode: string;
+  skypeId: string;
 }
 
 export interface IClientRes {

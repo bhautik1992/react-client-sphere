@@ -95,3 +95,30 @@ export const InvoiceStatus = [
     label: 'Paid'
   }
 ];
+
+export const Designation = [
+  {
+    value: 'admin',
+    label: 'Admin'
+  },
+  {
+    value: 'project_manager',
+    label: 'Project Manager'
+  },
+  {
+    value: 'sales_manager',
+    label: 'Sales Manager'
+  },
+  {
+    value: 'developer',
+    label: 'Developer'
+  },
+  {
+    value: 'intern',
+    label: 'Intern'
+  },
+  {
+    value: 'tester',
+    label: 'Tester'
+  }
+];

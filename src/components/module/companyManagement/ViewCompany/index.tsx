@@ -47,8 +47,18 @@ const ViewCompany = () => {
           <Row className="companyRow">
             <Col xs={6}>
               <h4>Country</h4>
-              <p>{data?.country?.name ?? '-'}</p>
+              <p>{data?.countryName ?? '-'}</p>
             </Col>
+            <Col xs={6}>
+              <h4>State</h4>
+              <p>{data?.stateName ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>City</h4>
+              <p>{data?.cityName ?? '-'}</p>
+            </Col>
+          </Row>
+          <Row className="companyRow">
             <Col xs={6}>
               <h4>No. of Projects</h4>
               <Tooltip
@@ -69,7 +79,6 @@ const ViewCompany = () => {
                 <p>{data?.projects?.length ?? '-'}</p>
               </Tooltip>
             </Col>
-            <Col xs={6}></Col>
           </Row>
         </DetailWrapper>
       </div>

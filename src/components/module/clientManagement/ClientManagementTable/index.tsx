@@ -3,19 +3,17 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Popconfirm, Tag, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { SorterResult } from 'antd/es/table/interface';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import AddClientModal from 'components/common/Modal/AddClientModal';
 import CommonModal from 'components/common/Modal/CommonModal';
 import { CommonTable } from 'components/common/Table';
 
 import { IClient, IClientReq } from 'services/api/client/types';
 import { useClientList, useClientStatus, useDeleteClient } from 'services/hooks/client';
 import { clientKeys } from 'services/hooks/queryKeys';
-import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
+import { Designation } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import { renderTagColor } from 'utils/renderColor';
 
@@ -29,13 +27,8 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { userData } = authStore((state) => state);
-
   const { mutate: deleteMutate } = useDeleteClient();
   const { mutate: statusMutate } = useClientStatus();
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [clientData, setClientData] = useState<IClient | null>(null);
 
   const { data: clientList, isLoading } = useClientList({
     ...args,
@@ -125,13 +118,16 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       dataIndex: 'designation',
       key: 'designation',
       sorter: true,
-      render: (_, record: IClient) => <>{record?.designation ?? '-'}</>
+      render: (_, record: IClient) => (
+        <>{Designation.find((d) => d.value === record?.designation)?.label ?? '-'}</>
+      )
     },
     {
       title: 'Company name',
-      dataIndex: 'companyName',
-      key: 'companyName',
-      sorter: true
+      dataIndex: 'company.id',
+      key: 'company.id',
+      sorter: true,
+      render: (_, record: IClient) => <>{record?.company?.name ?? '-'}</>
     },
     {
       title: 'Client Company Name',
@@ -210,8 +206,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
               className="cta_btn table_cta_btn"
               icon={<EditOutlined />}
               onClick={() => {
-                setIsOpen(true);
-                setClientData(record);
+                navigate(`${ROUTES.clientEdit}/${record?.id}`);
               }}
             />
           </Tooltip>
@@ -267,14 +262,6 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
         loading={isLoading}
         total={clientList?.recordsTotal ?? 10}
       />
-      {isOpen && (
-        <AddClientModal
-          isOpen={Boolean(isOpen)}
-          setIsOpen={(flag) => setIsOpen(!!flag)}
-          clientData={clientData}
-          userData={userData}
-        />
-      )}
     </>
   );
 };

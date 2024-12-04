@@ -12,6 +12,8 @@ export const ROUTES = {
 
   clientManagement: `/clients-management`,
   clientView: `/clients-management/view-client`,
+  clientEdit: `/clients-management/edit-client`,
+  clientAdd: `/clients-management/add-client`,
 
   usersManagement: `/users-management`,
   usersView: `/users-management/view-user`,

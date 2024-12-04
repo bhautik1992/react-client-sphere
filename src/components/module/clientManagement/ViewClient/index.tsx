@@ -12,6 +12,7 @@ import { useClientDetail, useClientStatus } from 'services/hooks/client';
 import { clientKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
+import { Designation } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import { renderTagColor } from 'utils/renderColor';
 
@@ -128,7 +129,7 @@ const ViewClient = () => {
           <Row className="clientRow">
             <Col xs={6}>
               <h4>Company Name</h4>
-              <p>{clientData?.companyName ?? '-'}</p>
+              <p>{clientData?.company?.name ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Client Company Name</h4>
@@ -158,7 +159,7 @@ const ViewClient = () => {
           <Row className="clientRow">
             <Col xs={6}>
               <h4>Designation</h4>
-              <p>{clientData?.designation ?? '-'}</p>
+              <p>{Designation.find((d) => d.value === clientData?.designation)?.label ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Account Manager</h4>

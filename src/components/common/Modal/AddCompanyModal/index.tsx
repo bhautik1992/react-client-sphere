@@ -7,8 +7,9 @@ import React, { useState } from 'react';
 import { RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 
 import { IAddCompanyReq, ICompany, ICompanyReq } from 'services/api/company/types';
+import { ICity, ICountry, IState } from 'services/api/country/types';
 import { useAddCompany, useEditCompany } from 'services/hooks/company';
-import { useCountryList } from 'services/hooks/country';
+import { useCityList, useCountryList, useStateList } from 'services/hooks/country';
 import { companyKeys, dashboardKey } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
@@ -32,13 +33,46 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
   const { mutate: editMutate, isLoading: isEditLoading } = useEditCompany();
 
   const [open, setOpen] = useState<boolean>(false);
-  const { data: countryList } = useCountryList();
-  const countryOptions = countryList?.map((item) => {
-    return {
-      label: item.name,
-      value: item.id
-    };
+  const { data: countryOptions } = useCountryList();
+
+  // Country changes
+  const [countryCode, setCountryCode] = useState<string>(companyData?.countryCode ?? '');
+  const [stateOptions, setStateOptions] = useState<IState[]>([]);
+
+  const { data: stateList } = useStateList({
+    countryCode: countryCode
   });
+
+  React.useEffect(() => {
+    if (stateList) {
+      setStateOptions(stateList);
+    }
+  }, [stateList]);
+
+  const handleCountryChange = (countryCode: string) => {
+    setCountryCode(countryCode);
+    setStateOptions([]);
+  };
+
+  // State changes
+  const [stateCode, setStateCode] = useState<string>(companyData?.stateCode ?? '');
+  const [cityOptions, setCityOptions] = useState<ICity[]>([]);
+
+  const { data: cityList } = useCityList({
+    countryCode: countryCode,
+    stateCode: stateCode
+  });
+
+  React.useEffect(() => {
+    if (cityList) {
+      setCityOptions(cityList);
+    }
+  }, [cityList]);
+
+  const handleStateChange = (stateCode: string) => {
+    setStateCode(stateCode);
+    setCityOptions([]);
+  };
 
   const handleClose = (_?: unknown, reason?: string) => {
     if (reason === 'backdropClick') return;
@@ -132,7 +166,9 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
           name: companyData?.name ?? '',
           email: companyData?.email ?? '',
           address: companyData?.address ?? null,
-          countryId: companyData?.country?.id ?? null
+          countryCode: companyData?.countryCode ?? null,
+          stateCode: companyData?.stateCode ?? null,
+          cityName: companyData?.cityName ?? null
         }}
       >
         <Row gutter={[0, 30]}>
@@ -154,7 +190,7 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
             col={{ xs: 24 }}
             name="email"
             placeholder="Enter company email address"
-            label="Email address"
+            label="Email"
             allowClear="allowClear"
             size="middle"
             disabled={Boolean(companyData?.email)}
@@ -185,15 +221,59 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
           />
           <RenderSelectInput
             col={{ xs: 24 }}
-            name="countryId"
+            name="countryCode"
             placeholder="Please select country"
             label="Country"
             allowClear={true}
-            optionLabel={countryOptions}
+            showSearch={true}
+            optionLabel={countryOptions?.map((country: ICountry) => ({
+              label: country.name,
+              value: country.isoCode
+            }))}
+            onSelect={handleCountryChange}
             rules={[
               {
                 required: true,
                 message: 'Please select country'
+              }
+            ]}
+          />
+          <RenderSelectInput
+            col={{ xs: 24 }}
+            name="stateCode"
+            placeholder="Please select state"
+            label="State"
+            showSearch={true}
+            allowClear={true}
+            disabled={!stateOptions.length}
+            optionLabel={stateOptions?.map((state: IState) => ({
+              label: state.name,
+              value: state.isoCode
+            }))}
+            onSelect={handleStateChange}
+            rules={[
+              {
+                required: true,
+                message: 'Please select state'
+              }
+            ]}
+          />
+          <RenderSelectInput
+            col={{ xs: 24 }}
+            name="cityName"
+            placeholder="Please select city"
+            label="City"
+            showSearch={true}
+            allowClear={true}
+            disabled={!cityOptions.length}
+            optionLabel={cityOptions?.map((city: ICity) => ({
+              label: city.name,
+              value: city.name
+            }))}
+            rules={[
+              {
+                required: true,
+                message: 'Please select city'
               }
             ]}
           />

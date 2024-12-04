@@ -15,6 +15,7 @@ const UsersList = lazy(() => import('../pages/UsersManagement'));
 const UserView = lazy(() => import('../components/module/usersManagement/ViewUser'));
 const ClientList = lazy(() => import('../pages/ClientManagement/index'));
 const ClientView = lazy(() => import('../components/module/clientManagement/ViewClient'));
+const ClientAdd = lazy(() => import('../components/module/clientManagement/AddEditClient'));
 const ProjectList = lazy(() => import('../pages/ProjectManagement/index'));
 const ProjectView = lazy(() => import('../components/module/projectManagement/ViewProject'));
 const CompanyList = lazy(() => import('../pages/CompanyManagement/index'));
@@ -50,6 +51,8 @@ const Routing = () => {
         <Route path={ROUTES.clientManagement} element={<Outlet />}>
           <Route path={ROUTES.clientManagement} element={<ClientList />} />
           <Route path={`${ROUTES.clientView}/:id`} element={<ClientView />} />
+          <Route path={`${ROUTES.clientAdd}`} element={<ClientAdd />} />
+          <Route path={`${ROUTES.clientEdit}/:id`} element={<ClientAdd />} />
           <Route path="*" element={<Navigate to={ROUTES.clientManagement} replace={true} />} />
         </Route>
 

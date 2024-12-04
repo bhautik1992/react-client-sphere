@@ -3,15 +3,16 @@ import { Wrapper } from './style';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Form } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import useDebounce from '../../components/common/useDebounce';
 import { RenderTextInput } from 'components/common/FormField';
-import AddClientModal from 'components/common/Modal/AddClientModal';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 import ClientManagementTable from 'components/module/clientManagement/ClientManagementTable';
 
 import { IClientReq } from 'services/api/client/types';
-import { authStore } from 'services/store/auth';
+
+import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
   {
@@ -21,11 +22,8 @@ const BreadcrumbsPath = [
 
 const ClientManagement = () => {
   const [form] = Form.useForm();
-  const { userData } = authStore((state) => state);
-
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
   const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IClientReq>({
     limit: 10,
@@ -55,21 +53,13 @@ const ClientManagement = () => {
                 onChange={onChange}
               />
             </Form>
-            <Button type="primary" onClick={() => setIsOpen(true)}>
+            <Button type="primary" onClick={() => navigate(ROUTES.clientAdd)}>
               Add Client
             </Button>
           </div>
         </div>
         <ClientManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
       </div>
-
-      {isOpen && (
-        <AddClientModal
-          isOpen={Boolean(isOpen)}
-          setIsOpen={(flag) => setIsOpen(!!flag)}
-          userData={userData}
-        />
-      )}
     </Wrapper>
   );
 };

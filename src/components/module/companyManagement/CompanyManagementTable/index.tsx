@@ -77,7 +77,21 @@ const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'country',
       key: 'country',
       sorter: true,
-      render: (_, record: ICompany) => <>{record?.country?.name ?? '-'}</>
+      render: (_, record: ICompany) => <>{record?.countryName ?? '-'}</>
+    },
+    {
+      title: 'State',
+      dataIndex: 'state',
+      key: 'state',
+      sorter: true,
+      render: (_, record: ICompany) => <>{record?.stateName ?? '-'}</>
+    },
+    {
+      title: 'City',
+      dataIndex: 'city',
+      key: 'city',
+      sorter: true,
+      render: (_, record: ICompany) => <>{record?.cityName ?? '-'}</>
     },
     {
       title: 'Actions',

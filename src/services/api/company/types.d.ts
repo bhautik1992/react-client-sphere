@@ -8,7 +8,11 @@ export interface ICompany {
   name: string;
   email: string;
   address: string;
-  country: ICountry;
+  countryCode: string;
+  countryName: string;
+  stateCode: string;
+  stateName: string;
+  cityName: string;
   projects: IProject[];
 }
 
@@ -29,7 +33,9 @@ export interface IAddCompanyReq {
   name: string;
   email: string;
   address: string;
-  countryId: number;
+  countryCode: string;
+  stateCode: string;
+  cityName: string;
 }
 
 export interface IAddCompanyRes {}

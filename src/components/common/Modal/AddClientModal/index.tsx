@@ -17,6 +17,7 @@ import { IAddClientReq, IClient, IClientReq } from 'services/api/client/types';
 import { ICity, ICountry, IState } from 'services/api/country/types';
 import { useAddClient, useEditClient } from 'services/hooks/client';
 import { useCityList, useCountryList, useStateList } from 'services/hooks/country';
+import { useDashboardCompany } from 'services/hooks/dashboard';
 import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
@@ -44,6 +45,15 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
 
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
+
+  const { data: companyList } = useDashboardCompany();
+
+  const companyListOption = companyList?.map((item) => {
+    return {
+      label: item.name,
+      value: item.id
+    };
+  });
 
   const { data: countryOptions } = useCountryList();
   // Country changes
@@ -191,7 +201,7 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
           email: clientData?.email ?? '',
           phone: clientData?.phone ?? null,
           designation: clientData?.designation ?? null,
-          companyName: clientData?.companyName ?? null,
+          companyId: clientData?.company?.id ?? null,
           clientCompanyName: clientData?.clientCompanyName ?? null,
           accountManager: clientData?.accountManager
             ? clientData?.accountManager
@@ -287,18 +297,18 @@ const AddClientModal: React.FC<IAddClientModalProps & ModalProps> = ({
               }
             ]}
           />
-          <RenderTextInput
+          <RenderSelectInput
             col={{ xs: 12 }}
-            name="companyName"
-            placeholder="Enter your company name"
-            label="Company name"
-            allowClear="allowClear"
-            size="middle"
-            disabled={Boolean(clientData?.companyName)}
+            name="companyId"
+            placeholder="Please select company"
+            label="Company"
+            allowClear={true}
+            optionLabel={companyListOption}
+            disabled={Boolean(clientData?.company.id)}
             rules={[
               {
                 required: true,
-                message: 'Please enter your company name'
+                message: 'Please select company'
               }
             ]}
           />

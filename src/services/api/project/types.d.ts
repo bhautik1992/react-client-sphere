@@ -11,6 +11,8 @@ interface IProject {
   startDate: string;
   endDate: string;
   billingType: string;
+  invoiceStatus: string;
+  projectManager: string;
   hourlyMonthlyRate: number;
   projectHours: number;
   currency: string;
@@ -40,6 +42,8 @@ export interface IAddProjectReq {
   currency: string;
   amount: number;
   clientId: number;
+  invoiceStatus: string;
+  projectManager: string;
 }
 
 export interface IProjectRes {

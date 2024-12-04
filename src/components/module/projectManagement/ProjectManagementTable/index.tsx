@@ -17,7 +17,7 @@ import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType } from 'utils/constants/enum';
+import { BillingType, InvoiceStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/projectStatusDropDown';
 
@@ -135,6 +135,13 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       render: (_, record: IProject) => <>{record?.client?.companyName ?? '-'}</>
     },
     {
+      title: 'Project Manager',
+      dataIndex: 'projectManager',
+      key: 'projectManager',
+      sorter: true,
+      render: (_, record: IProject) => <>{record?.projectManager ?? '-'}</>
+    },
+    {
       title: 'Billing Type',
       dataIndex: 'billingType',
       key: 'billingType',
@@ -156,6 +163,15 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       key: 'projectHours',
       sorter: false,
       render: (_, record: IProject) => <>{record?.projectHours ?? '-'}</>
+    },
+    {
+      title: 'Invoice Status',
+      dataIndex: 'invoiceStatus',
+      key: 'invoiceStatus',
+      sorter: false,
+      render: (_, record: IProject) => (
+        <>{InvoiceStatus.find((item) => item.value === record?.invoiceStatus)?.label ?? '-'}</>
+      )
     },
     {
       title: 'Status',

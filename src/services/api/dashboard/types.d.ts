@@ -7,7 +7,10 @@ export interface IDashboardRes {
 
 export interface IDashboardClientRes {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  clientCompanyName: string;
 }
 
 export interface IDashboardCompanyRes {

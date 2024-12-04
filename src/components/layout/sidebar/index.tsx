@@ -34,10 +34,10 @@ function createMenuItem(
 
 const items = [
   createMenuItem(ROUTES.dashboard, 'Dashboard', '1', <Dashboard />),
-  createMenuItem(ROUTES.usersManagement, 'User Management', '2', <UsersManagement />),
-  createMenuItem(ROUTES.clientManagement, 'Client Management', '3', <Client />),
-  createMenuItem(ROUTES.projectManagement, 'Project Management', '4', <ProjectManagement />),
-  createMenuItem(ROUTES.companyManagement, 'Company Management', '5', <CompanyManagement />)
+  createMenuItem(ROUTES.usersManagement, 'Users', '2', <UsersManagement />),
+  createMenuItem(ROUTES.clientManagement, 'Clients', '3', <Client />),
+  createMenuItem(ROUTES.projectManagement, 'Projects', '4', <ProjectManagement />),
+  createMenuItem(ROUTES.companyManagement, 'Companies', '5', <CompanyManagement />)
 ];
 
 function compareLinkAndReturnKey(items: any, currentPath: any): any {

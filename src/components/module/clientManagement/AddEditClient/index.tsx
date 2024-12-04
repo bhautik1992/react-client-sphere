@@ -197,7 +197,7 @@ const AddEditClient = () => {
 
   const BreadcrumbsPath = [
     {
-      title: <Link to={ROUTES.clientManagement}>Client Management</Link>
+      title: <Link to={ROUTES.clientManagement}>Clients</Link>
     },
     {
       title: id ? 'Edit Client' : 'Add Client'
@@ -337,7 +337,7 @@ const AddEditClient = () => {
               allowClear="allowClear"
               size="middle"
               disabled={Boolean(
-                clientData?.accountManager || userData?.firstName + ' ' + userData?.lastName
+                clientData?.accountManager ?? userData?.firstName + ' ' + userData?.lastName
               )}
               rules={[
                 {

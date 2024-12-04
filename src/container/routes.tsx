@@ -13,6 +13,7 @@ const ChangePassword = lazy(() => import('../pages/Auth/ChangePassword'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const UsersList = lazy(() => import('../pages/UsersManagement'));
 const UserView = lazy(() => import('../components/module/usersManagement/ViewUser'));
+const UserAdd = lazy(() => import('../components/module/usersManagement/AddEditUser'));
 const ClientList = lazy(() => import('../pages/ClientManagement/index'));
 const ClientView = lazy(() => import('../components/module/clientManagement/ViewClient'));
 const ClientAdd = lazy(() => import('../components/module/clientManagement/AddEditClient'));
@@ -45,6 +46,8 @@ const Routing = () => {
         <Route path={ROUTES.usersManagement} element={<Outlet />}>
           <Route path={ROUTES.usersManagement} element={<UsersList />} />
           <Route path={`${ROUTES.usersView}/:id`} element={<UserView />} />
+          <Route path={`${ROUTES.usersAdd}`} element={<UserAdd />} />
+          <Route path={`${ROUTES.usersEdit}/:id`} element={<UserAdd />} />
           <Route path="*" element={<Navigate to={ROUTES.usersManagement} replace={true} />} />
         </Route>
 

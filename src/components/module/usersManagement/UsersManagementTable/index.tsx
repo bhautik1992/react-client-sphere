@@ -4,10 +4,8 @@ import { Button, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { SorterResult } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import AddEditUserModal from 'components/common/Modal/AddUserModal';
 import CommonModal from 'components/common/Modal/CommonModal';
 import { CommonTable } from 'components/common/Table';
 
@@ -29,9 +27,6 @@ interface IProps {
 const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [userData, setUserData] = useState<IUser | null>(null);
 
   const { data: userList, isLoading } = useUserList({ ...args, search: searchDebounce });
   const { mutate } = useDeleteUser();
@@ -140,9 +135,8 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      width: 100,
       render: (_, record: IUser) => (
-        <>
+        <div className="d-flex flex-row">
           <Tooltip title="View user" placement="top" trigger="hover">
             <Button
               type="text"
@@ -159,8 +153,7 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
               className="cta_btn table_cta_btn"
               icon={<EditOutlined />}
               onClick={() => {
-                setIsOpen(true);
-                setUserData(record);
+                navigate(`${ROUTES.usersEdit}/${record?.id}`);
               }}
             />
           </Tooltip>
@@ -179,51 +172,42 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
               />
             </CommonModal>
           </Tooltip>
-        </>
+        </div>
       )
     }
   ];
 
   return (
-    <>
-      <CommonTable
-        bordered
-        columns={columns}
-        dataSource={
-          (userList?.result ?? []).length > 0
-            ? userList?.result.map((item) => ({ ...item, key: item.id }))
-            : []
+    <CommonTable
+      bordered
+      columns={columns}
+      dataSource={
+        (userList?.result ?? []).length > 0
+          ? userList?.result.map((item) => ({ ...item, key: item.id }))
+          : []
+      }
+      currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
+      onChange={(pagination, _, sorter, extra) => {
+        const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
+        const pageIndex = pagination?.current ?? 1;
+        if (extra?.action === 'paginate') {
+          setArgs({
+            ...args,
+            offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
+            limit: pagination?.pageSize ?? 10
+          });
+        } else {
+          setArgs({
+            ...args,
+            sortBy: order ? columnKey : '',
+            sortOrder: order?.replace('end', '') ?? '',
+            offset: (pageIndex - 1) * args.limit
+          });
         }
-        currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
-        onChange={(pagination, _, sorter, extra) => {
-          const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
-          const pageIndex = pagination?.current ?? 1;
-          if (extra?.action === 'paginate') {
-            setArgs({
-              ...args,
-              offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
-              limit: pagination?.pageSize ?? 10
-            });
-          } else {
-            setArgs({
-              ...args,
-              sortBy: order ? columnKey : '',
-              sortOrder: order?.replace('end', '') ?? '',
-              offset: (pageIndex - 1) * args.limit
-            });
-          }
-        }}
-        loading={isLoading}
-        total={userList?.recordsTotal ?? 10}
-      />
-      {isOpen && (
-        <AddEditUserModal
-          isOpen={Boolean(isOpen)}
-          setIsOpen={(flag) => setIsOpen(!!flag)}
-          userData={userData}
-        />
-      )}
-    </>
+      }}
+      loading={isLoading}
+      total={userList?.recordsTotal ?? 10}
+    />
   );
 };
 

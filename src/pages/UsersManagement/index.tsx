@@ -3,14 +3,16 @@ import { Wrapper } from './style';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Form } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import useDebounce from '../../components/common/useDebounce';
 import { RenderTextInput } from 'components/common/FormField';
-import AddEditUserModal from 'components/common/Modal/AddUserModal';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 import UsersManagementTable from 'components/module/usersManagement/UsersManagementTable';
 
 import { IUserReq } from 'services/api/users/types';
+
+import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
   {
@@ -20,9 +22,8 @@ const BreadcrumbsPath = [
 
 const UsersManagement = () => {
   const [form] = Form.useForm();
-
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const [args, setArgs] = useState<IUserReq>({
     limit: 10,
@@ -54,16 +55,13 @@ const UsersManagement = () => {
                 onChange={onChange}
               />
             </Form>
-            <Button type="primary" onClick={() => setIsOpen(true)}>
+            <Button type="primary" onClick={() => navigate(ROUTES.usersAdd)}>
               Add User
             </Button>
           </div>
         </div>
         <UsersManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
       </div>
-      {isOpen && (
-        <AddEditUserModal isOpen={Boolean(isOpen)} setIsOpen={(flag) => setIsOpen(!!flag)} />
-      )}
     </Wrapper>
   );
 };

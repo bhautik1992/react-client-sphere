@@ -16,4 +16,14 @@ export interface IDashboardClientRes {
 export interface IDashboardCompanyRes {
   id: number;
   name: string;
+  email: string;
+}
+
+export interface IDashboardUserRes {
+  id: number;
+  firstName: string;
+  lastName: string;
+  personalEmail: string;
+  companyEmail: string;
+  designation: string;
 }

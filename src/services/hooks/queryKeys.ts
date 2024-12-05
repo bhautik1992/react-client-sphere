@@ -77,7 +77,8 @@ export const companyKeys = {
 export const dashboardKey = {
   dashboardCount: [`dashboard-count`],
   dashboardClient: [`dashboard-client`],
-  dashboardCompany: [`dashboard-company`]
+  dashboardCompany: [`dashboard-company`],
+  dashboardUser: [`dashboard-user`]
 };
 
 export const countryStateCityKey = {

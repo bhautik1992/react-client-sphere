@@ -10,14 +10,23 @@ interface IProject {
   status: string;
   startDate: string;
   endDate: string;
-  billingType: string;
-  invoiceStatus: string;
+  assignFromCompanyId: number;
+  assignFromCompany: ICompany;
+  clientId: number;
+  client: IClient;
+  company: ICompany;
+  assignToCompanyId: number;
+  assignToCompany: ICompany;
   projectManager: string;
+  teamLeader: string;
+  isInternalProject: boolean;
+  billingType: string;
   hourlyMonthlyRate: number;
   projectHours: number;
+  projectCost: number;
   currency: string;
-  amount: number;
-  client: IClient;
+  paymentTermDays: number;
+  invoicePaymentCycle: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -36,14 +45,19 @@ export interface IAddProjectReq {
   status: string;
   startDate: string;
   endDate: string;
+  assignFromCompanyId: number;
+  clientId: number;
+  assignToCompanyId: number;
+  projectManager: string;
+  teamLeader: string;
+  isInternalProject: boolean;
   billingType: string;
   hourlyMonthlyRate: number;
   projectHours: number;
+  projectCost: number;
   currency: string;
-  amount: number;
-  clientId: number;
-  invoiceStatus: string;
-  projectManager: string;
+  paymentTermDays: number;
+  invoicePaymentCycle: string;
 }
 
 export interface IProjectRes {

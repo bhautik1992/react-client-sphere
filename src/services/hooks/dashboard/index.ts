@@ -38,3 +38,14 @@ export const useDashboardCompany = () => {
     }
   });
 };
+
+export const useDashboardUser = () => {
+  return useFetch({
+    queryFn: () => dashboardAPI.dashboardUser(),
+    queryKey: dashboardKey.dashboardUser,
+    queryOptions: {
+      staleTime: Infinity,
+      retry: false
+    }
+  });
+};

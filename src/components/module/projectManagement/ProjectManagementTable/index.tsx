@@ -4,10 +4,8 @@ import { Button, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { SorterResult } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import AddProjectModal from 'components/common/Modal/AddProjectModal';
 import CommonModal from 'components/common/Modal/CommonModal';
 import { CommonTable } from 'components/common/Table';
 
@@ -17,7 +15,7 @@ import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, InvoiceStatus } from 'utils/constants/enum';
+import { BillingType } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/projectStatusDropDown';
 
@@ -33,9 +31,6 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
 
   const { mutate: deleteMutate } = useDeleteProject();
   const { mutate: statusMutate } = useProjectStatus();
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [projectData, setProjectData] = useState<IProject | null>(null);
 
   const { data: projectList, isLoading } = useProjectList({
     ...args,
@@ -128,13 +123,6 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       )
     },
     {
-      title: 'Company Name',
-      dataIndex: 'client.companyName',
-      key: 'client.companyName',
-      sorter: false,
-      render: (_, record: IProject) => <>{record?.client?.companyName ?? '-'}</>
-    },
-    {
       title: 'Project Manager',
       dataIndex: 'projectManager',
       key: 'projectManager',
@@ -163,15 +151,6 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       key: 'projectHours',
       sorter: false,
       render: (_, record: IProject) => <>{record?.projectHours ?? '-'}</>
-    },
-    {
-      title: 'Invoice Status',
-      dataIndex: 'invoiceStatus',
-      key: 'invoiceStatus',
-      sorter: false,
-      render: (_, record: IProject) => (
-        <>{InvoiceStatus.find((item) => item.value === record?.invoiceStatus)?.label ?? '-'}</>
-      )
     },
     {
       title: 'Status',
@@ -208,8 +187,7 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
               className="cta_btn table_cta_btn"
               icon={<EditOutlined />}
               onClick={() => {
-                setIsOpen(true);
-                setProjectData(record);
+                navigate(`${ROUTES.projectEdit}/${record?.id}`);
               }}
             />
           </Tooltip>
@@ -265,13 +243,6 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         loading={isLoading}
         total={projectList?.recordsTotal ?? 10}
       />
-      {isOpen && (
-        <AddProjectModal
-          isOpen={Boolean(isOpen)}
-          setIsOpen={(flag) => setIsOpen(!!flag)}
-          projectData={projectData}
-        />
-      )}
     </>
   );
 };

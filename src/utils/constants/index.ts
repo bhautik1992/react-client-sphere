@@ -18,7 +18,8 @@ export const ApiEndPoints = {
   dashboard: {
     dashboardCount: `dashboard/count`,
     dashboardClient: `dashboard/client-list`,
-    dashboardCompany: `dashboard/company-list`
+    dashboardCompany: `dashboard/company-list`,
+    dashboardUser: `dashboard/user-list`
   },
   profile: {
     profileDetail: `dashboard/user-profile`,

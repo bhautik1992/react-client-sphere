@@ -13,13 +13,13 @@ export interface ISignInRes {
 
 export interface IForgotPwdReq {
   email: string;
-  userType: string;
+  employeeType: string;
 }
 
 export interface IResetPasswordReq {
   token: string;
   password: string;
-  userType: string;
+  employeeType: string;
 }
 
 export interface IChangePasswordReq {

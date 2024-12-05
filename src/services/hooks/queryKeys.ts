@@ -1,8 +1,8 @@
 import { IClientReq } from 'services/api/client/types';
 import { ICompanyReq } from 'services/api/company/types';
 import { ICityReq, IStateReq } from 'services/api/country/types';
+import { IEmployeeReq } from 'services/api/employee/types';
 import { IProjectReq } from 'services/api/project/types';
-import { IUserReq } from 'services/api/users/types';
 import { IVendorReq } from 'services/api/vendor/types';
 
 export const authKeys = {
@@ -78,7 +78,7 @@ export const dashboardKey = {
   dashboardCount: [`dashboard-count`],
   dashboardClient: [`dashboard-client`],
   dashboardCompany: [`dashboard-company`],
-  dashboardUser: [`dashboard-user`]
+  dashboardEmployee: [`dashboard-employee`]
 };
 
 export const countryStateCityKey = {
@@ -92,17 +92,17 @@ export const profileKey = {
   profileEdit: [`profile-edit`]
 };
 
-export const userKeys = {
-  userList: (data: IUserReq) => [
-    `user-list`,
+export const employeeKeys = {
+  employeeList: (data: IEmployeeReq) => [
+    `employee-list`,
     `${data?.limit}`,
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`
   ],
-  userDetail: (id: number) => [`user-detail-${id}`],
-  userDelete: [`user-delete`],
-  userAdd: [`add-user`],
-  userEdit: [`edit-user`]
+  employeeDetail: (id: number) => [`employee-detail-${id}`],
+  employeeDelete: [`employee-delete`],
+  employeeAdd: [`add-employee`],
+  employeeEdit: [`edit-employee`]
 };

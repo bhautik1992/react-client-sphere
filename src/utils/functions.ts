@@ -10,10 +10,12 @@ const { actions } = authStore.getState();
 export const toAbsoluteUrl = (pathname: string) => window.location.origin + pathname;
 
 export const setupAxios = () => {
-  const userStorage: ISignInRes = JSON.parse(localStorage.getItem(LocalStorageKeys.user) ?? '{}');
+  const employeeStorage: ISignInRes = JSON.parse(
+    localStorage.getItem(LocalStorageKeys.employee) ?? '{}'
+  );
 
-  if (userStorage?.access_token) {
-    actions.authSuccess({ data: userStorage });
+  if (employeeStorage?.access_token) {
+    actions.authSuccess({ data: employeeStorage });
   } else {
     actions.authFail();
   }

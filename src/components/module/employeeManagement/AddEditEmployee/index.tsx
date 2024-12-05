@@ -10,40 +10,49 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { RenderDatePicker, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
-import { IAddUserReq, IUser, IUserReq } from 'services/api/users/types';
-import { dashboardKey, userKeys } from 'services/hooks/queryKeys';
-import { useAddUser, useEditUser, useUserDetail } from 'services/hooks/user';
+import { IAddEmployeeReq, IEmployee, IEmployeeReq } from 'services/api/employee/types';
+import { useDashboardEmployee } from 'services/hooks/dashboard';
+import { useAddEmployee, useEditEmployee, useEmployeeDetail } from 'services/hooks/employee';
+import { dashboardKey, employeeKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { Department, UserRole } from 'utils/constants/enum';
+import { Department, Designation, EmployeeRole } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
-const AddEditUser = () => {
+const AddEditEmployee = () => {
   const [form] = Form.useForm();
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useAddUser();
-  const { mutate: editMutate, isLoading: isEditLoading } = useEditUser();
-  const { data: userData } = useUserDetail(Number(id));
+  const { mutate, isLoading } = useAddEmployee();
+  const { mutate: editMutate, isLoading: isEditLoading } = useEditEmployee();
+  const { data: employeeData } = useEmployeeDetail(Number(id));
+
+  const { data: employeeList } = useDashboardEmployee();
+  const employeeListOption = employeeList?.map((item) => {
+    return {
+      label: item.firstName + ' ' + item.lastName,
+      value: item.id
+    };
+  });
 
   const handleClose = () => {
     form.resetFields();
-    navigate(ROUTES.clientManagement);
+    navigate(ROUTES.employeeManagement);
   };
 
-  const onSubmit = (value: IAddUserReq) => {
-    return userData?.id ? editUser(value) : addUser(value);
+  const onSubmit = (value: IAddEmployeeReq) => {
+    return employeeData?.id ? editEmployee(value) : addEmployee(value);
   };
 
-  const addUser = (value: IAddUserReq) => {
+  const addEmployee = (value: IAddEmployeeReq) => {
     mutate(value, {
       onSuccess: () => {
-        // invalidate user list
+        // invalidate employee list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [userKeys.userList({} as IUserReq)].some((key) => {
+            return [employeeKeys.employeeList({} as IEmployeeReq)].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -62,6 +71,16 @@ const AddEditUser = () => {
           }
         });
 
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [dashboardKey.dashboardEmployee].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+
         handleClose();
       },
       onError: (err: IApiError) => {
@@ -70,17 +89,17 @@ const AddEditUser = () => {
     });
   };
 
-  const editUser = (value: IAddUserReq) => {
+  const editEmployee = (value: IAddEmployeeReq) => {
     const data = {
       ...value,
-      id: userData?.id ?? 0
+      id: employeeData?.id ?? 0
     };
     editMutate(data, {
       onSuccess: (res) => {
-        // invalidate client list
+        // invalidate employee list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [userKeys.userList({} as IUserReq)].some((key) => {
+            return [employeeKeys.employeeList({} as IEmployeeReq)].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -89,9 +108,24 @@ const AddEditUser = () => {
         });
 
         // set detail view
-        queryClient.setQueryData<IUser>(userKeys.userDetail(userData?.id ?? 0), () => {
-          return { ...res } as IUser;
+        queryClient.setQueryData<IEmployee>(
+          employeeKeys.employeeDetail(employeeData?.id ?? 0),
+          () => {
+            return { ...res } as IEmployee;
+          }
+        );
+
+        // dashboard employee list
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [dashboardKey.dashboardEmployee].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
         });
+
         handleClose();
       },
       onError: (err: IApiError) => {
@@ -101,28 +135,28 @@ const AddEditUser = () => {
   };
 
   useEffect(() => {
-    if (!userData) return;
+    if (!employeeData) return;
     form.setFieldsValue({
-      firstName: userData?.firstName ?? null,
-      lastName: userData?.lastName ?? null,
-      personalEmail: userData?.personalEmail ?? null,
-      companyEmail: userData?.companyEmail ?? null,
-      phone: userData?.phone ?? null,
-      role: userData?.role ?? null,
-      department: userData?.department ?? null,
-      designation: userData?.designation ?? null,
-      joiningDate: userData?.joiningDate ? dayjs(userData?.joiningDate) : null,
-      dateOfBirth: userData?.dateOfBirth ? dayjs(userData?.dateOfBirth) : null,
-      reportingPerson: userData?.reportingPerson ?? null
+      firstName: employeeData?.firstName ?? null,
+      lastName: employeeData?.lastName ?? null,
+      personalEmail: employeeData?.personalEmail ?? null,
+      companyEmail: employeeData?.companyEmail ?? null,
+      phone: employeeData?.phone ?? null,
+      role: employeeData?.role ?? null,
+      department: employeeData?.department ?? null,
+      designation: employeeData?.designation ?? null,
+      joiningDate: employeeData?.joiningDate ? dayjs(employeeData?.joiningDate) : null,
+      dateOfBirth: employeeData?.dateOfBirth ? dayjs(employeeData?.dateOfBirth) : null,
+      reportingPersonId: employeeData?.reportingPersonId ?? null
     });
-  }, [userData, form]);
+  }, [employeeData, form]);
 
   const BreadcrumbsPath = [
     {
-      title: <Link to={ROUTES.usersManagement}>Users</Link>
+      title: <Link to={ROUTES.employeeManagement}>Employees</Link>
     },
     {
-      title: id ? 'Edit User' : 'Add User'
+      title: id ? 'Edit Employee' : 'Add Employee'
     }
   ];
   return (
@@ -130,13 +164,13 @@ const AddEditUser = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">{id ? 'Edit User' : 'Add User'}</h2>
+          <h2 className="pageTitle">{id ? 'Edit Employee' : 'Add Employee'}</h2>
         </div>
 
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">
           <Row gutter={[0, 30]}>
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="firstName"
               placeholder="Enter your first name"
               label="First Name"
@@ -150,7 +184,7 @@ const AddEditUser = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="lastName"
               placeholder="Enter your last name"
               label="Last Name"
@@ -164,7 +198,7 @@ const AddEditUser = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="personalEmail"
               placeholder="Enter your personal email"
               label="Personal Email"
@@ -182,7 +216,7 @@ const AddEditUser = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="companyEmail"
               placeholder="Enter your company email"
               label="Company Email"
@@ -200,7 +234,7 @@ const AddEditUser = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="phone"
               placeholder="Enter your phone number"
               label="Phone Number"
@@ -221,12 +255,12 @@ const AddEditUser = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="role"
               placeholder="Please select your role"
               label="Role"
               allowClear={true}
-              optionLabel={UserRole}
+              optionLabel={EmployeeRole}
               rules={[
                 {
                   required: true,
@@ -235,7 +269,7 @@ const AddEditUser = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="department"
               placeholder="Please select your department"
               label="Department"
@@ -248,21 +282,22 @@ const AddEditUser = () => {
                 }
               ]}
             />
-            <RenderTextInput
-              col={{ xs: 18 }}
+            <RenderSelectInput
+              col={{ xs: 12 }}
               name="designation"
-              placeholder="Please enter your designation"
+              placeholder="Select designation"
               label="Designation"
+              optionLabel={Designation}
               allowClear={true}
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your designation'
+                  message: 'Please select designation'
                 }
               ]}
             />
             <RenderDatePicker
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="joiningDate"
               placeholder="Select your joining date"
               label="Joining Date"
@@ -277,7 +312,7 @@ const AddEditUser = () => {
               ]}
             />
             <RenderDatePicker
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="dateOfBirth"
               placeholder="Select your date of birth"
               label="Date of Birth"
@@ -285,16 +320,18 @@ const AddEditUser = () => {
               size="middle"
               format={DATE_FORMAT}
             />
-            <RenderTextInput
-              col={{ xs: 18 }}
-              name="reportingPerson"
-              placeholder="Please enter your reporting person"
+            <RenderSelectInput
+              col={{ xs: 12 }}
+              name="reportingPersonId"
+              placeholder="Select your reporting person"
               label="Reporting Person"
               allowClear={true}
+              showSearch={true}
+              optionLabel={employeeListOption}
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your reporting person'
+                  message: 'Please select your reporting person'
                 }
               ]}
             />
@@ -309,7 +346,7 @@ const AddEditUser = () => {
                 htmlType="submit"
                 disabled={isLoading ?? isEditLoading}
               >
-                {userData?.id ? 'Update' : 'Create'}
+                {employeeData?.id ? 'Update' : 'Create'}
               </Button>
             </ButtonWrapper>
           </Row>
@@ -319,4 +356,4 @@ const AddEditUser = () => {
   );
 };
 
-export default AddEditUser;
+export default AddEditEmployee;

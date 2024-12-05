@@ -26,8 +26,8 @@ const Dashboard = () => {
           <Row>
             <Col xs={8} lg={6}>
               <div className="dashboardInfo">
-                <span className="number">{data?.usersCount ?? '00'}</span>
-                <h2 className="infoTitle">Users</h2>
+                <span className="number">{data?.employeesCount ?? '00'}</span>
+                <h2 className="infoTitle">Employees</h2>
               </div>
             </Col>
             <Col xs={8} lg={6}>

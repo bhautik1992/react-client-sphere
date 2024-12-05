@@ -5,7 +5,7 @@ export const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
-  &.userDetail {
+  &.employeeDetail {
     margin-top: 60px;
   }
   .projectRow {

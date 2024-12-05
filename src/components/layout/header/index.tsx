@@ -13,7 +13,7 @@ const Header = () => {
   const navigate = useNavigate();
   const {
     actions: { authFail },
-    userData
+    employeeData
   } = authStore((state) => state);
   const onLogout = () => {
     authFail();
@@ -58,7 +58,7 @@ const Header = () => {
         <Col xs={24} className="d-flex align-items-center justify-content-end">
           <div className="d-flex align-items-center">
             <span style={{ marginRight: '15px', fontWeight: 500, fontSize: '16px' }}>
-              {userData?.firstName}
+              {employeeData?.firstName}
             </span>
             <Dropdown
               menu={{ items }}
@@ -69,7 +69,7 @@ const Header = () => {
               <Link to="" onClick={(e) => e.preventDefault()}>
                 <Avatar
                   size="large"
-                  src={toAbsoluteUrl('/icons/user_thumbnail.svg')}
+                  src={toAbsoluteUrl('/icons/employee_thumbnail.svg')}
                   className="profile-avatar"
                 />
               </Link>

@@ -8,24 +8,24 @@ import { useNavigate } from 'react-router-dom';
 import useDebounce from '../../components/common/useDebounce';
 import { RenderTextInput } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
-import UsersManagementTable from 'components/module/usersManagement/UsersManagementTable';
+import EmployeesManagementTable from 'components/module/employeeManagement/EmployeeManagementTable';
 
-import { IUserReq } from 'services/api/users/types';
+import { IEmployeeReq } from 'services/api/employee/types';
 
 import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
   {
-    title: 'Users'
+    title: 'Employees'
   }
 ];
 
-const UsersManagement = () => {
+const EmployeesManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
 
-  const [args, setArgs] = useState<IUserReq>({
+  const [args, setArgs] = useState<IEmployeeReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
@@ -44,26 +44,26 @@ const UsersManagement = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">Users</h2>
+          <h2 className="pageTitle">Employees</h2>
           <div className="pageHeaderButton">
             <Form form={form}>
               <RenderTextInput
                 size="middle"
-                placeholder="Search user"
+                placeholder="Search employee"
                 allowClear
                 prefix={<SearchOutlined style={{ color: '#0000ff' }} />}
                 onChange={onChange}
               />
             </Form>
-            <Button type="primary" onClick={() => navigate(ROUTES.usersAdd)}>
-              Add User
+            <Button type="primary" onClick={() => navigate(ROUTES.employeeAdd)}>
+              Add Employee
             </Button>
           </div>
         </div>
-        <UsersManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
+        <EmployeesManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
       </div>
     </Wrapper>
   );
 };
 
-export default UsersManagement;
+export default EmployeesManagement;

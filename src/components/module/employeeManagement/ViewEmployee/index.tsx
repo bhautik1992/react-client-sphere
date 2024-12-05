@@ -6,34 +6,38 @@ import { Link, useParams } from 'react-router-dom';
 
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
-import { useUserDetail } from 'services/hooks/user';
+import { useEmployeeDetail } from 'services/hooks/employee';
 
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { UserRole } from 'utils/constants/enum';
+import { Department, Designation, EmployeeRole } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
   {
-    title: <Link to={ROUTES.usersManagement}>Users</Link>
+    title: <Link to={ROUTES.employeeManagement}>Employees</Link>
   },
   {
-    title: 'View User'
+    title: 'View Employee'
   }
 ];
 
-const ViewUser = () => {
+const ViewEmployee = () => {
   const { id } = useParams();
 
-  const { data } = useUserDetail(Number(id));
+  const { data } = useEmployeeDetail(Number(id));
   return (
     <>
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">View User</h2>
+          <h2 className="pageTitle">View Employee</h2>
         </div>
         <DetailWrapper>
-          <Row className="userRow">
+          <Row className="employeeRow">
+            <Col xs={6}>
+              <h4>Employee Code</h4>
+              <p>{data?.employeeCode ?? '-'}</p>
+            </Col>
             <Col xs={6}>
               <h4>First Name</h4>
               <p>{data?.firstName ?? '-'}</p>
@@ -42,12 +46,8 @@ const ViewUser = () => {
               <h4>Last Name</h4>
               <p>{data?.lastName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
-              <h4>Phone</h4>
-              <p>{data?.phone ?? '-'}</p>
-            </Col>
           </Row>
-          <Row className="userRow">
+          <Row className="employeeRow">
             <Col xs={6}>
               <h4>Personal Email</h4>
               <p>{data?.personalEmail ?? '-'}</p>
@@ -58,24 +58,30 @@ const ViewUser = () => {
             </Col>
             <Col xs={6}>
               <h4>Role</h4>
-              <p>{UserRole.find((role) => role.value === data?.role)?.label ?? '-'}</p>
+              <p>{EmployeeRole.find((role) => role.value === data?.role)?.label ?? '-'}</p>
             </Col>
           </Row>
-          <Row className="userRow">
+          <Row className="employeeRow">
             <Col xs={6}>
               <h4>Department</h4>
-              <p>{data?.department ?? '-'}</p>
+              <p>{Department.find((role) => role.value === data?.department)?.label ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Designation</h4>
-              <p>{data?.designation ?? '-'}</p>
+              <p>{Designation.find((role) => role.value === data?.designation)?.label ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Reporting Person</h4>
-              <p>{data?.reportingPerson ?? '-'}</p>
+              <p>
+                {data?.reportingPerson?.firstName ?? '-'} {data?.reportingPerson?.lastName ?? '-'}
+              </p>
             </Col>
           </Row>
-          <Row className="userRow">
+          <Row className="employeeRow">
+            <Col xs={6}>
+              <h4>Phone</h4>
+              <p>{data?.phone ?? '-'}</p>
+            </Col>
             <Col xs={6}>
               <h4>Date of Birth</h4>
               <p>{data?.dateOfBirth ? dayjs(data?.dateOfBirth).format(DATE_FORMAT) : '-'}</p>
@@ -84,10 +90,6 @@ const ViewUser = () => {
               <h4>Joining Date</h4>
               <p>{data?.joiningDate ? dayjs(data?.joiningDate).format(DATE_FORMAT) : '-'}</p>
             </Col>
-            <Col xs={6}>
-              <h4>User Code</h4>
-              <p>{data?.userCode ?? '-'}</p>
-            </Col>
           </Row>
         </DetailWrapper>
       </div>
@@ -95,4 +97,4 @@ const ViewUser = () => {
   );
 };
 
-export default ViewUser;
+export default ViewEmployee;

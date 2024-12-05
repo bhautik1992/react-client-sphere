@@ -2,12 +2,19 @@ import { IApiSuccess } from 'utils/Types';
 import { ApiEndPoints } from 'utils/constants';
 
 import apiInstance from '..';
-import { IAddUserReq, IAddUserRes, IEditUserReq, IUser, IUserReq, IUserRes } from './types';
+import {
+  IAddEmployeeReq,
+  IAddEmployeeRes,
+  IEditEmployeeReq,
+  IEmployee,
+  IEmployeeReq,
+  IEmployeeRes
+} from './types';
 
-export const userAPI = {
-  async userList(data: IUserReq): Promise<IUserRes> {
+export const employeeAPI = {
+  async employeeList(data: IEmployeeReq): Promise<IEmployeeRes> {
     return apiInstance
-      .post(ApiEndPoints.user.userList, data)
+      .post(ApiEndPoints.employee.employeeList, data)
       .then((response) => {
         return response?.data;
       })
@@ -16,9 +23,9 @@ export const userAPI = {
       });
   },
 
-  async userDetail(id: number): Promise<IUser> {
+  async employeeDetail(id: number): Promise<IEmployee> {
     return apiInstance
-      .get(`${ApiEndPoints.user.userDetail}/${id}`)
+      .get(`${ApiEndPoints.employee.employeeDetail}/${id}`)
       .then((response) => {
         return response?.data;
       })
@@ -27,9 +34,9 @@ export const userAPI = {
       });
   },
 
-  async deleteUser(id: number): Promise<IApiSuccess<string>> {
+  async deleteEmployee(id: number): Promise<IApiSuccess<string>> {
     return apiInstance
-      .delete(`${ApiEndPoints.user.userDelete}/${id}`)
+      .delete(`${ApiEndPoints.employee.employeeDelete}/${id}`)
       .then((response) => {
         return response?.data;
       })
@@ -38,9 +45,9 @@ export const userAPI = {
       });
   },
 
-  async addUser(data: IAddUserReq): Promise<IAddUserRes> {
+  async addEmployee(data: IAddEmployeeReq): Promise<IAddEmployeeRes> {
     return apiInstance
-      .post(ApiEndPoints.user.userAdd, data)
+      .post(ApiEndPoints.employee.employeeAdd, data)
       .then((response) => {
         return response?.data;
       })
@@ -49,9 +56,9 @@ export const userAPI = {
       });
   },
 
-  async editUser(data: IEditUserReq): Promise<IAddUserRes> {
+  async editEmployee(data: IEditEmployeeReq): Promise<IAddEmployeeRes> {
     return apiInstance
-      .post(`${ApiEndPoints.user.userEdit}/${data.id}`, data)
+      .post(`${ApiEndPoints.employee.employeeEdit}/${data.id}`, data)
       .then((response) => {
         return response?.data;
       })

@@ -35,7 +35,7 @@ const AddEditClient = () => {
   const { mutate: editMutate, isLoading: isEditLoading } = useEditClient();
   const { data: clientData } = useClientDetail(Number(id));
   const [value, setValue] = useState<string>('');
-  const { userData } = authStore((state) => state);
+  const { employeeData } = authStore((state) => state);
 
   const { data: companyList } = useDashboardCompany();
   const companyListOption = companyList?.map((item) => {
@@ -168,9 +168,9 @@ const AddEditClient = () => {
   };
 
   useEffect(() => {
-    if (userData) {
+    if (employeeData) {
       form.setFieldsValue({
-        accountManager: userData?.firstName + ' ' + userData?.lastName
+        accountManager: employeeData?.firstName + ' ' + employeeData?.lastName
       });
     }
     if (!clientData) return;
@@ -193,7 +193,7 @@ const AddEditClient = () => {
       status: clientData?.status ?? null,
       skypeId: clientData?.skypeId ?? null
     });
-  }, [clientData, form, userData]);
+  }, [clientData, form, employeeData]);
 
   const BreadcrumbsPath = [
     {
@@ -214,7 +214,7 @@ const AddEditClient = () => {
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">
           <Row gutter={[0, 30]}>
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="firstName"
               placeholder="Enter your first name"
               label="First Name"
@@ -228,7 +228,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="lastName"
               placeholder="Enter your last name"
               label="Last Name"
@@ -242,7 +242,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="email"
               placeholder="Enter your email address"
               label="Email"
@@ -261,7 +261,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderPhoneNumber
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="phone"
               placeholder="Enter your phone number "
               label="Phone Number"
@@ -280,7 +280,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderTextArea
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="address"
               placeholder="Enter your address"
               label="Address"
@@ -288,7 +288,7 @@ const AddEditClient = () => {
               size="middle"
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="designation"
               placeholder="Select your designation"
               label="Designation"
@@ -301,7 +301,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="companyId"
               placeholder="Please select company"
               label="Company"
@@ -316,10 +316,10 @@ const AddEditClient = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="clientCompanyName"
               placeholder="Enter your client company name"
-              label="Client Company Name"
+              label="Client Company"
               allowClear="allowClear"
               size="middle"
               rules={[
@@ -330,14 +330,14 @@ const AddEditClient = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="accountManager"
               placeholder="Enter your account manager"
               label="Account Manager"
               allowClear="allowClear"
               size="middle"
               disabled={Boolean(
-                clientData?.accountManager ?? userData?.firstName + ' ' + userData?.lastName
+                clientData?.accountManager ?? employeeData?.firstName + ' ' + employeeData?.lastName
               )}
               rules={[
                 {
@@ -347,7 +347,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="gender"
               placeholder="Please select your gender"
               label="Gender"
@@ -364,7 +364,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="website"
               placeholder="Enter your client website"
               label="Website"
@@ -372,7 +372,7 @@ const AddEditClient = () => {
               size="middle"
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="status"
               placeholder="Please select your status"
               label="Status"
@@ -389,7 +389,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="countryCode"
               placeholder="Please select country"
               label="Country"
@@ -408,7 +408,7 @@ const AddEditClient = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="stateCode"
               placeholder="Please select state"
               label="State"
@@ -422,7 +422,7 @@ const AddEditClient = () => {
               onSelect={handleStateChange}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="cityName"
               placeholder="Please select city"
               label="City"
@@ -435,7 +435,7 @@ const AddEditClient = () => {
               }))}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="skypeId"
               placeholder="Enter your Skype Id"
               label="Skype Id"
@@ -443,7 +443,7 @@ const AddEditClient = () => {
               size="middle"
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="zipCode"
               placeholder="Enter your zip code"
               label="Zip Code"

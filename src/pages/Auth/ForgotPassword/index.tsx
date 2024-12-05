@@ -21,7 +21,7 @@ const ForgotPassword: React.FC = () => {
   const onSubmit = (value: { email: string }) => {
     const data = {
       email: value?.email,
-      userType: Role?.ADMIN
+      employeeType: Role?.ADMIN
     };
     mutate(data, {
       onSuccess: () => {

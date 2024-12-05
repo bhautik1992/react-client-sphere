@@ -39,10 +39,10 @@ export const useDashboardCompany = () => {
   });
 };
 
-export const useDashboardUser = () => {
+export const useDashboardEmployee = () => {
   return useFetch({
-    queryFn: () => dashboardAPI.dashboardUser(),
-    queryKey: dashboardKey.dashboardUser,
+    queryFn: () => dashboardAPI.dashboardEmployee(),
+    queryKey: dashboardKey.dashboardEmployee,
     queryOptions: {
       staleTime: Infinity,
       retry: false

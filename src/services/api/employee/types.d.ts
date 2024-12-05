@@ -1,6 +1,6 @@
 import { Key } from 'react';
 
-export interface IUser {
+export interface IEmployee {
   id: number;
   firstName: string;
   lastName: string;
@@ -12,18 +12,19 @@ export interface IUser {
   designation: string;
   joiningDate: string;
   dateOfBirth: string;
-  reportingPerson: string;
-  userCode: string;
+  reportingPersonId: number;
+  reportingPerson: IEmployee;
+  employeeCode: string;
   createdAt: string;
   updatedAt: string;
 }
 
-export interface IUserRes {
-  result: IUser[];
+export interface IEmployeeRes {
+  result: IEmployee[];
   recordsTotal: number;
 }
 
-export interface IUserReq {
+export interface IEmployeeReq {
   limit: number;
   offset: number;
   search?: string;
@@ -31,7 +32,7 @@ export interface IUserReq {
   sortBy?: Key;
 }
 
-export interface IAddUserReq {
+export interface IAddEmployeeReq {
   id?: number;
   firstName: string;
   lastName: string;
@@ -43,10 +44,10 @@ export interface IAddUserReq {
   designation: string;
   joiningDate: string;
   dateOfBirth: string;
-  reportingPerson: string;
+  reportingPersonId: number;
 }
 
-export interface IEditUserReq extends IAddUserReq {
+export interface IEditEmployeeReq extends IAddEmployeeReq {
   id: number;
 }
-export interface IAddUserRes {}
+export interface IAddEmployeeRes {}

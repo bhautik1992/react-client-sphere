@@ -8,7 +8,7 @@ import { LocalStorageKeys } from 'utils/constants';
 export type IAuthStore = {
   isLoading: boolean;
   isLoggedIn: boolean;
-  userData: ISignInRes;
+  employeeData: ISignInRes;
   isSuperAdmin?: boolean;
 };
 
@@ -24,7 +24,7 @@ export const authStore = create<IAuthStore & IAuthAction>((set) => ({
   // initial state
   isLoading: false,
   isLoggedIn: false,
-  userData: {} as ISignInRes,
+  employeeData: {} as ISignInRes,
 
   // Actions
   actions: {
@@ -35,10 +35,10 @@ export const authStore = create<IAuthStore & IAuthAction>((set) => ({
           'Authorization'
         ] = `Bearer ${payload.data.access_token}`;
         localStorage.setItem(LocalStorageKeys.authToken, JSON.stringify(payload.data.access_token));
-        localStorage.setItem(LocalStorageKeys.user, JSON.stringify(payload.data));
+        localStorage.setItem(LocalStorageKeys.employee, JSON.stringify(payload.data));
         return {
           ...state,
-          userData: payload.data,
+          employeeData: payload.data,
           isLoggedIn: true
         };
       }),
@@ -46,10 +46,10 @@ export const authStore = create<IAuthStore & IAuthAction>((set) => ({
       set((state) => {
         delete apiInstance.defaults.headers.common['Authorization'];
         localStorage.removeItem(LocalStorageKeys.authToken);
-        localStorage.removeItem(LocalStorageKeys.user);
+        localStorage.removeItem(LocalStorageKeys.employee);
         return {
           ...state,
-          userData: {} as ISignInRes,
+          employeeData: {} as ISignInRes,
           isLoggedIn: false
         };
       })

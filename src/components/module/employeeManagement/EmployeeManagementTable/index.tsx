@@ -9,35 +9,35 @@ import { useNavigate } from 'react-router-dom';
 import CommonModal from 'components/common/Modal/CommonModal';
 import { CommonTable } from 'components/common/Table';
 
-import { IUser, IUserReq } from 'services/api/users/types';
-import { userKeys } from 'services/hooks/queryKeys';
-import { useDeleteUser, useUserList } from 'services/hooks/user';
+import { IEmployee, IEmployeeReq } from 'services/api/employee/types';
+import { useDeleteEmployee, useEmployeeList } from 'services/hooks/employee';
+import { employeeKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { UserRole } from 'utils/constants/enum';
+import { Department, Designation, EmployeeRole } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
   searchDebounce: string;
-  args: IUserReq;
-  setArgs: React.Dispatch<React.SetStateAction<IUserReq>>;
+  args: IEmployeeReq;
+  setArgs: React.Dispatch<React.SetStateAction<IEmployeeReq>>;
 }
 
-const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: userList, isLoading } = useUserList({ ...args, search: searchDebounce });
-  const { mutate } = useDeleteUser();
+  const { data: employeeList, isLoading } = useEmployeeList({ ...args, search: searchDebounce });
+  const { mutate } = useDeleteEmployee();
 
   const handleDeleteModal = (id: number) => {
     mutate(id, {
       onSuccess: () => {
-        // invalidate user list
+        // invalidate employee list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [userKeys.userList({ ...args, search: searchDebounce })].some((key) => {
+            return [employeeKeys.employeeList({ ...args, search: searchDebounce })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -51,11 +51,11 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
     });
   };
 
-  const columns: ColumnsType<IUser> = [
+  const columns: ColumnsType<IEmployee> = [
     {
-      title: 'User Code',
-      dataIndex: 'userCode',
-      key: 'userCode',
+      title: 'Employee Code',
+      dataIndex: 'employeeCode',
+      key: 'employeeCode',
       sorter: true
     },
     {
@@ -93,27 +93,46 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
       dataIndex: 'role',
       key: 'role',
       sorter: true,
-      render: (_, record: IUser) => (
-        <>{UserRole.find((role) => role.value === record?.role)?.label ?? '-'}</>
+      render: (_, record: IEmployee) => (
+        <>{EmployeeRole.find((role) => role.value === record?.role)?.label ?? '-'}</>
       )
     },
     {
       title: 'Department',
       dataIndex: 'department',
       key: 'department',
-      sorter: true
+      sorter: true,
+      render: (_, record: IEmployee) => (
+        <>{Department.find((role) => role.value === record?.department)?.label ?? '-'}</>
+      )
     },
     {
       title: 'Designation',
       dataIndex: 'designation',
       key: 'designation',
-      sorter: true
+      sorter: true,
+      render: (_, record: IEmployee) => (
+        <>{Designation.find((role) => role.value === record?.designation)?.label ?? '-'}</>
+      )
+    },
+    {
+      title: 'Reporting Person',
+      dataIndex: 'reportingPerson',
+      key: 'reportingPerson',
+      sorter: true,
+      render: (_, record: IEmployee) => (
+        <>
+          {record?.reportingPerson
+            ? `${record?.reportingPerson?.firstName} ${record?.reportingPerson?.lastName}`
+            : '-'}
+        </>
+      )
     },
     {
       title: 'Date of joining',
       dataIndex: 'joiningDate',
       key: 'joiningDate',
-      render: (_, record: IUser) => (
+      render: (_, record: IEmployee) => (
         <>{record?.joiningDate ? dayjs(record?.joiningDate).format(DATE_FORMAT) : '-'}</>
       )
     },
@@ -121,46 +140,41 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
       title: 'Date of birth',
       dataIndex: 'dateOfBirth',
       key: 'dateOfBirth',
-      render: (_, record: IUser) => (
+      render: (_, record: IEmployee) => (
         <>{record?.dateOfBirth ? dayjs(record?.dateOfBirth).format(DATE_FORMAT) : '-'}</>
       )
-    },
-    {
-      title: 'Reporting person',
-      dataIndex: 'reportingPerson',
-      key: 'reportingPerson'
     },
     {
       title: 'Actions',
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: IUser) => (
+      render: (_, record: IEmployee) => (
         <div className="d-flex flex-row">
-          <Tooltip title="View user" placement="top" trigger="hover">
+          <Tooltip title="View employee" placement="top" trigger="hover">
             <Button
               type="text"
               size="small"
               className="cta_btn table_cta_btn"
               icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.usersView}/${record?.id}`)}
+              onClick={() => navigate(`${ROUTES.employeeView}/${record?.id}`)}
             />
           </Tooltip>
-          <Tooltip title="Edit user" placement="top" trigger="hover">
+          <Tooltip title="Edit employee" placement="top" trigger="hover">
             <Button
               type="text"
               size="small"
               className="cta_btn table_cta_btn"
               icon={<EditOutlined />}
               onClick={() => {
-                navigate(`${ROUTES.usersEdit}/${record?.id}`);
+                navigate(`${ROUTES.employeeEdit}/${record?.id}`);
               }}
             />
           </Tooltip>
-          <Tooltip title="Delete user" placement="top" trigger="hover">
+          <Tooltip title="Delete employee" placement="top" trigger="hover">
             <CommonModal
               title="Delete"
-              content="Are you sure delete this user?"
+              content="Are you sure delete this employee?"
               type="confirm"
               onConfirm={() => handleDeleteModal(record?.id)}
             >
@@ -182,8 +196,8 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
       bordered
       columns={columns}
       dataSource={
-        (userList?.result ?? []).length > 0
-          ? userList?.result.map((item) => ({ ...item, key: item.id }))
+        (employeeList?.result ?? []).length > 0
+          ? employeeList?.result.map((item) => ({ ...item, key: item.id }))
           : []
       }
       currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
@@ -206,9 +220,9 @@ const UsersManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs 
         }
       }}
       loading={isLoading}
-      total={userList?.recordsTotal ?? 10}
+      total={employeeList?.recordsTotal ?? 10}
     />
   );
 };
 
-export default UsersManagementTable;
+export default EmployeesManagementTable;

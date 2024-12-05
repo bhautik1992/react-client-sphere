@@ -18,7 +18,7 @@ import { IAddProjectReq, IProject, IProjectReq } from 'services/api/project/type
 import {
   useDashboardClient,
   useDashboardCompany,
-  useDashboardUser
+  useDashboardEmployee
 } from 'services/hooks/dashboard';
 import { useAddProject, useEditProject, useProjectDetail } from 'services/hooks/project';
 import { dashboardKey, projectKeys } from 'services/hooks/queryKeys';
@@ -50,14 +50,14 @@ const AddEditProject = () => {
     { value: string; label: string }[]
   >([]);
 
-  const { data: userList } = useDashboardUser();
+  const { data: employeeList } = useDashboardEmployee();
   const projectManagerListOption = [
     {
       label: 'Outsourcing PM',
       value: 0
     },
-    ...(Array.isArray(userList)
-      ? userList
+    ...(Array.isArray(employeeList)
+      ? employeeList
           .filter((item) => item.designation === 'project_manager')
           .map((item) => ({
             label: `${item.firstName} ${item.lastName}`,
@@ -65,8 +65,8 @@ const AddEditProject = () => {
           }))
       : [])
   ];
-  const teamLeaderListOption = Array.isArray(userList)
-    ? userList
+  const teamLeaderListOption = Array.isArray(employeeList)
+    ? employeeList
         .filter((item) => item.designation === 'team_leader')
         .map((item) => ({
           label: `${item.firstName} ${item.lastName}`,

@@ -19,7 +19,7 @@ import { Wrapper } from '../Auth.Styled';
 const ChangePassword = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const { userData } = authStore((state) => state);
+  const { employeeData } = authStore((state) => state);
 
   const { mutate } = useChangePassword();
 
@@ -60,7 +60,7 @@ const ChangePassword = () => {
     const data = {
       currentPassword: value?.currentPassword,
       newPassword: value?.newPassword,
-      id: +userData.id
+      id: +employeeData.id
     };
     mutate(data, {
       onSuccess: () => {

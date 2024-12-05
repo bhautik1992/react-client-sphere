@@ -1,5 +1,5 @@
 export interface IDashboardRes {
-  usersCount: number;
+  employeesCount: number;
   clientsCount: number;
   projectsCount: number;
   companiesCount: number;
@@ -19,7 +19,7 @@ export interface IDashboardCompanyRes {
   email: string;
 }
 
-export interface IDashboardUserRes {
+export interface IDashboardEmployeeRes {
   id: number;
   firstName: string;
   lastName: string;

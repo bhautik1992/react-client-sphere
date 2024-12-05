@@ -4,8 +4,8 @@ import apiInstance from '..';
 import {
   IDashboardClientRes,
   IDashboardCompanyRes,
-  IDashboardRes,
-  IDashboardUserRes
+  IDashboardEmployeeRes,
+  IDashboardRes
 } from './types';
 
 export const dashboardAPI = {
@@ -42,9 +42,9 @@ export const dashboardAPI = {
       });
   },
 
-  async dashboardUser(): Promise<IDashboardUserRes[]> {
+  async dashboardEmployee(): Promise<IDashboardEmployeeRes[]> {
     return apiInstance
-      .get(`${ApiEndPoints.dashboard.dashboardUser}`)
+      .get(`${ApiEndPoints.dashboard.dashboardEmployee}`)
       .then((response) => {
         return response?.data;
       })

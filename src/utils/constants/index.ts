@@ -4,7 +4,7 @@ export const APP_NAME = import.meta.env.VITE_REACT_APP_NAME;
 
 // Local Storage Variables
 export const LocalStorageKeys = {
-  user: `user${APP_NAME}`,
+  employee: `employee${APP_NAME}`,
   authToken: `authToken${APP_NAME}`
 };
 
@@ -19,18 +19,18 @@ export const ApiEndPoints = {
     dashboardCount: `dashboard/count`,
     dashboardClient: `dashboard/client-list`,
     dashboardCompany: `dashboard/company-list`,
-    dashboardUser: `dashboard/user-list`
+    dashboardEmployee: `dashboard/employee-list`
   },
   profile: {
-    profileDetail: `dashboard/user-profile`,
-    editProfile: `user/update`
+    profileDetail: `dashboard/employee-profile`,
+    editProfile: `employee/update`
   },
-  user: {
-    userList: `user/list`,
-    userDetail: `user/get`,
-    userAdd: `user/create`,
-    userEdit: `user/update`,
-    userDelete: `user/delete`
+  employee: {
+    employeeList: `employee/list`,
+    employeeDetail: `employee/get`,
+    employeeAdd: `employee/create`,
+    employeeEdit: `employee/update`,
+    employeeDelete: `employee/delete`
   },
   client: {
     clientList: `client/list`,

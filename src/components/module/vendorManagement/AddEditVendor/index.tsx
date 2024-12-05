@@ -35,7 +35,7 @@ const AddEditVendor = () => {
   const { mutate: editMutate, isLoading: isEditLoading } = useEditVendor();
   const { data: vendorData } = useVendorDetail(Number(id));
   const [value, setValue] = useState<string>('');
-  const { userData } = authStore((state) => state);
+  const { employeeData } = authStore((state) => state);
 
   const { data: companyList } = useDashboardCompany();
   const companyListOption = companyList?.map((item) => {
@@ -157,9 +157,9 @@ const AddEditVendor = () => {
   };
 
   useEffect(() => {
-    if (userData) {
+    if (employeeData) {
       form.setFieldsValue({
-        accountManager: userData?.firstName + ' ' + userData?.lastName
+        accountManager: employeeData?.firstName + ' ' + employeeData?.lastName
       });
     }
     if (!vendorData) return;
@@ -179,7 +179,7 @@ const AddEditVendor = () => {
       cityName: vendorData?.cityName ?? null,
       skypeId: vendorData?.skypeId ?? null
     });
-  }, [vendorData, form, userData]);
+  }, [vendorData, form, employeeData]);
 
   const BreadcrumbsPath = [
     {
@@ -323,7 +323,7 @@ const AddEditVendor = () => {
               allowClear="allowClear"
               size="middle"
               disabled={Boolean(
-                vendorData?.accountManager ?? userData?.firstName + ' ' + userData?.lastName
+                vendorData?.accountManager ?? employeeData?.firstName + ' ' + employeeData?.lastName
               )}
               rules={[
                 {

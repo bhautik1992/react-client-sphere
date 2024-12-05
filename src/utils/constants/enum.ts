@@ -16,7 +16,7 @@ export enum ProjectStatusName {
   Completed = 'completed'
 }
 
-export enum UserRoleName {
+export enum EmployeeRoleName {
   Admin = 'admin',
   Employee = 'employee'
 }
@@ -45,13 +45,13 @@ export enum PaymentStatusName {
   PartialPaid = 'partial_paid'
 }
 
-export const UserRole = [
+export const EmployeeRole = [
   {
-    value: UserRoleName.Admin,
+    value: EmployeeRoleName.Admin,
     label: 'Admin'
   },
   {
-    value: UserRoleName.Employee,
+    value: EmployeeRoleName.Employee,
     label: 'Employee'
   }
 ];
@@ -115,12 +115,16 @@ export const CurrencyType = [
 
 export const Department = [
   {
+    value: 'admin',
+    label: 'Admin'
+  },
+  {
     value: 'development',
     label: 'Development'
   },
   {
-    value: 'design',
-    label: 'Design'
+    value: 'designing',
+    label: 'Designing'
   },
   {
     value: 'testing',

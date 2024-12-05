@@ -5,10 +5,10 @@ export const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
-  &.userDetail {
+  &.employeeDetail {
     margin-top: 60px;
   }
-  .userRow {
+  .employeeRow {
     justify-content: space-between;
     h4 {
       margin-bottom: 5px;

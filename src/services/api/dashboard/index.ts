@@ -1,7 +1,12 @@
 import { ApiEndPoints } from 'utils/constants';
 
 import apiInstance from '..';
-import { IDashboardClientRes, IDashboardCompanyRes, IDashboardRes } from './types';
+import {
+  IDashboardClientRes,
+  IDashboardCompanyRes,
+  IDashboardRes,
+  IDashboardUserRes
+} from './types';
 
 export const dashboardAPI = {
   async dashboardCount(): Promise<IDashboardRes> {
@@ -29,6 +34,17 @@ export const dashboardAPI = {
   async dashboardCompany(): Promise<IDashboardCompanyRes[]> {
     return apiInstance
       .get(`${ApiEndPoints.dashboard.dashboardCompany}`)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  },
+
+  async dashboardUser(): Promise<IDashboardUserRes[]> {
+    return apiInstance
+      .get(`${ApiEndPoints.dashboard.dashboardUser}`)
       .then((response) => {
         return response?.data;
       })

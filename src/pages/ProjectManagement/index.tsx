@@ -3,14 +3,16 @@ import { Wrapper } from './style';
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Form } from 'antd';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import useDebounce from '../../components/common/useDebounce';
 import { RenderTextInput } from 'components/common/FormField';
-import AddProjectModal from 'components/common/Modal/AddProjectModal';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 import ProjectManagementTable from 'components/module/projectManagement/ProjectManagementTable';
 
 import { IProjectReq } from 'services/api/project/types';
+
+import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
   {
@@ -20,9 +22,8 @@ const BreadcrumbsPath = [
 
 const ProjectManagement = () => {
   const [form] = Form.useForm();
-
+  const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
-  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IProjectReq>({
@@ -53,17 +54,13 @@ const ProjectManagement = () => {
                 onChange={onChange}
               />
             </Form>
-            <Button type="primary" onClick={() => setIsOpen(true)}>
+            <Button type="primary" onClick={() => navigate(ROUTES.projectAdd)}>
               Add Project
             </Button>
           </div>
         </div>
         <ProjectManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
       </div>
-
-      {isOpen && (
-        <AddProjectModal isOpen={Boolean(isOpen)} setIsOpen={(flag) => setIsOpen(!!flag)} />
-      )}
     </Wrapper>
   );
 };

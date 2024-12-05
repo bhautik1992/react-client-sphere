@@ -22,6 +22,7 @@ const VendorView = lazy(() => import('../components/module/vendorManagement/View
 const VendorAdd = lazy(() => import('../components/module/vendorManagement/AddEditVendor'));
 const ProjectList = lazy(() => import('../pages/ProjectManagement/index'));
 const ProjectView = lazy(() => import('../components/module/projectManagement/ViewProject'));
+const ProjectAdd = lazy(() => import('../components/module/projectManagement/AddEditProject'));
 const CompanyList = lazy(() => import('../pages/CompanyManagement/index'));
 const CompanyView = lazy(() => import('../components/module/companyManagement/ViewCompany'));
 const MyProfile = lazy(() => import('../pages/MyProfile'));
@@ -73,6 +74,8 @@ const Routing = () => {
         <Route path={ROUTES.projectManagement} element={<Outlet />}>
           <Route path={ROUTES.projectManagement} element={<ProjectList />} />
           <Route path={`${ROUTES.projectView}/:id`} element={<ProjectView />} />
+          <Route path={`${ROUTES.projectAdd}`} element={<ProjectAdd />} />
+          <Route path={`${ROUTES.projectEdit}/:id`} element={<ProjectAdd />} />
           <Route path="*" element={<Navigate to={ROUTES.projectManagement} replace={true} />} />
         </Route>
 

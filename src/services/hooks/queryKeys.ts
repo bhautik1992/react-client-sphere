@@ -3,6 +3,7 @@ import { ICompanyReq } from 'services/api/company/types';
 import { ICityReq, IStateReq } from 'services/api/country/types';
 import { IProjectReq } from 'services/api/project/types';
 import { IUserReq } from 'services/api/users/types';
+import { IVendorReq } from 'services/api/vendor/types';
 
 export const authKeys = {
   authMutate: ['auth-mutate-key'],
@@ -25,6 +26,21 @@ export const clientKeys = {
   clientAdd: [`add-client`],
   clientEdit: [`edit-client`],
   companyDelete: [`company-delete`]
+};
+
+export const vendorKeys = {
+  vendorList: (data: IVendorReq) => [
+    `vendor-list`,
+    `${data?.limit}`,
+    `${data?.offset}`,
+    `${data?.search ?? ''}`,
+    `${data?.sortBy ?? ''}`,
+    `${data?.sortOrder ?? ''}`
+  ],
+  vendorDetail: (id: number) => [`vendor-detail-${id}`],
+  vendorAdd: [`add-vendor`],
+  vendorEdit: [`edit-vendor`],
+  vendorDelete: [`vendor-delete`]
 };
 
 export const projectKeys = {

@@ -17,6 +17,9 @@ const UserAdd = lazy(() => import('../components/module/usersManagement/AddEditU
 const ClientList = lazy(() => import('../pages/ClientManagement/index'));
 const ClientView = lazy(() => import('../components/module/clientManagement/ViewClient'));
 const ClientAdd = lazy(() => import('../components/module/clientManagement/AddEditClient'));
+const VendorList = lazy(() => import('../pages/VendorManagement/index'));
+const VendorView = lazy(() => import('../components/module/vendorManagement/ViewVendor'));
+const VendorAdd = lazy(() => import('../components/module/vendorManagement/AddEditVendor'));
 const ProjectList = lazy(() => import('../pages/ProjectManagement/index'));
 const ProjectView = lazy(() => import('../components/module/projectManagement/ViewProject'));
 const CompanyList = lazy(() => import('../pages/CompanyManagement/index'));
@@ -57,6 +60,14 @@ const Routing = () => {
           <Route path={`${ROUTES.clientAdd}`} element={<ClientAdd />} />
           <Route path={`${ROUTES.clientEdit}/:id`} element={<ClientAdd />} />
           <Route path="*" element={<Navigate to={ROUTES.clientManagement} replace={true} />} />
+        </Route>
+
+        <Route path={ROUTES.vendorManagement} element={<Outlet />}>
+          <Route path={ROUTES.vendorManagement} element={<VendorList />} />
+          <Route path={`${ROUTES.vendorView}/:id`} element={<VendorView />} />
+          <Route path={`${ROUTES.vendorAdd}`} element={<VendorAdd />} />
+          <Route path={`${ROUTES.vendorEdit}/:id`} element={<VendorAdd />} />
+          <Route path="*" element={<Navigate to={ROUTES.vendorManagement} replace={true} />} />
         </Route>
 
         <Route path={ROUTES.projectManagement} element={<Outlet />}>

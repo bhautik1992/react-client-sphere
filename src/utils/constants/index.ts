@@ -39,6 +39,13 @@ export const ApiEndPoints = {
     editClient: `client/update`,
     deleteClient: `client/delete`
   },
+  vendor: {
+    vendorList: `vendor/list`,
+    vendorDetail: `vendor/get`,
+    addVendor: `vendor/create`,
+    editVendor: `vendor/update`,
+    deleteVendor: `vendor/delete`
+  },
   project: {
     projectList: `project/list`,
     addProject: `project/create`,

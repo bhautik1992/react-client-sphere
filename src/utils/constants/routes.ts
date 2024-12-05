@@ -15,6 +15,11 @@ export const ROUTES = {
   clientEdit: `/clients-management/edit-client`,
   clientAdd: `/clients-management/add-client`,
 
+  vendorManagement: `/vendors-management`,
+  vendorView: `/vendors-management/view-vendor`,
+  vendorEdit: `/vendors-management/edit-vendor`,
+  vendorAdd: `/vendors-management/add-vendor`,
+
   usersManagement: `/users-management`,
   usersView: `/users-management/view-user`,
   usersEdit: `/users-management/edit-user`,

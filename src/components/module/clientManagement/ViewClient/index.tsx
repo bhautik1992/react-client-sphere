@@ -167,7 +167,7 @@ const ViewClient = () => {
             </Col>
             <Col xs={6}>
               <h4>Website</h4>
-              <p>{clientData?.webSite ?? '-'}</p>
+              <p>{clientData?.website ?? '-'}</p>
             </Col>
           </Row>
         </DetailWrapper>

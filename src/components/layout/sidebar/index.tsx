@@ -8,6 +8,7 @@ import CompanyManagement from 'components/svg/CompanyManagement';
 import Dashboard from 'components/svg/Dashboard';
 import ProjectManagement from 'components/svg/ProjectManagement';
 import UsersManagement from 'components/svg/UsersManagement';
+import Vendor from 'components/svg/Vendor';
 
 import { ROUTES } from 'utils/constants/routes';
 import { toAbsoluteUrl } from 'utils/functions';
@@ -36,8 +37,9 @@ const items = [
   createMenuItem(ROUTES.dashboard, 'Dashboard', '1', <Dashboard />),
   createMenuItem(ROUTES.usersManagement, 'Users', '2', <UsersManagement />),
   createMenuItem(ROUTES.clientManagement, 'Clients', '3', <Client />),
-  createMenuItem(ROUTES.projectManagement, 'Projects', '4', <ProjectManagement />),
-  createMenuItem(ROUTES.companyManagement, 'Companies', '5', <CompanyManagement />)
+  createMenuItem(ROUTES.vendorManagement, 'Vendors', '4', <Vendor />),
+  createMenuItem(ROUTES.projectManagement, 'Projects', '5', <ProjectManagement />),
+  createMenuItem(ROUTES.companyManagement, 'Companies', '6', <CompanyManagement />)
 ];
 
 function compareLinkAndReturnKey(items: any, currentPath: any): any {

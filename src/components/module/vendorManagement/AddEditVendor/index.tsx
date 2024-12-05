@@ -14,26 +14,26 @@ import {
 } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
-import { IAddClientReq, IClient, IClientReq } from 'services/api/client/types';
 import { ICity, ICountry, IState } from 'services/api/country/types';
-import { useAddClient, useClientDetail, useEditClient } from 'services/hooks/client';
+import { IAddVendorReq, IVendor, IVendorReq } from 'services/api/vendor/types';
 import { useCityList, useCountryList, useStateList } from 'services/hooks/country';
 import { useDashboardCompany } from 'services/hooks/dashboard';
-import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
+import { dashboardKey, vendorKeys } from 'services/hooks/queryKeys';
+import { useAddVendor, useEditVendor, useVendorDetail } from 'services/hooks/vendor';
 import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
 import { Designation } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
-const AddEditClient = () => {
+const AddEditVendor = () => {
   const [form] = Form.useForm();
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useAddClient();
-  const { mutate: editMutate, isLoading: isEditLoading } = useEditClient();
-  const { data: clientData } = useClientDetail(Number(id));
+  const { mutate, isLoading } = useAddVendor();
+  const { mutate: editMutate, isLoading: isEditLoading } = useEditVendor();
+  const { data: vendorData } = useVendorDetail(Number(id));
   const [value, setValue] = useState<string>('');
   const { userData } = authStore((state) => state);
 
@@ -46,7 +46,7 @@ const AddEditClient = () => {
   });
 
   const { data: countryOptions } = useCountryList();
-  const [countryCode, setCountryCode] = useState<string>(clientData?.countryCode ?? '');
+  const [countryCode, setCountryCode] = useState<string>(vendorData?.countryCode ?? '');
   const [stateOptions, setStateOptions] = useState<IState[]>([]);
 
   const { data: stateList } = useStateList({
@@ -65,7 +65,7 @@ const AddEditClient = () => {
   };
 
   // State changes
-  const [stateCode, setStateCode] = useState<string>(clientData?.stateCode ?? '');
+  const [stateCode, setStateCode] = useState<string>(vendorData?.stateCode ?? '');
   const [cityOptions, setCityOptions] = useState<ICity[]>([]);
 
   const { data: cityList } = useCityList({
@@ -86,20 +86,20 @@ const AddEditClient = () => {
 
   const handleClose = () => {
     form.resetFields();
-    navigate(ROUTES.clientManagement);
+    navigate(ROUTES.vendorManagement);
   };
 
-  const onSubmit = (value: IAddClientReq) => {
-    return clientData?.id ? editClient(value) : addClient(value);
+  const onSubmit = (value: IAddVendorReq) => {
+    return vendorData?.id ? editVendor(value) : addVendor(value);
   };
 
-  const addClient = (value: IAddClientReq) => {
+  const addVendor = (value: IAddVendorReq) => {
     mutate(value, {
       onSuccess: () => {
-        // invalidate client list
+        // invalidate vendor list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [clientKeys.clientList({} as IClientReq)].some((key) => {
+            return [vendorKeys.vendorList({} as IVendorReq)].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -118,17 +118,6 @@ const AddEditClient = () => {
           }
         });
 
-        // client list dashboard
-        queryClient.invalidateQueries({
-          predicate: (query) => {
-            return [dashboardKey.dashboardClient].some((key) => {
-              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
-                key[0]
-              );
-            });
-          }
-        });
-
         handleClose();
       },
       onError: (err: IApiError) => {
@@ -137,17 +126,17 @@ const AddEditClient = () => {
     });
   };
 
-  const editClient = (value: IAddClientReq) => {
+  const editVendor = (value: IAddVendorReq) => {
     const data = {
       ...value,
-      id: clientData?.id ?? 0
+      id: vendorData?.id ?? 0
     };
     editMutate(data, {
       onSuccess: (res) => {
-        // invalidate client list
+        // invalidate vendor list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [clientKeys.clientList({} as IClientReq)].some((key) => {
+            return [vendorKeys.vendorList({} as IVendorReq)].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -156,8 +145,8 @@ const AddEditClient = () => {
         });
 
         // set detail view
-        queryClient.setQueryData<IClient>(clientKeys.clientDetail(clientData?.id ?? 0), () => {
-          return { ...res } as IClient;
+        queryClient.setQueryData<IVendor>(vendorKeys.vendorDetail(vendorData?.id ?? 0), () => {
+          return { ...res } as IVendor;
         });
         handleClose();
       },
@@ -173,34 +162,31 @@ const AddEditClient = () => {
         accountManager: userData?.firstName + ' ' + userData?.lastName
       });
     }
-    if (!clientData) return;
+    if (!vendorData) return;
     form.setFieldsValue({
-      firstName: clientData?.firstName ?? null,
-      lastName: clientData?.lastName ?? null,
-      email: clientData?.email ?? null,
-      phone: clientData?.phone ?? null,
-      designation: clientData?.designation ?? null,
-      companyId: clientData?.company?.id ?? null,
-      clientCompanyName: clientData?.clientCompanyName ?? null,
-      accountManager: clientData?.accountManager ?? null,
-      website: clientData?.website ?? null,
-      gender: clientData?.gender ?? null,
-      address: clientData?.address ?? null,
-      countryCode: clientData?.countryCode ?? null,
-      stateCode: clientData?.stateCode ?? null,
-      cityName: clientData?.cityName ?? null,
-      zipCode: clientData?.zipCode ?? null,
-      status: clientData?.status ?? null,
-      skypeId: clientData?.skypeId ?? null
+      firstName: vendorData?.firstName ?? null,
+      lastName: vendorData?.lastName ?? null,
+      email: vendorData?.email ?? null,
+      phone: vendorData?.phone ?? null,
+      designation: vendorData?.designation ?? null,
+      companyId: vendorData?.company?.id ?? null,
+      vendorCompanyName: vendorData?.vendorCompanyName ?? null,
+      accountManager: vendorData?.accountManager ?? null,
+      website: vendorData?.website ?? null,
+      address: vendorData?.address ?? null,
+      countryCode: vendorData?.countryCode ?? null,
+      stateCode: vendorData?.stateCode ?? null,
+      cityName: vendorData?.cityName ?? null,
+      skypeId: vendorData?.skypeId ?? null
     });
-  }, [clientData, form, userData]);
+  }, [vendorData, form, userData]);
 
   const BreadcrumbsPath = [
     {
-      title: <Link to={ROUTES.clientManagement}>Clients</Link>
+      title: <Link to={ROUTES.vendorManagement}>Vendors</Link>
     },
     {
-      title: id ? 'Edit Client' : 'Add Client'
+      title: id ? 'Edit Vendor' : 'Add Vendor'
     }
   ];
   return (
@@ -208,7 +194,7 @@ const AddEditClient = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">{id ? 'Edit Client' : 'Add Client'}</h2>
+          <h2 className="pageTitle">{id ? 'Edit Vendor' : 'Add Vendor'}</h2>
         </div>
 
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">
@@ -248,7 +234,7 @@ const AddEditClient = () => {
               label="Email"
               allowClear="allowClear"
               size="middle"
-              disabled={Boolean(clientData?.email)}
+              disabled={Boolean(vendorData?.email)}
               rules={[
                 {
                   required: true,
@@ -307,7 +293,7 @@ const AddEditClient = () => {
               label="Company"
               allowClear={true}
               optionLabel={companyListOption}
-              disabled={Boolean(clientData?.company.id)}
+              disabled={Boolean(vendorData?.company.id)}
               rules={[
                 {
                   required: true,
@@ -317,15 +303,15 @@ const AddEditClient = () => {
             />
             <RenderTextInput
               col={{ xs: 18 }}
-              name="clientCompanyName"
-              placeholder="Enter your client company name"
-              label="Client Company Name"
+              name="vendorCompanyName"
+              placeholder="Enter your vendor company name"
+              label="Vendor Company Name"
               allowClear="allowClear"
               size="middle"
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your client company name'
+                  message: 'Please enter your vendor company name'
                 }
               ]}
             />
@@ -337,7 +323,7 @@ const AddEditClient = () => {
               allowClear="allowClear"
               size="middle"
               disabled={Boolean(
-                clientData?.accountManager ?? userData?.firstName + ' ' + userData?.lastName
+                vendorData?.accountManager ?? userData?.firstName + ' ' + userData?.lastName
               )}
               rules={[
                 {
@@ -346,47 +332,13 @@ const AddEditClient = () => {
                 }
               ]}
             />
-            <RenderSelectInput
-              col={{ xs: 18 }}
-              name="gender"
-              placeholder="Please select your gender"
-              label="Gender"
-              allowClear={true}
-              optionLabel={[
-                { label: 'Male', value: 'Male' },
-                { label: 'Female', value: 'Female' }
-              ]}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select your gender'
-                }
-              ]}
-            />
             <RenderTextInput
               col={{ xs: 18 }}
               name="website"
-              placeholder="Enter your client website"
+              placeholder="Enter your vendor website"
               label="Website"
               allowClear="allowClear"
               size="middle"
-            />
-            <RenderSelectInput
-              col={{ xs: 18 }}
-              name="status"
-              placeholder="Please select your status"
-              label="Status"
-              allowClear={true}
-              optionLabel={[
-                { label: 'Active', value: 'active' },
-                { label: 'Inactive', value: 'inactive' }
-              ]}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select your status'
-                }
-              ]}
             />
             <RenderSelectInput
               col={{ xs: 18 }}
@@ -442,14 +394,6 @@ const AddEditClient = () => {
               allowClear="allowClear"
               size="middle"
             />
-            <RenderTextInput
-              col={{ xs: 18 }}
-              name="zipCode"
-              placeholder="Enter your zip code"
-              label="Zip Code"
-              allowClear="allowClear"
-              size="middle"
-            />
           </Row>
           <Row justify={'center'}>
             <ButtonWrapper>
@@ -461,7 +405,7 @@ const AddEditClient = () => {
                 htmlType="submit"
                 disabled={isLoading ?? isEditLoading}
               >
-                {clientData?.id ? 'Update' : 'Create'}
+                {vendorData?.id ? 'Update' : 'Create'}
               </Button>
             </ButtonWrapper>
           </Row>
@@ -471,4 +415,4 @@ const AddEditClient = () => {
   );
 };
 
-export default AddEditClient;
+export default AddEditVendor;

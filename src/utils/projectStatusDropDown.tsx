@@ -30,8 +30,8 @@ const ProjectStatusDropdown: React.FC<{
       title="Change Project Status"
       trigger="click"
       placement="left"
-      visible={visible}
-      onVisibleChange={(visible) => setVisible(visible)}
+      open={visible}
+      onOpenChange={(visible) => setVisible(visible)}
       content={
         <div style={{ width: 200 }}>
           <Select

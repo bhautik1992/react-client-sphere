@@ -9,3 +9,13 @@ export const ButtonWrapper = styled.div`
     margin-left: 20px;
   }
 `;
+
+export const Wrapper = styled.div`
+  form {
+    .otherAction {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+`;

@@ -63,9 +63,9 @@ const ViewCompany = () => {
               <h4>No. of Projects</h4>
               <Tooltip
                 title={
-                  data?.projects?.length ? (
+                  data?.assignedToProjects?.length ? (
                     <div>
-                      {data.projects.map((project, index) => (
+                      {data.assignedToProjects.map((project, index) => (
                         <div key={index}>{project.name}</div>
                       ))}
                     </div>
@@ -76,7 +76,7 @@ const ViewCompany = () => {
                 placement="left"
                 trigger="hover"
               >
-                <p>{data?.projects?.length ?? '-'}</p>
+                <p>{data?.assignedToProjects?.length ?? '-'}</p>
               </Tooltip>
             </Col>
           </Row>

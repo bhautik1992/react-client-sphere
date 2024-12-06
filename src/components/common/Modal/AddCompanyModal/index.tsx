@@ -109,6 +109,16 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
           }
         });
 
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [dashboardKey.dashboardCompany].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+
         handleClose();
       },
       onError: (err: IApiError) => {
@@ -222,7 +232,7 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
           <RenderSelectInput
             col={{ xs: 24 }}
             name="countryCode"
-            placeholder="Please select country"
+            placeholder="Select country"
             label="Country"
             allowClear={true}
             showSearch={true}
@@ -241,7 +251,7 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
           <RenderSelectInput
             col={{ xs: 24 }}
             name="stateCode"
-            placeholder="Please select state"
+            placeholder="Select state"
             label="State"
             showSearch={true}
             allowClear={true}
@@ -261,7 +271,7 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
           <RenderSelectInput
             col={{ xs: 24 }}
             name="cityName"
-            placeholder="Please select city"
+            placeholder="Select city"
             label="City"
             showSearch={true}
             allowClear={true}

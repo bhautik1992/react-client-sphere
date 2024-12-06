@@ -13,7 +13,7 @@ import { useClientList, useClientStatus, useDeleteClient } from 'services/hooks/
 import { clientKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
-import { Designation } from 'utils/constants/enum';
+import { Designation, EmployeeStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import { renderTagColor } from 'utils/renderColor';
 
@@ -57,7 +57,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
 
   const handleConfirm = (status: string, id: number) => {
     const data = {
-      status: status === 'active' ? 'inactive' : 'active',
+      status: status === EmployeeStatus.Active ? EmployeeStatus.Inactive : EmployeeStatus.Active,
       clientId: id
     };
 
@@ -171,14 +171,19 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
           title="Status"
           placement="left"
           description={`Are you sure to ${
-            record?.status === 'active' ? 'inactive' : 'active'
+            record?.status === EmployeeStatus.Active
+              ? EmployeeStatus.Inactive
+              : EmployeeStatus.Active
           } this client?`}
           okText="Yes"
           cancelText="No"
           onConfirm={() => handleConfirm(record?.status, record?.id)}
         >
-          <Tag className="table-status-tag" color={renderTagColor(record?.status === 'active')}>
-            {record?.status === 'active' ? 'Active' : 'Inactive'} <DownOutlined />
+          <Tag
+            className="table-status-tag"
+            color={renderTagColor(record?.status === EmployeeStatus.Active)}
+          >
+            {record?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'} <DownOutlined />
           </Tag>
         </Popconfirm>
       )

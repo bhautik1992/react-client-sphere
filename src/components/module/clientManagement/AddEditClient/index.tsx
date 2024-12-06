@@ -23,7 +23,7 @@ import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
 import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
-import { Designation } from 'utils/constants/enum';
+import { Designation, EmployeeStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditClient = () => {
@@ -303,7 +303,7 @@ const AddEditClient = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="companyId"
-              placeholder="Please select company"
+              placeholder="Select company"
               label="Company"
               allowClear={true}
               optionLabel={companyListOption}
@@ -349,7 +349,7 @@ const AddEditClient = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="gender"
-              placeholder="Please select your gender"
+              placeholder="Select your gender"
               label="Gender"
               allowClear={true}
               optionLabel={[
@@ -374,12 +374,12 @@ const AddEditClient = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="status"
-              placeholder="Please select your status"
+              placeholder="Select your status"
               label="Status"
               allowClear={true}
               optionLabel={[
-                { label: 'Active', value: 'active' },
-                { label: 'Inactive', value: 'inactive' }
+                { label: 'Active', value: EmployeeStatus.Active },
+                { label: 'Inactive', value: EmployeeStatus.Inactive }
               ]}
               rules={[
                 {
@@ -391,7 +391,7 @@ const AddEditClient = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="countryCode"
-              placeholder="Please select country"
+              placeholder="Select country"
               label="Country"
               allowClear={true}
               showSearch={true}
@@ -410,7 +410,7 @@ const AddEditClient = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="stateCode"
-              placeholder="Please select state"
+              placeholder="Select state"
               label="State"
               showSearch={true}
               allowClear={true}
@@ -424,7 +424,7 @@ const AddEditClient = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="cityName"
-              placeholder="Please select city"
+              placeholder="Select city"
               label="City"
               showSearch={true}
               allowClear={true}

@@ -13,7 +13,7 @@ export interface ICompany {
   stateCode: string;
   stateName: string;
   cityName: string;
-  projects: IProject[];
+  assignedToProjects: IProject[];
 }
 
 export interface ICompanyReq {

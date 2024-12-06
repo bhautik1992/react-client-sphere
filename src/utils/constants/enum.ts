@@ -1,4 +1,10 @@
 export const COMPANY_EMAIL = 'infiazure@gmail.com';
+
+export enum EmployeeStatus {
+  Active = 'active',
+  Inactive = 'inactive'
+}
+
 export enum DesignationName {
   Admin = 'admin',
   ProjectManager = 'project_manager',
@@ -77,16 +83,16 @@ export const ProjectStatus = [
 
 export const BillingType = [
   {
+    value: BillingTypeName.Fixed,
+    label: 'Fixed Cost'
+  },
+  {
     value: BillingTypeName.Hourly,
     label: 'Hourly'
   },
   {
     value: BillingTypeName.Monthly,
     label: 'Monthly'
-  },
-  {
-    value: BillingTypeName.Fixed,
-    label: 'Fixed Cost'
   }
 ];
 

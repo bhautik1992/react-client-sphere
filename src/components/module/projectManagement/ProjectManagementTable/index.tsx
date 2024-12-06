@@ -1,12 +1,14 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EyeOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Tooltip, message } from 'antd';
+import { Button, Modal, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { SorterResult } from 'antd/es/table/interface';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import CommonModal from 'components/common/Modal/CommonModal';
+import ProjectInfoTable from 'components/common/Modal/ProjectInfoModal';
 import { CommonTable } from 'components/common/Table';
 
 import { IProject, IProjectReq } from 'services/api/project/types';
@@ -31,6 +33,8 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
 
   const { mutate: deleteMutate } = useDeleteProject();
   const { mutate: statusMutate } = useProjectStatus();
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const { data: projectList, isLoading } = useProjectList({
     ...args,
@@ -127,7 +131,22 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'projectManager',
       key: 'projectManager',
       sorter: true,
-      render: (_, record: IProject) => <>{record?.projectManager ?? '-'}</>
+      render: (_, record: IProject) => (
+        <>
+          {record?.projectManager?.firstName ?? ''} {record?.projectManager?.lastName ?? '-'}
+        </>
+      )
+    },
+    {
+      title: 'Team Leader',
+      dataIndex: 'teamLeader',
+      key: 'teamLeader',
+      sorter: true,
+      render: (_, record: IProject) => (
+        <>
+          {record?.teamLeader?.firstName ?? ''} {record?.teamLeader?.lastName ?? '-'}
+        </>
+      )
     },
     {
       title: 'Billing Type',
@@ -151,6 +170,46 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       key: 'projectHours',
       sorter: false,
       render: (_, record: IProject) => <>{record?.projectHours ?? '-'}</>
+    },
+    {
+      title: 'Total Cost',
+      dataIndex: 'projectCost',
+      key: 'projectCost',
+      sorter: false,
+      render: (_, record: IProject) => (
+        <div className="d-flex flex-row">
+          <p className="mt-6">{record?.projectCost ?? '-'}</p>
+          <Tooltip title="View project cost" placement="top" trigger="hover">
+            <Button
+              type="text"
+              size="small"
+              className="cta_btn table_cta_btn"
+              icon={<InfoCircleOutlined />}
+              onClick={() => setIsModalVisible(true)}
+            />
+          </Tooltip>
+          <Modal
+            title="Project Cost"
+            open={isModalVisible}
+            onCancel={() => setIsModalVisible(false)}
+            footer={[
+              <Button key="cancel" onClick={() => setIsModalVisible(false)}>
+                Cancel
+              </Button>
+            ]}
+            destroyOnClose={true}
+          >
+            <ProjectInfoTable record={record} />
+          </Modal>
+        </div>
+      )
+    },
+    {
+      title: 'Currency',
+      dataIndex: 'currency',
+      key: 'currency',
+      sorter: false,
+      render: (_, record: IProject) => <>{record?.currency ?? '-'}</>
     },
     {
       title: 'Status',

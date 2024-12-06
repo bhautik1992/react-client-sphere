@@ -13,7 +13,7 @@ import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, InvoiceStatus, ProjectStatus } from 'utils/constants/enum';
+import { BillingType, EmployeeStatus, ProjectStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/projectStatusDropDown';
 
@@ -76,6 +76,7 @@ const ViewProject = () => {
           />
         </div>
         <DetailWrapper>
+          <Divider orientation="left">Project Information</Divider>
           <Row className="projectRow">
             <Col xs={6}>
               <h4>Name</h4>
@@ -101,40 +102,37 @@ const ViewProject = () => {
               <h4>End Date</h4>
               <p>{projectData?.endDate ? dayjs(projectData?.endDate).format(DATE_FORMAT) : '-'}</p>
             </Col>
-            <Col xs={6}>
-              <h4>Billing Type</h4>
-              <p>
-                {BillingType.find((item) => item.value == projectData?.billingType)?.label ?? '-'}
-              </p>
-            </Col>
-          </Row>
-          <Row className="projectRow">
-            <Col xs={6}>
-              <h4>Hourly Rate</h4>
-              <p>{projectData?.hourlyMonthlyRate ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Project Hours</h4>
-              <p>{projectData?.projectHours ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Amount</h4>
-              <p>{projectData?.amount ?? '-'}</p>
-            </Col>
-          </Row>
-          <Row className="projectRow">
-            <Col xs={6}>
-              <h4>Invoice Status</h4>
-              <p>
-                {InvoiceStatus.find((item) => item.value == projectData?.invoiceStatus)?.label ??
-                  '-'}
-              </p>
-            </Col>
-            <Col xs={6}>
-              <h4>Project Manager</h4>
-              <p>{projectData?.projectManager ?? '-'}</p>
-            </Col>
             <Col xs={6}></Col>
+          </Row>
+          <Divider orientation="left">Assign From Company</Divider>
+          <Row className="projectRow">
+            <Col xs={6}>
+              <h4>Name</h4>
+              <p>{projectData?.assignFromCompany?.name ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Email</h4>
+              <p>{projectData?.assignFromCompany?.email ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Country</h4>
+              <p>{projectData?.assignFromCompany?.countryName ?? '-'}</p>
+            </Col>
+          </Row>
+          <Divider orientation="left">Assign To Company</Divider>
+          <Row className="projectRow">
+            <Col xs={6}>
+              <h4>Name</h4>
+              <p>{projectData?.assignToCompany?.name ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Email</h4>
+              <p>{projectData?.assignToCompany?.email ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Country</h4>
+              <p>{projectData?.assignToCompany?.countryName ?? '-'}</p>
+            </Col>
           </Row>
           <Divider orientation="left">Client Details</Divider>
           <Row className="projectRow">
@@ -161,14 +159,14 @@ const ViewProject = () => {
               <p>{projectData?.client?.phone ?? '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Company Name</h4>
-              <p>{projectData?.client?.companyName ?? '-'}</p>
+              <h4>Status</h4>
+              <p>{projectData?.client?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'}</p>
             </Col>
           </Row>
           <Row className="projectRow">
             <Col xs={6}>
               <h4>Country</h4>
-              <p>{projectData?.client?.companyName ?? '-'}</p>
+              <p>{projectData?.client?.clientCompanyName ?? '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>State</h4>
@@ -179,14 +177,31 @@ const ViewProject = () => {
               <p>{projectData?.client?.cityName ?? '-'}</p>
             </Col>
           </Row>
+          <Divider orientation="left">Project Cost Information</Divider>
           <Row className="projectRow">
             <Col xs={6}>
-              <h4>Status</h4>
-              <p>{projectData?.client?.status === 'active' ? 'Active' : 'Inactive'}</p>
+              <h4>Hourly Rate</h4>
+              <p>{projectData?.hourlyMonthlyRate ?? '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Gender</h4>
-              <p>{projectData?.client?.gender === 'male' ? 'Male' : 'Female'}</p>
+              <h4>Project Hours</h4>
+              <p>{projectData?.projectHours ?? '-'}</p>
+            </Col>
+            <Col xs={6}>
+              <h4>Total Cost</h4>
+              <p>{projectData?.projectCost ?? '-'}</p>
+            </Col>
+          </Row>
+          <Row className="projectRow">
+            <Col xs={6}>
+              <h4>Billing Type</h4>
+              <p>
+                {BillingType.find((item) => item.value == projectData?.billingType)?.label ?? '-'}
+              </p>
+            </Col>
+            <Col xs={6}>
+              <h4>Currency</h4>
+              <p>{projectData?.currency ?? '-'}</p>
             </Col>
             <Col xs={6}></Col>
           </Row>

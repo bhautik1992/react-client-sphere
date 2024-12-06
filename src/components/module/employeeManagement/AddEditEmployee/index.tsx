@@ -257,7 +257,7 @@ const AddEditEmployee = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="role"
-              placeholder="Please select your role"
+              placeholder="Select your role"
               label="Role"
               allowClear={true}
               optionLabel={EmployeeRole}
@@ -271,7 +271,7 @@ const AddEditEmployee = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="department"
-              placeholder="Please select your department"
+              placeholder="Select your department"
               label="Department"
               allowClear={true}
               optionLabel={Department}

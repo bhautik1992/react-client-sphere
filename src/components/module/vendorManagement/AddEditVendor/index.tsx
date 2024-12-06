@@ -289,7 +289,7 @@ const AddEditVendor = () => {
             <RenderSelectInput
               col={{ xs: 18 }}
               name="companyId"
-              placeholder="Please select company"
+              placeholder="Select company"
               label="Company"
               allowClear={true}
               optionLabel={companyListOption}
@@ -343,7 +343,7 @@ const AddEditVendor = () => {
             <RenderSelectInput
               col={{ xs: 18 }}
               name="countryCode"
-              placeholder="Please select country"
+              placeholder="Select country"
               label="Country"
               allowClear={true}
               showSearch={true}
@@ -362,7 +362,7 @@ const AddEditVendor = () => {
             <RenderSelectInput
               col={{ xs: 18 }}
               name="stateCode"
-              placeholder="Please select state"
+              placeholder="Select state"
               label="State"
               showSearch={true}
               allowClear={true}
@@ -376,7 +376,7 @@ const AddEditVendor = () => {
             <RenderSelectInput
               col={{ xs: 18 }}
               name="cityName"
-              placeholder="Please select city"
+              placeholder="Select city"
               label="City"
               showSearch={true}
               allowClear={true}

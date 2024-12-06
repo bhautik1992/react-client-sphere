@@ -2,6 +2,7 @@ import { Key } from 'react';
 
 import { IClient } from '../client/types';
 import { ICompany } from '../company/types';
+import { IEmployee } from '../employee/types';
 
 interface IProject {
   id: number;
@@ -17,8 +18,10 @@ interface IProject {
   company: ICompany;
   assignToCompanyId: number;
   assignToCompany: ICompany;
-  projectManager: string;
-  teamLeader: string;
+  projectManagerId: number;
+  projectManager: IEmployee;
+  teamLeaderId: number;
+  teamLeader: IEmployee;
   isInternalProject: boolean;
   billingType: string;
   hourlyMonthlyRate: number;
@@ -48,8 +51,8 @@ export interface IAddProjectReq {
   assignFromCompanyId: number;
   clientId: number;
   assignToCompanyId: number;
-  projectManager: string;
-  teamLeader: string;
+  projectManagerId: number;
+  teamLeaderId: number;
   isInternalProject: boolean;
   billingType: string;
   hourlyMonthlyRate: number;

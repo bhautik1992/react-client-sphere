@@ -34,7 +34,10 @@ const ViewClient = () => {
 
   const handleConfirm = () => {
     const data = {
-      status: clientData?.status === 'active' ? 'inactive' : 'active',
+      status:
+        clientData?.status === EmployeeStatus.Active
+          ? EmployeeStatus.Inactive
+          : EmployeeStatus.Active,
       clientId: Number(id)
     };
 
@@ -72,14 +75,21 @@ const ViewClient = () => {
             title="Status"
             placement="bottomLeft"
             description={`Are you sure to ${
-              clientData?.status === 'active' ? 'inactive' : 'active'
+              clientData?.status === EmployeeStatus.Active
+                ? EmployeeStatus.Inactive
+                : EmployeeStatus.Active
             } this client?`}
             okText="Yes"
             cancelText="No"
             onConfirm={() => handleConfirm()}
           >
-            <Tag color={renderTagColor(clientData?.status === 'active' ? 'Active' : 'Inactive')}>
-              {clientData?.status === 'active' ? 'Active' : 'Inactive'} <DownOutlined />
+            <Tag
+              color={renderTagColor(
+                clientData?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'
+              )}
+            >
+              {clientData?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'}{' '}
+              <DownOutlined />
             </Tag>
           </Popconfirm>
         </div>

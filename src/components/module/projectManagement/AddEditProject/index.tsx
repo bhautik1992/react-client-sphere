@@ -1,7 +1,7 @@
 import { ButtonWrapper } from './style';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Form, Row, message } from 'antd';
+import { Button, Divider, Form, Row, message } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -44,8 +44,9 @@ const AddEditProject = () => {
   const { mutate, isLoading } = useAddProject();
   const { mutate: editMutate, isLoading: isEditLoading } = useEditProject();
   const { data: projectData } = useProjectDetail(Number(id));
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
-  const [billingType, setBillingType] = useState(projectData?.billingType ?? BillingTypeName.Fixed);
+  const [billingType, setBillingType] = useState<string>('');
   const [filteredInvoicePaymentCycle, setFilteredInvoicePaymentCycle] = useState<
     { value: string; label: string }[]
   >([]);
@@ -115,14 +116,18 @@ const AddEditProject = () => {
   };
 
   const handleHourlyMonthlyRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const intValue = parseFloat(e.target.value) || 0;
     form.setFieldsValue({
-      projectCost: String(+e.target.value * (form.getFieldValue('projectHours') || 0))
+      projectCost: +e.target.value * (form.getFieldValue('projectHours') || 0),
+      hourlyMonthlyRate: intValue
     });
   };
 
   const handleProjectHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const intValue = parseFloat(e.target.value) || 0;
     form.setFieldsValue({
-      projectCost: String(+e.target.value * (form.getFieldValue('hourlyMonthlyRate') || 0))
+      projectCost: +e.target.value * (form.getFieldValue('hourlyMonthlyRate') || 0),
+      projectHours: intValue
     });
   };
 
@@ -199,10 +204,15 @@ const AddEditProject = () => {
   };
 
   useEffect(() => {
+    setIsChecked(projectData?.isInternalProject ?? false);
+  }, [projectData]);
+
+  useEffect(() => {
     form.setFieldsValue({
       assignFromCompanyId: companyList?.find((item) => item.email === COMPANY_EMAIL)?.id
     });
     if (!projectData) return;
+    setBillingType(projectData?.billingType ?? '');
     form.setFieldsValue({
       name: projectData?.name ?? '',
       description: projectData?.description ?? '',
@@ -211,12 +221,12 @@ const AddEditProject = () => {
       endDate: projectData?.endDate ? dayjs(projectData?.endDate) : null,
       assignFromCompanyId: projectData?.assignFromCompanyId ?? null,
       assignToCompanyId: projectData?.assignToCompanyId ?? null,
-      clientId: projectData?.client.id ?? null,
+      clientId: projectData?.clientId ?? null,
       clientCompanyName: projectData?.client.clientCompanyName ?? null,
-      projectManager: projectData?.projectManager ?? null,
-      teamLeader: projectData?.teamLeader ?? null,
+      projectManagerId: projectData?.projectManagerId ?? null,
+      teamLeaderId: projectData?.teamLeaderId ?? null,
       isInternalProject: projectData?.isInternalProject ?? false,
-      billingType: projectData?.billingType ?? 'fixed',
+      billingType: projectData?.billingType ?? null,
       hourlyMonthlyRate: projectData?.hourlyMonthlyRate ?? null,
       projectHours: projectData?.projectHours ?? null,
       currency: projectData?.currency ?? null,
@@ -244,8 +254,9 @@ const AddEditProject = () => {
 
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">
           <Row gutter={[0, 30]}>
+            <Divider orientation="left">Project Information</Divider>
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="name"
               placeholder="Enter project name"
               label="Name"
@@ -259,29 +270,15 @@ const AddEditProject = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="description"
               placeholder="Enter project description"
               label="Description"
               allowClear="allowClear"
               size="middle"
             />
-            <RenderSelectInput
-              col={{ xs: 18 }}
-              name="status"
-              placeholder="Please select project status"
-              label="Status"
-              allowClear={true}
-              optionLabel={ProjectStatus}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select project status'
-                }
-              ]}
-            />
             <RenderDatePicker
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isAfter(new Date())}
               name="startDate"
               placeholder="Enter project start date"
@@ -297,7 +294,7 @@ const AddEditProject = () => {
               ]}
             />
             <RenderDatePicker
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(new Date())}
               name="endDate"
               placeholder="Enter project end date"
@@ -307,9 +304,24 @@ const AddEditProject = () => {
               format={DATE_FORMAT}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
+              name="status"
+              placeholder="Select project status"
+              label="Status"
+              allowClear={true}
+              optionLabel={ProjectStatus}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select project status'
+                }
+              ]}
+            />
+            <Divider orientation="left">Company Information</Divider>
+            <RenderSelectInput
+              col={{ xs: 12 }}
               name="assignFromCompanyId"
-              placeholder="Please select parent company"
+              placeholder="Select parent company"
               label="Assign From"
               allowClear={true}
               optionLabel={companyListOption}
@@ -322,9 +334,9 @@ const AddEditProject = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="assignToCompanyId"
-              placeholder="Please select company"
+              placeholder="Select company"
               label="Assign To"
               allowClear={true}
               optionLabel={companyListOption}
@@ -336,9 +348,9 @@ const AddEditProject = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="clientId"
-              placeholder="Please select client"
+              placeholder="Select client"
               label="Client"
               allowClear={true}
               optionLabel={clientListOption}
@@ -351,16 +363,16 @@ const AddEditProject = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="clientCompanyName"
               placeholder="Client company name"
-              label="Client Company Name"
+              label="Client Company"
               allowClear={true}
               disabled={true}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
-              name="projectManager"
+              col={{ xs: 12 }}
+              name="projectManagerId"
               placeholder="Select project manager"
               label="Project Manager"
               allowClear={true}
@@ -373,22 +385,28 @@ const AddEditProject = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
-              name="teamLeader"
+              col={{ xs: 12 }}
+              name="teamLeaderId"
               placeholder="Select team leader"
               label="Team Leader"
               allowClear={true}
               optionLabel={teamLeaderListOption}
             />
             <RenderCheckBox
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="isInternalProject"
               label="Is Internal Project?"
+              checked={isChecked}
+              onChange={(e) => {
+                setIsChecked(e.target.checked);
+                form.setFieldsValue({ isInternalProject: e.target.checked });
+              }}
             />
+            <Divider orientation="left">Project Cost Information</Divider>
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="billingType"
-              placeholder="Please select billing type"
+              placeholder="Select billing type"
               label="Billing Type"
               allowClear={true}
               optionLabel={BillingType}
@@ -400,21 +418,31 @@ const AddEditProject = () => {
               ]}
               onChange={handleBillingTypeChange}
             />
+            <RenderSelectInput
+              col={{ xs: 12 }}
+              name="currency"
+              placeholder="Select currency"
+              label="Currency"
+              allowClear={true}
+              optionLabel={CurrencyType}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select currency'
+                }
+              ]}
+            />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="hourlyMonthlyRate"
               placeholder="Enter project hourly rate"
-              label="Hourly/Monthly Rate"
+              label="Hourly Rate"
               allowClear="allowClear"
               size="middle"
               onChange={handleHourlyMonthlyRateChange}
               rules={[
                 () => ({
                   validator: (_: any, value: string) => {
-                    const regex = /^[0-9]*$/;
-                    if (!regex.test(value)) {
-                      return Promise.reject(new Error('Please enter valid hourly rate'));
-                    }
                     if (+value <= 0) {
                       return Promise.reject(new Error('Hourly rate must be greater than 0'));
                     }
@@ -424,7 +452,7 @@ const AddEditProject = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="projectHours"
               placeholder="Enter project hours"
               label="Project Hours"
@@ -447,54 +475,51 @@ const AddEditProject = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="projectCost"
               label="Project Cost"
               allowClear="allowClear"
               size="middle"
               disabled={true}
             />
-            <RenderSelectInput
-              col={{ xs: 18 }}
-              name="currency"
-              placeholder="Please select currency"
-              label="Currency"
-              allowClear={true}
-              optionLabel={CurrencyType}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select currency'
-                }
-              ]}
-            />
-            <RenderTextInput
-              col={{ xs: 18 }}
-              name="paymentTermDays"
-              placeholder="Enter payment term days"
-              label="Payment Term Days"
-              allowClear="allowClear"
-              size="middle"
-              rules={[
-                () => ({
-                  validator: (_: any, value: string) => {
-                    const regex = /^[0-9]*$/;
-                    if (!regex.test(value)) {
-                      return Promise.reject(new Error('Please enter valid payment term days'));
-                    }
-                    if (+value <= 0) {
-                      return Promise.reject(new Error('Payment term days must be greater than 0'));
-                    }
-                    return Promise.resolve();
-                  }
-                })
-              ]}
-            />
+            {billingType && (
+              <>
+                <Divider orientation="left">Project Payment Cycle</Divider>
+                <RenderTextInput
+                  col={{ xs: 12 }}
+                  name="paymentTermDays"
+                  placeholder="Enter payment term days"
+                  label="Payment Term Days"
+                  allowClear="allowClear"
+                  size="middle"
+                  rules={[
+                    () => ({
+                      validator: (_: any, value: string) => {
+                        const regex = /^[0-9]*$/;
+                        if (!regex.test(value)) {
+                          return Promise.reject(new Error('Please enter valid payment term days'));
+                        }
+                        if (+value <= 0) {
+                          return Promise.reject(
+                            new Error('Payment term days must be greater than 0')
+                          );
+                        }
+                        return Promise.resolve();
+                      }
+                    })
+                  ]}
+                  onChange={(e: any) => {
+                    const intValue = parseInt(e.target.value, 10) || 0;
+                    form.setFieldsValue({ paymentTermDays: intValue });
+                  }}
+                />
+              </>
+            )}
             {billingType && filteredInvoicePaymentCycle.length > 0 && (
               <RenderSelectInput
-                col={{ xs: 18 }}
+                col={{ xs: 12 }}
                 name="invoicePaymentCycle"
-                placeholder="Please select invoice payment cycle"
+                placeholder="Select invoice payment cycle"
                 label="Invoice Payment Cycle"
                 allowClear={true}
                 optionLabel={filteredInvoicePaymentCycle}

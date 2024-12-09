@@ -15,7 +15,7 @@ import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
 import { BillingType, EmployeeStatus, ProjectStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
-import ProjectStatusDropdown from 'utils/projectStatusDropDown';
+import ProjectStatusDropdown from 'utils/renderDropDownStatus/projectStatusDropDown';
 
 const BreadcrumbsPath = [
   {
@@ -102,7 +102,16 @@ const ViewProject = () => {
               <h4>End Date</h4>
               <p>{projectData?.endDate ? dayjs(projectData?.endDate).format(DATE_FORMAT) : '-'}</p>
             </Col>
-            <Col xs={6}></Col>
+            <Col xs={6}>
+              <h4>Project Manager</h4>
+              <p>
+                {projectData?.projectManager
+                  ? projectData?.projectManager?.firstName +
+                    ' ' +
+                    projectData?.projectManager?.lastName
+                  : 'Outsourcing PM'}
+              </p>
+            </Col>
           </Row>
           <Divider orientation="left">Assign From Company</Divider>
           <Row className="projectRow">

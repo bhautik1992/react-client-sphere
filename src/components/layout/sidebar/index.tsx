@@ -39,7 +39,8 @@ const items = [
   createMenuItem(ROUTES.clientManagement, 'Clients', '3', <Client />),
   createMenuItem(ROUTES.vendorManagement, 'Vendors', '4', <Vendor />),
   createMenuItem(ROUTES.projectManagement, 'Projects', '5', <ProjectManagement />),
-  createMenuItem(ROUTES.companyManagement, 'Companies', '6', <CompanyManagement />)
+  createMenuItem(ROUTES.crManagement, 'Project CRs', '6', <ProjectManagement />),
+  createMenuItem(ROUTES.companyManagement, 'Companies', '7', <CompanyManagement />)
 ];
 
 function compareLinkAndReturnKey(items: any, currentPath: any): any {

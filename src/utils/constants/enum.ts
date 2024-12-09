@@ -22,6 +22,14 @@ export enum ProjectStatusName {
   Completed = 'completed'
 }
 
+export enum CrStatusName {
+  NotStarted = 'not_started',
+  Started = 'started',
+  Pending = 'pending',
+  Completed = 'completed',
+  Cancelled = 'cancelled'
+}
+
 export enum EmployeeRoleName {
   Admin = 'admin',
   Employee = 'employee'
@@ -215,5 +223,28 @@ export const Designation = [
   {
     value: DesignationName.Tester,
     label: 'Tester'
+  }
+];
+
+export const CrStatus = [
+  {
+    value: CrStatusName.NotStarted,
+    label: 'Not Started'
+  },
+  {
+    value: CrStatusName.Started,
+    label: 'Started'
+  },
+  {
+    value: CrStatusName.Pending,
+    label: 'Pending'
+  },
+  {
+    value: CrStatusName.Completed,
+    label: 'Completed'
+  },
+  {
+    value: CrStatusName.Cancelled,
+    label: 'Cancelled'
   }
 ];

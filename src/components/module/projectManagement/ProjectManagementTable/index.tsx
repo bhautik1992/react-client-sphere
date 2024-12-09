@@ -1,4 +1,10 @@
-import { DeleteOutlined, EditOutlined, EyeOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  EyeOutlined,
+  InfoCircleOutlined,
+  PlusOutlined
+} from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Modal, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
@@ -19,7 +25,7 @@ import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
 import { BillingType } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
-import ProjectStatusDropdown from 'utils/projectStatusDropDown';
+import ProjectStatusDropdown from 'utils/renderDropDownStatus/projectStatusDropDown';
 
 interface IProps {
   searchDebounce: string;
@@ -133,7 +139,9 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       sorter: true,
       render: (_, record: IProject) => (
         <>
-          {record?.projectManager?.firstName ?? ''} {record?.projectManager?.lastName ?? '-'}
+          {record?.projectManager
+            ? `${record?.projectManager?.firstName} ${record?.projectManager?.lastName}`
+            : 'Outsourcing PM'}
         </>
       )
     },
@@ -230,6 +238,19 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       className: 'text-center',
       render: (_, record: IProject) => (
         <div className="d-flex flex-row">
+          <Tooltip title="Add Cr" placement="top" trigger="hover">
+            <Button
+              type="text"
+              size="small"
+              className="cta_btn table_cta_btn"
+              icon={<PlusOutlined />}
+              onClick={() => {
+                navigate(`${ROUTES.crAdd}`, {
+                  state: { project: record }
+                });
+              }}
+            />
+          </Tooltip>
           <Tooltip title="View project" placement="top" trigger="hover">
             <Button
               type="text"
@@ -271,38 +292,36 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
   ];
 
   return (
-    <>
-      <CommonTable
-        bordered
-        columns={columns}
-        dataSource={
-          (projectList?.result ?? []).length > 0
-            ? projectList?.result.map((item) => ({ ...item, key: item.id }))
-            : []
+    <CommonTable
+      bordered
+      columns={columns}
+      dataSource={
+        (projectList?.result ?? []).length > 0
+          ? projectList?.result.map((item) => ({ ...item, key: item.id }))
+          : []
+      }
+      currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
+      onChange={(pagination, _, sorter, extra) => {
+        const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
+        const pageIndex = pagination?.current ?? 1;
+        if (extra?.action === 'paginate') {
+          setArgs({
+            ...args,
+            offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
+            limit: pagination?.pageSize ?? 10
+          });
+        } else {
+          setArgs({
+            ...args,
+            sortBy: order ? columnKey : '',
+            sortOrder: order?.replace('end', '') ?? '',
+            offset: (pageIndex - 1) * args.limit
+          });
         }
-        currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
-        onChange={(pagination, _, sorter, extra) => {
-          const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
-          const pageIndex = pagination?.current ?? 1;
-          if (extra?.action === 'paginate') {
-            setArgs({
-              ...args,
-              offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
-              limit: pagination?.pageSize ?? 10
-            });
-          } else {
-            setArgs({
-              ...args,
-              sortBy: order ? columnKey : '',
-              sortOrder: order?.replace('end', '') ?? '',
-              offset: (pageIndex - 1) * args.limit
-            });
-          }
-        }}
-        loading={isLoading}
-        total={projectList?.recordsTotal ?? 10}
-      />
-    </>
+      }}
+      loading={isLoading}
+      total={projectList?.recordsTotal ?? 10}
+    />
   );
 };
 

@@ -49,3 +49,14 @@ export const useDashboardEmployee = () => {
     }
   });
 };
+
+export const useDashboardProject = () => {
+  return useFetch({
+    queryFn: () => dashboardAPI.dashboardProject(),
+    queryKey: dashboardKey.dashboardProject,
+    queryOptions: {
+      staleTime: Infinity,
+      retry: false
+    }
+  });
+};

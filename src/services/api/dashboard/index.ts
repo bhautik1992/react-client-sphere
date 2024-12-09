@@ -5,6 +5,7 @@ import {
   IDashboardClientRes,
   IDashboardCompanyRes,
   IDashboardEmployeeRes,
+  IDashboardProjectRes,
   IDashboardRes
 } from './types';
 
@@ -45,6 +46,17 @@ export const dashboardAPI = {
   async dashboardEmployee(): Promise<IDashboardEmployeeRes[]> {
     return apiInstance
       .get(`${ApiEndPoints.dashboard.dashboardEmployee}`)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  },
+
+  async dashboardProject(): Promise<IDashboardProjectRes[]> {
+    return apiInstance
+      .get(`${ApiEndPoints.dashboard.dashboardProject}`)
       .then((response) => {
         return response?.data;
       })

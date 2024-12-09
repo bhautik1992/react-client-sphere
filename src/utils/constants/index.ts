@@ -19,7 +19,8 @@ export const ApiEndPoints = {
     dashboardCount: `dashboard/count`,
     dashboardClient: `dashboard/client-list`,
     dashboardCompany: `dashboard/company-list`,
-    dashboardEmployee: `dashboard/employee-list`
+    dashboardEmployee: `dashboard/employee-list`,
+    dashboardProject: `dashboard/project-list`
   },
   profile: {
     profileDetail: `dashboard/employee-profile`,
@@ -54,6 +55,15 @@ export const ApiEndPoints = {
     deleteProject: `project/delete`,
     projectDetail: `project/get`,
     projectStatus: `project/status`
+  },
+  cr: {
+    crList: `cr/list`,
+    addCr: `cr/create`,
+    editCr: `cr/update`,
+    deleteCr: `cr/delete`,
+    crDetail: `cr/get`,
+    crStatus: `cr/status`,
+    crDetailByProjectId: `cr/getByProjectId`
   },
   company: {
     companyList: `company/list`,

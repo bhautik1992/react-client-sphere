@@ -27,3 +27,14 @@ export interface IDashboardEmployeeRes {
   companyEmail: string;
   designation: string;
 }
+
+export interface IDashboardProjectRes {
+  id: number;
+  name: string;
+  client: Client;
+}
+
+interface Client {
+  id: number;
+  clientCompanyName: string;
+}

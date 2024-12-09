@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Divider, Form, Row, message } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import {
   RenderCheckBox,
@@ -14,14 +14,15 @@ import {
 } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
-import { IAddProjectReq, IProject, IProjectReq } from 'services/api/project/types';
+import { IAddCrReq, ICr, ICrReq } from 'services/api/cr/types';
+import { IProject } from 'services/api/project/types';
+import { useAddCr, useCrDetail, useEditCr } from 'services/hooks/cr';
 import {
   useDashboardClient,
   useDashboardCompany,
-  useDashboardEmployee
+  useDashboardProject
 } from 'services/hooks/dashboard';
-import { useAddProject, useEditProject, useProjectDetail } from 'services/hooks/project';
-import { dashboardKey, projectKeys } from 'services/hooks/queryKeys';
+import { crKeys, dashboardKey } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
@@ -29,51 +30,29 @@ import {
   BillingType,
   BillingTypeName,
   COMPANY_EMAIL,
+  CrStatus,
   CurrencyType,
   InvoicePaymentCycle,
-  InvoicePaymentCycleName,
-  ProjectStatus
+  InvoicePaymentCycleName
 } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
-const AddEditProject = () => {
+const AddEditCr = () => {
   const [form] = Form.useForm();
   const { id } = useParams();
+  const location = useLocation();
+  const { project } = (location.state as { project: IProject }) || {};
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useAddProject();
-  const { mutate: editMutate, isLoading: isEditLoading } = useEditProject();
-  const { data: projectData } = useProjectDetail(Number(id));
+  const { mutate, isLoading } = useAddCr();
+  const { mutate: editMutate, isLoading: isEditLoading } = useEditCr();
+  const { data: crData } = useCrDetail(Number(id));
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const [billingType, setBillingType] = useState<string>('');
   const [filteredInvoicePaymentCycle, setFilteredInvoicePaymentCycle] = useState<
     { value: string; label: string }[]
   >([]);
-
-  const { data: employeeList } = useDashboardEmployee();
-  const projectManagerListOption = [
-    {
-      label: 'Outsourcing PM',
-      value: 0
-    },
-    ...(Array.isArray(employeeList)
-      ? employeeList
-          .filter((item) => item.designation === 'project_manager')
-          .map((item) => ({
-            label: `${item.firstName} ${item.lastName}`,
-            value: item.id
-          }))
-      : [])
-  ];
-  const teamLeaderListOption = Array.isArray(employeeList)
-    ? employeeList
-        .filter((item) => item.designation === 'team_leader')
-        .map((item) => ({
-          label: `${item.firstName} ${item.lastName}`,
-          value: item.id
-        }))
-    : [];
 
   const { data: companyList } = useDashboardCompany();
   const companyListOption = companyList?.map((item) => {
@@ -91,9 +70,19 @@ const AddEditProject = () => {
     };
   });
 
-  const handleClientChange = (clientId: number) => {
+  const { data: projectList } = useDashboardProject();
+  const projectListOption = projectList?.map((item) => {
+    return {
+      label: item.name,
+      value: item.id
+    };
+  });
+
+  const handleProjectChange = (projectId: number) => {
     form.setFieldsValue({
-      clientCompanyName: clientList?.find((item) => item.id === clientId)?.clientCompanyName
+      clientId: projectList?.find((item) => item.id === projectId)?.client?.id,
+      clientCompanyName: projectList?.find((item) => item.id === projectId)?.client
+        ?.clientCompanyName
     });
   };
 
@@ -101,8 +90,8 @@ const AddEditProject = () => {
     setBillingType(value);
     form.setFieldsValue({
       hourlyMonthlyRate: '',
-      projectHours: '',
-      projectCost: ''
+      crHours: '',
+      crCost: ''
     });
     if (value === BillingTypeName.Hourly) {
       setFilteredInvoicePaymentCycle(InvoicePaymentCycle);
@@ -117,34 +106,34 @@ const AddEditProject = () => {
 
   const handleHourlyMonthlyRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     form.setFieldsValue({
-      projectCost: String(+e.target.value * (form.getFieldValue('projectHours') || 0))
+      crCost: String(+e.target.value * (form.getFieldValue('crHours') || 0))
     });
   };
 
-  const handleProjectHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCrHoursChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const intValue = parseFloat(e.target.value) || 0;
     form.setFieldsValue({
-      projectCost: String(+e.target.value * (form.getFieldValue('hourlyMonthlyRate') || 0)),
-      projectHours: intValue
+      crCost: String(+e.target.value * (form.getFieldValue('hourlyMonthlyRate') || 0)),
+      crHours: intValue
     });
   };
 
   const handleClose = () => {
     form.resetFields();
-    navigate(ROUTES.projectManagement);
+    navigate(ROUTES.crManagement);
   };
 
-  const onSubmit = (value: IAddProjectReq) => {
-    return projectData?.id ? editProject(value) : addProject(value);
+  const onSubmit = (value: IAddCrReq) => {
+    return crData?.id ? editCr(value) : addCr(value);
   };
 
-  const addProject = (value: IAddProjectReq) => {
+  const addCr = (value: IAddCrReq) => {
     mutate(value, {
       onSuccess: () => {
-        // invalidate project list
+        // invalidate cr list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [projectKeys.projectList({} as IProjectReq)].some((key) => {
+            return [crKeys.crList({} as ICrReq)].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -163,16 +152,6 @@ const AddEditProject = () => {
           }
         });
 
-        queryClient.invalidateQueries({
-          predicate: (query) => {
-            return [dashboardKey.dashboardProject].some((key) => {
-              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
-                key[0]
-              );
-            });
-          }
-        });
-
         handleClose();
       },
       onError: (err: IApiError) => {
@@ -181,17 +160,17 @@ const AddEditProject = () => {
     });
   };
 
-  const editProject = (value: IAddProjectReq) => {
+  const editCr = (value: IAddCrReq) => {
     const data = {
       ...value,
-      id: projectData?.id ?? 0
+      id: crData?.id ?? 0
     };
     editMutate(data, {
       onSuccess: (res) => {
-        // invalidate project list
+        // invalidate cr list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [projectKeys.projectList({} as IProjectReq)].some((key) => {
+            return [crKeys.crList({} as ICrReq)].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -200,8 +179,8 @@ const AddEditProject = () => {
         });
 
         // set detail view
-        queryClient.setQueryData<IProject>(projectKeys.projectDetail(projectData?.id ?? 0), () => {
-          return { ...res } as IProject;
+        queryClient.setQueryData<ICr>(crKeys.crDetail(crData?.id ?? 0), () => {
+          return { ...res } as ICr;
         });
         handleClose();
       },
@@ -212,45 +191,53 @@ const AddEditProject = () => {
   };
 
   useEffect(() => {
-    setIsChecked(projectData?.isInternalProject ?? false);
-    form.setFieldsValue({ isInternalCr: projectData?.isInternalProject ?? false });
-  }, [projectData, form]);
+    setIsChecked(crData?.isInternalCr ?? false);
+    form.setFieldsValue({ isInternalCr: crData?.isInternalCr ?? false });
+  }, [crData, form]);
+
+  useEffect(() => {
+    if (!project) return;
+    form.setFieldsValue({
+      projectId: project?.id,
+      clientId: project?.clientId,
+      clientCompanyName: project?.client.clientCompanyName,
+      currency: project?.currency
+    });
+  });
 
   useEffect(() => {
     form.setFieldsValue({
       assignFromCompanyId: companyList?.find((item) => item.email === COMPANY_EMAIL)?.id
     });
-    if (!projectData) return;
-    setBillingType(projectData?.billingType ?? '');
+    if (!crData) return;
+    setBillingType(crData?.billingType ?? '');
     form.setFieldsValue({
-      name: projectData?.name ?? '',
-      description: projectData?.description ?? '',
-      status: projectData?.status ?? null,
-      startDate: projectData?.startDate ? dayjs(projectData?.startDate) : null,
-      endDate: projectData?.endDate ? dayjs(projectData?.endDate) : null,
-      assignFromCompanyId: projectData?.assignFromCompanyId ?? null,
-      assignToCompanyId: projectData?.assignToCompanyId ?? null,
-      clientId: projectData?.clientId ?? null,
-      clientCompanyName: projectData?.client.clientCompanyName ?? null,
-      projectManagerId: projectData?.projectManagerId ?? null,
-      teamLeaderId: projectData?.teamLeaderId ?? null,
-      isInternalProject: projectData?.isInternalProject ?? false,
-      billingType: projectData?.billingType ?? null,
-      hourlyMonthlyRate: projectData?.hourlyMonthlyRate ?? null,
-      projectHours: projectData?.projectHours ?? null,
-      currency: projectData?.currency ?? null,
-      projectCost: projectData?.projectCost ?? null,
-      paymentTermDays: projectData?.paymentTermDays ?? null,
-      invoicePaymentCycle: projectData?.invoicePaymentCycle ?? null
+      name: crData?.name ?? '',
+      description: crData?.description ?? '',
+      status: crData?.status ?? null,
+      startDate: crData?.startDate ? dayjs(crData?.startDate) : null,
+      endDate: crData?.endDate ? dayjs(crData?.endDate) : null,
+      assignFromCompanyId: crData?.assignFromCompanyId ?? null,
+      projectId: crData?.projectId ?? null,
+      clientId: crData?.clientId ?? null,
+      clientCompanyName: crData?.client.clientCompanyName ?? null,
+      isInternalCr: crData?.isInternalCr ?? false,
+      billingType: crData?.billingType ?? null,
+      hourlyMonthlyRate: crData?.hourlyMonthlyRate ?? null,
+      crHours: crData?.crHours ?? null,
+      currency: crData?.currency ?? null,
+      crCost: crData?.crCost ?? null,
+      paymentTermDays: crData?.paymentTermDays ?? null,
+      invoicePaymentCycle: crData?.invoicePaymentCycle ?? null
     });
-  }, [projectData, form, companyList]);
+  }, [crData, form, companyList]);
 
   const BreadcrumbsPath = [
     {
-      title: <Link to={ROUTES.projectManagement}>Projects</Link>
+      title: <Link to={ROUTES.crManagement}>Crs</Link>
     },
     {
-      title: id ? 'Edit Project' : 'Add Project'
+      title: id ? 'Edit Cr' : 'Add Cr'
     }
   ];
   return (
@@ -258,39 +245,41 @@ const AddEditProject = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">{id ? 'Edit Project' : 'Add Project'}</h2>
+          <h2 className="pageTitle">{id ? 'Edit Cr' : 'Add Cr'}</h2>
         </div>
 
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">
           <Row gutter={[0, 30]}>
-            <Divider orientation="left">Project Information</Divider>
+            <Divider orientation="left">Cr Information</Divider>
             <RenderTextInput
               col={{ xs: 12 }}
               name="name"
-              placeholder="Enter project name"
+              placeholder="Enter cr name"
               label="Name"
               allowClear="allowClear"
               size="middle"
               rules={[
                 {
                   required: true,
-                  message: 'Please enter project name'
+                  message: 'Please enter cr name'
                 }
               ]}
             />
             <RenderTextInput
               col={{ xs: 12 }}
               name="description"
-              placeholder="Enter project description"
+              placeholder="Enter cr description"
               label="Description"
               allowClear="allowClear"
               size="middle"
             />
             <RenderDatePicker
               col={{ xs: 12 }}
-              // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isAfter(new Date())}
+              disabledDate={(currentDate: dayjs.Dayjs) =>
+                currentDate.isBefore(new Date(project?.startDate))
+              }
               name="startDate"
-              placeholder="Enter project start date"
+              placeholder="Enter cr start date"
               label="Start Date"
               allowClear="allowClear"
               size="middle"
@@ -298,7 +287,7 @@ const AddEditProject = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please select project start date'
+                  message: 'Please select cr start date'
                 }
               ]}
             />
@@ -306,7 +295,7 @@ const AddEditProject = () => {
               col={{ xs: 12 }}
               // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(new Date())}
               name="endDate"
-              placeholder="Enter project end date"
+              placeholder="Enter cr end date"
               label="End Date"
               allowClear="allowClear"
               size="middle"
@@ -315,14 +304,14 @@ const AddEditProject = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="status"
-              placeholder="Select project status"
+              placeholder="Select cr status"
               label="Status"
               allowClear={true}
-              optionLabel={ProjectStatus}
+              optionLabel={CrStatus}
               rules={[
                 {
                   required: true,
-                  message: 'Please select project status'
+                  message: 'Please select cr status'
                 }
               ]}
             />
@@ -344,15 +333,17 @@ const AddEditProject = () => {
             />
             <RenderSelectInput
               col={{ xs: 12 }}
-              name="assignToCompanyId"
-              placeholder="Select company"
-              label="Assign To"
+              name="projectId"
+              placeholder="Select project"
+              label="Project"
               allowClear={true}
-              optionLabel={companyListOption}
+              disabled={!!project?.id}
+              onSelect={handleProjectChange}
+              optionLabel={projectListOption}
               rules={[
                 {
                   required: true,
-                  message: 'Please select company'
+                  message: 'Please select cr manager'
                 }
               ]}
             />
@@ -362,8 +353,8 @@ const AddEditProject = () => {
               placeholder="Select client"
               label="Client"
               allowClear={true}
+              disabled={true}
               optionLabel={clientListOption}
-              onSelect={handleClientChange}
               rules={[
                 {
                   required: true,
@@ -379,39 +370,17 @@ const AddEditProject = () => {
               allowClear={true}
               disabled={true}
             />
-            <RenderSelectInput
-              col={{ xs: 12 }}
-              name="projectManagerId"
-              placeholder="Select project manager"
-              label="Project Manager"
-              allowClear={true}
-              optionLabel={projectManagerListOption}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select project manager'
-                }
-              ]}
-            />
-            <RenderSelectInput
-              col={{ xs: 12 }}
-              name="teamLeaderId"
-              placeholder="Select team leader"
-              label="Team Leader"
-              allowClear={true}
-              optionLabel={teamLeaderListOption}
-            />
             <RenderCheckBox
               col={{ xs: 12 }}
-              name="isInternalProject"
-              label="Is Internal Project?"
+              name="isInternalCr"
+              label="Is Internal Cr?"
               checked={isChecked}
               onChange={(e) => {
                 setIsChecked(e.target.checked);
-                form.setFieldsValue({ isInternalProject: e.target.checked });
+                form.setFieldsValue({ isInternalCr: e.target.checked });
               }}
             />
-            <Divider orientation="left">Project Cost Information</Divider>
+            <Divider orientation="left">Cr Cost Information</Divider>
             <RenderSelectInput
               col={{ xs: 12 }}
               name="billingType"
@@ -434,6 +403,7 @@ const AddEditProject = () => {
               label="Currency"
               allowClear={true}
               optionLabel={CurrencyType}
+              disabled={true}
               rules={[
                 {
                   required: true,
@@ -444,7 +414,7 @@ const AddEditProject = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="hourlyMonthlyRate"
-              placeholder="Enter project hourly rate"
+              placeholder="Enter cr hourly rate"
               label="Hourly Rate"
               allowClear="allowClear"
               size="middle"
@@ -462,21 +432,21 @@ const AddEditProject = () => {
             />
             <RenderTextInput
               col={{ xs: 12 }}
-              name="projectHours"
-              placeholder="Enter project hours"
-              label="Project Hours"
+              name="crHours"
+              placeholder="Enter cr hours"
+              label="Cr Hours"
               allowClear="allowClear"
               size="middle"
-              onChange={handleProjectHoursChange}
+              onChange={handleCrHoursChange}
               rules={[
                 () => ({
                   validator: (_: any, value: string) => {
                     const regex = /^[0-9]*$/;
                     if (!regex.test(value)) {
-                      return Promise.reject(new Error('Please enter valid project hours'));
+                      return Promise.reject(new Error('Please enter valid cr hours'));
                     }
                     if (+value <= 0) {
-                      return Promise.reject(new Error('Project hours must be greater than 0'));
+                      return Promise.reject(new Error('Cr hours must be greater than 0'));
                     }
                     return Promise.resolve();
                   }
@@ -485,15 +455,15 @@ const AddEditProject = () => {
             />
             <RenderTextInput
               col={{ xs: 12 }}
-              name="projectCost"
-              label="Project Cost"
+              name="crCost"
+              label="Cr Cost"
               allowClear="allowClear"
               size="middle"
               disabled={true}
             />
             {billingType && (
               <>
-                <Divider orientation="left">Project Payment Cycle</Divider>
+                <Divider orientation="left">Cr Payment Cycle</Divider>
                 <RenderTextInput
                   col={{ xs: 12 }}
                   name="paymentTermDays"
@@ -551,7 +521,7 @@ const AddEditProject = () => {
                 htmlType="submit"
                 disabled={isLoading ?? isEditLoading}
               >
-                {projectData?.id ? 'Update' : 'Create'}
+                {crData?.id ? 'Update' : 'Create'}
               </Button>
             </ButtonWrapper>
           </Row>
@@ -561,4 +531,4 @@ const AddEditProject = () => {
   );
 };
 
-export default AddEditProject;
+export default AddEditCr;

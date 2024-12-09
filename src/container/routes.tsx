@@ -23,6 +23,9 @@ const VendorAdd = lazy(() => import('../components/module/vendorManagement/AddEd
 const ProjectList = lazy(() => import('../pages/ProjectManagement/index'));
 const ProjectView = lazy(() => import('../components/module/projectManagement/ViewProject'));
 const ProjectAdd = lazy(() => import('../components/module/projectManagement/AddEditProject'));
+const CrList = lazy(() => import('../pages/CrManagement/index'));
+const CrView = lazy(() => import('../components/module/crManagement/ViewCr'));
+const CrAdd = lazy(() => import('../components/module/crManagement/AddEditCr'));
 const CompanyList = lazy(() => import('../pages/CompanyManagement/index'));
 const CompanyView = lazy(() => import('../components/module/companyManagement/ViewCompany'));
 const MyProfile = lazy(() => import('../pages/MyProfile'));
@@ -77,6 +80,14 @@ const Routing = () => {
           <Route path={`${ROUTES.projectAdd}`} element={<ProjectAdd />} />
           <Route path={`${ROUTES.projectEdit}/:id`} element={<ProjectAdd />} />
           <Route path="*" element={<Navigate to={ROUTES.projectManagement} replace={true} />} />
+        </Route>
+
+        <Route path={ROUTES.crManagement} element={<Outlet />}>
+          <Route path={ROUTES.crManagement} element={<CrList />} />
+          <Route path={`${ROUTES.crView}/:id`} element={<CrView />} />
+          <Route path={`${ROUTES.crAdd}`} element={<CrAdd />} />
+          <Route path={`${ROUTES.crEdit}/:id`} element={<CrAdd />} />
+          <Route path="*" element={<Navigate to={ROUTES.crManagement} replace={true} />} />
         </Route>
 
         <Route path={ROUTES.companyManagement} element={<Outlet />}>

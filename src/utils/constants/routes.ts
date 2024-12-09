@@ -30,6 +30,11 @@ export const ROUTES = {
   projectEdit: `/project-management/edit-project`,
   projectAdd: `/project-management/add-project`,
 
+  crManagement: `/cr-management`,
+  crView: `/cr-management/view-cr`,
+  crEdit: `/cr-management/edit-cr`,
+  crAdd: `/cr-management/add-cr`,
+
   companyManagement: `/company-management`,
   companyView: `/company-management/view-company`,
 

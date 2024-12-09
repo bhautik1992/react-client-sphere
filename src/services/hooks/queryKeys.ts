@@ -59,6 +59,23 @@ export const projectKeys = {
   projectStatus: [`project-status`]
 };
 
+export const crKeys = {
+  crList: (data: IProjectReq) => [
+    `cr-list`,
+    `${data?.limit}`,
+    `${data?.offset}`,
+    `${data?.search ?? ''}`,
+    `${data?.sortBy ?? ''}`,
+    `${data?.sortOrder ?? ''}`
+  ],
+  crDetail: (id: number) => [`cr-detail-${id}`],
+  crAdd: [`add-cr`],
+  crEdit: [`edit-cr`],
+  crDelete: [`cr-delete`],
+  crStatus: [`cr-status`],
+  crDetailByProductId: (id: number) => [`cr-detail-by-product-id-${id}`]
+};
+
 export const companyKeys = {
   companyList: (data: ICompanyReq) => [
     `company-list`,
@@ -78,7 +95,8 @@ export const dashboardKey = {
   dashboardCount: [`dashboard-count`],
   dashboardClient: [`dashboard-client`],
   dashboardCompany: [`dashboard-company`],
-  dashboardEmployee: [`dashboard-employee`]
+  dashboardEmployee: [`dashboard-employee`],
+  dashboardProject: [`dashboard-project`]
 };
 
 export const countryStateCityKey = {

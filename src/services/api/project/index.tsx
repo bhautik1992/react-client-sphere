@@ -77,5 +77,14 @@ export const projectAPI = {
       .catch((error) => {
         throw error?.response?.data;
       });
+  },
+
+  async exportProjects(data: IProjectReq): Promise<Blob> {
+    return apiInstance
+      .post(ApiEndPoints.project.exportProjects, data, { responseType: 'blob' })
+      .then((response) => response.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
   }
 };

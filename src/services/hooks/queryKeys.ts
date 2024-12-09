@@ -1,6 +1,7 @@
 import { IClientReq } from 'services/api/client/types';
 import { ICompanyReq } from 'services/api/company/types';
 import { ICityReq, IStateReq } from 'services/api/country/types';
+import { ICrReq } from 'services/api/cr/types';
 import { IEmployeeReq } from 'services/api/employee/types';
 import { IProjectReq } from 'services/api/project/types';
 import { IVendorReq } from 'services/api/vendor/types';
@@ -50,7 +51,8 @@ export const projectKeys = {
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`
+    `${data?.sortOrder ?? ''}`,
+    `${data?.isInternalProject ?? ''}`
   ],
   projectDetail: (id: number) => [`project-detail-${id}`],
   projectAdd: [`add-project`],
@@ -60,13 +62,14 @@ export const projectKeys = {
 };
 
 export const crKeys = {
-  crList: (data: IProjectReq) => [
+  crList: (data: ICrReq) => [
     `cr-list`,
     `${data?.limit}`,
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`
+    `${data?.sortOrder ?? ''}`,
+    `${data?.isInternalCr ?? ''}`
   ],
   crDetail: (id: number) => [`cr-detail-${id}`],
   crAdd: [`add-cr`],

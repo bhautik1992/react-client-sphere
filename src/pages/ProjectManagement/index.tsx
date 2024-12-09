@@ -1,7 +1,7 @@
 import { Wrapper } from './style';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,7 @@ import StyledBreadcrumb from 'components/layout/breadcrumb';
 import ProjectManagementTable from 'components/module/projectManagement/ProjectManagementTable';
 
 import { IProjectReq } from 'services/api/project/types';
+import { useExportProjects } from 'services/hooks/project';
 
 import { ROUTES } from 'utils/constants/routes';
 
@@ -24,18 +25,31 @@ const ProjectManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [isInternalProject, setIsInternalProject] = useState<boolean>(false);
+  const { mutate: exportProjects } = useExportProjects();
+
+  const handleChange = (value: string) => {
+    const internal = value === 'internal';
+    setIsInternalProject(internal);
+    setArgs((prev) => ({ ...prev, isInternalProject: internal, offset: 0 }));
+  };
 
   const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IProjectReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: ''
+    sortOrder: '',
+    isInternalProject
   });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
     setArgs((prev) => ({ ...prev, offset: 0 }));
+  };
+
+  const handleExport = () => {
+    exportProjects(args);
   };
 
   return (
@@ -54,6 +68,13 @@ const ProjectManagement = () => {
                 onChange={onChange}
               />
             </Form>
+            <Select defaultValue="all" style={{ width: 120 }} onChange={handleChange}>
+              <Select.Option value="all">All Projects</Select.Option>
+              <Select.Option value="internal">Internal Projects</Select.Option>
+            </Select>
+            <Button type="primary" onClick={handleExport}>
+              Export
+            </Button>
             <Button type="primary" onClick={() => navigate(ROUTES.projectAdd)}>
               Add Project
             </Button>

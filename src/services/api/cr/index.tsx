@@ -80,5 +80,14 @@ export const crAPI = {
       .catch((error) => {
         throw error?.response?.data;
       });
+  },
+
+  async exportCrs(data: ICrReq): Promise<Blob> {
+    return apiInstance
+      .post(ApiEndPoints.cr.exportCrs, data, { responseType: 'blob' })
+      .then((response) => response.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
   }
 };

@@ -54,7 +54,8 @@ export const ApiEndPoints = {
     editProject: `project/update`,
     deleteProject: `project/delete`,
     projectDetail: `project/get`,
-    projectStatus: `project/status`
+    projectStatus: `project/status`,
+    exportProjects: `project/export`
   },
   cr: {
     crList: `cr/list`,
@@ -63,7 +64,8 @@ export const ApiEndPoints = {
     deleteCr: `cr/delete`,
     crDetail: `cr/get`,
     crStatus: `cr/status`,
-    crDetailByProjectId: `cr/getByProjectId`
+    crDetailByProjectId: `cr/getByProjectId`,
+    exportCrs: `cr/export`
   },
   company: {
     companyList: `company/list`,

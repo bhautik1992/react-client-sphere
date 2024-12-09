@@ -40,6 +40,7 @@ export interface IProjectReq {
   search?: string;
   sortOrder?: Key;
   sortBy?: Key;
+  isInternalProject: boolean;
 }
 
 export interface IAddProjectReq {

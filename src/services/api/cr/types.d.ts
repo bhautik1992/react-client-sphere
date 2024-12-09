@@ -37,6 +37,7 @@ export interface ICrReq {
   search?: string;
   sortOrder?: Key;
   sortBy?: Key;
+  isInternalCr?: boolean;
 }
 
 export interface IAddCrReq {

@@ -1,3 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { crAPI } from 'services/api/cr';
 import { ICrReq } from 'services/api/cr/types';
 
@@ -63,6 +65,23 @@ export const useCrDetailByProductId = (id: number) => {
       staleTime: Infinity,
       retry: false,
       enabled: Boolean(id)
+    }
+  });
+};
+
+export const useExportCrs = () => {
+  return useMutation((filters: ICrReq) => crAPI.exportCrs(filters), {
+    onError: (error) => {
+      console.error('Export failed:', error);
+    },
+    onSuccess: (data) => {
+      const url = window.URL.createObjectURL(new Blob([data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `CR_${Date.now()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
     }
   });
 };

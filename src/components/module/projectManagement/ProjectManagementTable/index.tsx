@@ -1,8 +1,10 @@
 import {
+  CheckOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
   InfoCircleOutlined,
+  PauseOutlined,
   PlusOutlined
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
@@ -23,7 +25,7 @@ import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType } from 'utils/constants/enum';
+import { BillingType, ProjectStatusName } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/renderDropDownStatus/projectStatusDropDown';
 
@@ -64,6 +66,14 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         message.error(err.message);
       }
     });
+  };
+
+  const handleMarkAsCompleted = (id: number) => {
+    handleConfirm(ProjectStatusName.Completed, id);
+  };
+
+  const handleMarkAsPending = (id: number) => {
+    handleConfirm(ProjectStatusName.Pending, id);
   };
 
   const handleConfirm = (status: string, id: number) => {
@@ -258,6 +268,24 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
               className="cta_btn table_cta_btn"
               icon={<EyeOutlined />}
               onClick={() => navigate(`${ROUTES.projectView}/${record?.id}`)}
+            />
+          </Tooltip>
+          <Tooltip title="Mark as completed" placement="top" trigger="hover">
+            <Button
+              type="text"
+              size="small"
+              className="cta_btn table_cta_btn"
+              icon={<CheckOutlined />}
+              onClick={() => handleMarkAsCompleted(record?.id)}
+            />
+          </Tooltip>
+          <Tooltip title="On hold" placement="top" trigger="hover">
+            <Button
+              type="text"
+              size="small"
+              className="cta_btn table_cta_btn"
+              icon={<PauseOutlined />}
+              onClick={() => handleMarkAsPending(record?.id)}
             />
           </Tooltip>
           <Tooltip title="Edit project" placement="top" trigger="hover">

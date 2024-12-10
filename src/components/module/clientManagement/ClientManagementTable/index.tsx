@@ -13,7 +13,7 @@ import { useClientList, useClientStatus, useDeleteClient } from 'services/hooks/
 import { clientKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
-import { Designation, EmployeeStatus } from 'utils/constants/enum';
+import { EmployeeStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import { renderTagColor } from 'utils/renderColor';
 
@@ -111,15 +111,6 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       sorter: true,
       render: (_, record: IClient) => (
         <>{record?.phone && record?.phone?.length > 0 ? record?.phone : '-'}</>
-      )
-    },
-    {
-      title: 'Designation',
-      dataIndex: 'designation',
-      key: 'designation',
-      sorter: true,
-      render: (_, record: IClient) => (
-        <>{Designation.find((d) => d.value === record?.designation)?.label ?? '-'}</>
       )
     },
     {

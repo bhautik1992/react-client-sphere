@@ -12,7 +12,7 @@ import { useClientDetail, useClientStatus } from 'services/hooks/client';
 import { clientKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
-import { Designation } from 'utils/constants/enum';
+import { EmployeeStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import { renderTagColor } from 'utils/renderColor';
 
@@ -168,10 +168,6 @@ const ViewClient = () => {
           </Row>
           <Row className="clientRow">
             <Col xs={6}>
-              <h4>Designation</h4>
-              <p>{Designation.find((d) => d.value === clientData?.designation)?.label ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
               <h4>Account Manager</h4>
               <p>{clientData?.accountManager ?? '-'}</p>
             </Col>
@@ -179,6 +175,7 @@ const ViewClient = () => {
               <h4>Website</h4>
               <p>{clientData?.website ?? '-'}</p>
             </Col>
+            <Col xs={6}></Col>
           </Row>
         </DetailWrapper>
       </div>

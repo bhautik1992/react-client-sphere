@@ -59,7 +59,7 @@ const AddEditProject = () => {
     },
     ...(Array.isArray(employeeList)
       ? employeeList
-          .filter((item) => item.designation === 'project_manager')
+          .filter((item) => item.role === 'project_manager')
           .map((item) => ({
             label: `${item.firstName} ${item.lastName}`,
             value: item.id
@@ -68,7 +68,7 @@ const AddEditProject = () => {
   ];
   const teamLeaderListOption = Array.isArray(employeeList)
     ? employeeList
-        .filter((item) => item.designation === 'team_leader')
+        .filter((item) => item.role === 'team_leader')
         .map((item) => ({
           label: `${item.firstName} ${item.lastName}`,
           value: item.id

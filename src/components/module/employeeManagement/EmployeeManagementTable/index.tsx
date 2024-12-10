@@ -15,7 +15,7 @@ import { employeeKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { Department, Designation, EmployeeRole } from 'utils/constants/enum';
+import { Department, EmployeeRole } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
@@ -104,15 +104,6 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
       sorter: true,
       render: (_, record: IEmployee) => (
         <>{Department.find((role) => role.value === record?.department)?.label ?? '-'}</>
-      )
-    },
-    {
-      title: 'Designation',
-      dataIndex: 'designation',
-      key: 'designation',
-      sorter: true,
-      render: (_, record: IEmployee) => (
-        <>{Designation.find((role) => role.value === record?.designation)?.label ?? '-'}</>
       )
     },
     {

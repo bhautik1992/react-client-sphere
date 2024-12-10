@@ -17,7 +17,7 @@ import { dashboardKey, employeeKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { Department, Designation, EmployeeRole } from 'utils/constants/enum';
+import { Department, EmployeeRole } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditEmployee = () => {
@@ -144,7 +144,6 @@ const AddEditEmployee = () => {
       phone: employeeData?.phone ?? null,
       role: employeeData?.role ?? null,
       department: employeeData?.department ?? null,
-      designation: employeeData?.designation ?? null,
       joiningDate: employeeData?.joiningDate ? dayjs(employeeData?.joiningDate) : null,
       dateOfBirth: employeeData?.dateOfBirth ? dayjs(employeeData?.dateOfBirth) : null,
       reportingPersonId: employeeData?.reportingPersonId ?? null
@@ -279,20 +278,6 @@ const AddEditEmployee = () => {
                 {
                   required: true,
                   message: 'Please select your department'
-                }
-              ]}
-            />
-            <RenderSelectInput
-              col={{ xs: 12 }}
-              name="designation"
-              placeholder="Select designation"
-              label="Designation"
-              optionLabel={Designation}
-              allowClear={true}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select designation'
                 }
               ]}
             />

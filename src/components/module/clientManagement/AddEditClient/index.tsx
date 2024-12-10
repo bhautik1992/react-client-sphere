@@ -23,7 +23,7 @@ import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
 import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
-import { Designation, EmployeeStatus } from 'utils/constants/enum';
+import { EmployeeStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditClient = () => {
@@ -179,7 +179,6 @@ const AddEditClient = () => {
       lastName: clientData?.lastName ?? null,
       email: clientData?.email ?? null,
       phone: clientData?.phone ?? null,
-      designation: clientData?.designation ?? null,
       companyId: clientData?.company?.id ?? null,
       clientCompanyName: clientData?.clientCompanyName ?? null,
       accountManager: clientData?.accountManager ?? null,
@@ -286,19 +285,6 @@ const AddEditClient = () => {
               label="Address"
               allowClear="allowClear"
               size="middle"
-            />
-            <RenderSelectInput
-              col={{ xs: 12 }}
-              name="designation"
-              placeholder="Select your designation"
-              label="Designation"
-              optionLabel={Designation}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select your designation'
-                }
-              ]}
             />
             <RenderSelectInput
               col={{ xs: 12 }}

@@ -5,16 +5,6 @@ export enum EmployeeStatus {
   Inactive = 'inactive'
 }
 
-export enum DesignationName {
-  Admin = 'admin',
-  ProjectManager = 'project_manager',
-  TeamLeader = 'team_leader',
-  SalesManager = 'sales_manager',
-  Developer = 'developer',
-  Intern = 'intern',
-  Tester = 'tester'
-}
-
 export enum ProjectStatusName {
   NotStarted = 'not_started',
   Started = 'started',
@@ -32,7 +22,13 @@ export enum CrStatusName {
 
 export enum EmployeeRoleName {
   Admin = 'admin',
-  Employee = 'employee'
+  Sales_Manager = 'sales_manager',
+  Sales_Executive = 'sales_executive',
+  Project_Manager = 'project_manager',
+  Team_Leader = 'team_leader',
+  Senior_Software_Engineer = 'senior_software_engineer',
+  Software_Engineer = 'software_engineer',
+  Trainee = 'trainee'
 }
 
 export enum BillingTypeName {
@@ -65,8 +61,32 @@ export const EmployeeRole = [
     label: 'Admin'
   },
   {
-    value: EmployeeRoleName.Employee,
-    label: 'Employee'
+    value: EmployeeRoleName.Sales_Manager,
+    label: 'Sales Manager'
+  },
+  {
+    value: EmployeeRoleName.Sales_Executive,
+    label: 'Sales Executive'
+  },
+  {
+    value: EmployeeRoleName.Project_Manager,
+    label: 'Project Manager'
+  },
+  {
+    value: EmployeeRoleName.Team_Leader,
+    label: 'Team Leader'
+  },
+  {
+    value: EmployeeRoleName.Senior_Software_Engineer,
+    label: 'Senior Software Engineer'
+  },
+  {
+    value: EmployeeRoleName.Software_Engineer,
+    label: 'Software Engineer'
+  },
+  {
+    value: EmployeeRoleName.Trainee,
+    label: 'Trainee'
   }
 ];
 
@@ -137,16 +157,16 @@ export const Department = [
     label: 'Development'
   },
   {
+    value: 'marketing',
+    label: 'Marketing'
+  },
+  {
     value: 'designing',
     label: 'Designing'
   },
   {
     value: 'testing',
     label: 'Testing'
-  },
-  {
-    value: 'marketing',
-    label: 'Marketing'
   }
 ];
 
@@ -192,37 +212,6 @@ export const PaymentStatus = [
   {
     value: PaymentStatusName.PartialPaid,
     label: 'Partially Paid'
-  }
-];
-
-export const Designation = [
-  {
-    value: DesignationName.Admin,
-    label: 'Admin'
-  },
-  {
-    value: DesignationName.ProjectManager,
-    label: 'Project Manager'
-  },
-  {
-    value: DesignationName.TeamLeader,
-    label: 'Team Leader'
-  },
-  {
-    value: DesignationName.SalesManager,
-    label: 'Sales Manager'
-  },
-  {
-    value: DesignationName.Developer,
-    label: 'Developer'
-  },
-  {
-    value: DesignationName.Intern,
-    label: 'Intern'
-  },
-  {
-    value: DesignationName.Tester,
-    label: 'Tester'
   }
 ];
 

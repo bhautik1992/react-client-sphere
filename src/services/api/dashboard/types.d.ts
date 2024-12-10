@@ -25,7 +25,7 @@ export interface IDashboardEmployeeRes {
   lastName: string;
   personalEmail: string;
   companyEmail: string;
-  designation: string;
+  role: string;
 }
 
 export interface IDashboardProjectRes {

@@ -9,7 +9,7 @@ import StyledBreadcrumb from 'components/layout/breadcrumb';
 import { useProfileDetail } from 'services/hooks/profile';
 
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { Department, Designation, EmployeeRole } from 'utils/constants/enum';
+import { Department, EmployeeRole } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
@@ -71,10 +71,7 @@ const MyProfile = () => {
                 <h4>Department</h4>
                 <p>{Department.find((dep) => dep.value === data?.department)?.label ?? '-'}</p>
               </Col>
-              <Col xs={8}>
-                <h4>Designation</h4>
-                <p>{Designation.find((des) => des.value === data?.designation)?.label ?? '-'}</p>
-              </Col>
+              <Col xs={8}></Col>
             </Row>
             <Row gutter={[16, 40]} className="detailRow">
               <Col xs={8}>

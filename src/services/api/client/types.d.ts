@@ -12,7 +12,6 @@ export interface IClient {
   lastName: string;
   email: string;
   phone: string;
-  designation: string;
   company: ICompany;
   clientCompanyName: string;
   accountManager: string;
@@ -43,7 +42,6 @@ export interface IAddClientReq {
   lastName: string;
   email: string;
   phone: string;
-  designation: string;
   companyId: number;
   clientCompanyName: string;
   accountManager: string;

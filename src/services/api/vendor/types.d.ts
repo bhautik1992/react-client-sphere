@@ -6,7 +6,6 @@ export interface IVendor {
   lastName: string;
   email: string;
   phone: string;
-  designation: string;
   company: ICompany;
   vendorCompanyName: string;
   accountManager: string;
@@ -33,7 +32,6 @@ export interface IAddVendorReq {
   lastName: string;
   email: string;
   phone: string;
-  designation: string;
   companyId: number;
   vendorCompanyName: string;
   accountManager: string;

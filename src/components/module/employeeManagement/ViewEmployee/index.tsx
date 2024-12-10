@@ -9,7 +9,7 @@ import StyledBreadcrumb from 'components/layout/breadcrumb';
 import { useEmployeeDetail } from 'services/hooks/employee';
 
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { Department, Designation, EmployeeRole } from 'utils/constants/enum';
+import { Department, EmployeeRole } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
@@ -67,15 +67,12 @@ const ViewEmployee = () => {
               <p>{Department.find((role) => role.value === data?.department)?.label ?? '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Designation</h4>
-              <p>{Designation.find((role) => role.value === data?.designation)?.label ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
               <h4>Reporting Person</h4>
               <p>
                 {data?.reportingPerson?.firstName ?? '-'} {data?.reportingPerson?.lastName ?? '-'}
               </p>
             </Col>
+            <Col xs={6}></Col>
           </Row>
           <Row className="employeeRow">
             <Col xs={6}>

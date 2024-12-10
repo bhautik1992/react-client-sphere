@@ -13,7 +13,6 @@ import { vendorKeys } from 'services/hooks/queryKeys';
 import { useDeleteVendor, useVendorList } from 'services/hooks/vendor';
 
 import { IApiError } from 'utils/Types';
-import { Designation } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
@@ -78,15 +77,6 @@ const VendorManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       sorter: true,
       render: (_, record: IVendor) => (
         <>{record?.phone && record?.phone?.length > 0 ? record?.phone : '-'}</>
-      )
-    },
-    {
-      title: 'Designation',
-      dataIndex: 'designation',
-      key: 'designation',
-      sorter: true,
-      render: (_, record: IVendor) => (
-        <>{Designation.find((d) => d.value === record?.designation)?.label ?? '-'}</>
       )
     },
     {

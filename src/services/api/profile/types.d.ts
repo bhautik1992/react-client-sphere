@@ -7,7 +7,6 @@ export interface IProfileRes {
   companyEmail: string;
   phone: string;
   department: string;
-  designation: string;
   password: string;
   dateOfBirth: string;
   joiningDate: string;

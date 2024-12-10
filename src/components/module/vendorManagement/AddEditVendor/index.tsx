@@ -23,7 +23,6 @@ import { useAddVendor, useEditVendor, useVendorDetail } from 'services/hooks/ven
 import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
-import { Designation } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditVendor = () => {
@@ -168,7 +167,6 @@ const AddEditVendor = () => {
       lastName: vendorData?.lastName ?? null,
       email: vendorData?.email ?? null,
       phone: vendorData?.phone ?? null,
-      designation: vendorData?.designation ?? null,
       companyId: vendorData?.company?.id ?? null,
       vendorCompanyName: vendorData?.vendorCompanyName ?? null,
       accountManager: vendorData?.accountManager ?? null,
@@ -272,19 +270,6 @@ const AddEditVendor = () => {
               label="Address"
               allowClear="allowClear"
               size="middle"
-            />
-            <RenderSelectInput
-              col={{ xs: 18 }}
-              name="designation"
-              placeholder="Select your designation"
-              label="Designation"
-              optionLabel={Designation}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select your designation'
-                }
-              ]}
             />
             <RenderSelectInput
               col={{ xs: 18 }}

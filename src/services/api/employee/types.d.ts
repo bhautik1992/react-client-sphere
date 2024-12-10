@@ -9,7 +9,6 @@ export interface IEmployee {
   companyEmail: string;
   phone: string;
   department: string;
-  designation: string;
   joiningDate: string;
   dateOfBirth: string;
   reportingPersonId: number;
@@ -41,7 +40,6 @@ export interface IAddEmployeeReq {
   companyEmail: string;
   phone: string;
   department: string;
-  designation: string;
   joiningDate: string;
   dateOfBirth: string;
   reportingPersonId: number;

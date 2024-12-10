@@ -7,7 +7,6 @@ import StyledBreadcrumb from 'components/layout/breadcrumb';
 
 import { useVendorDetail } from 'services/hooks/vendor';
 
-import { Designation } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
@@ -61,10 +60,6 @@ const ViewVendor = () => {
           </Row>
           <Row className="clientRow">
             <Col xs={6}>
-              <h4>Designation</h4>
-              <p>{Designation.find((d) => d.value === vendorData?.designation)?.label ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
               <h4>Account Manager</h4>
               <p>{vendorData?.accountManager ?? '-'}</p>
             </Col>
@@ -72,6 +67,7 @@ const ViewVendor = () => {
               <h4>Website</h4>
               <p>{vendorData?.website ?? '-'}</p>
             </Col>
+            <Col xs={6}></Col>
           </Row>
           <Row className="clientRow">
             <Col xs={6}>

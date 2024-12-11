@@ -8,7 +8,6 @@ import { StyledLayout } from './Layout.Styled';
 import Sidebar from './sidebar';
 
 const Header = lazy(() => import('./header'));
-// const Footer = lazy(() => import('./footer'));
 
 const Layout = () => {
   return (

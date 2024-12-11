@@ -12,10 +12,11 @@ import { CommonTable } from 'components/common/Table';
 import { ICr, ICrReq } from 'services/api/cr/types';
 import { useCrList, useCrStatus, useDeleteCr } from 'services/hooks/cr';
 import { crKeys } from 'services/hooks/queryKeys';
+import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType } from 'utils/constants/enum';
+import { BillingType, EmployeeRoleName } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import CrStatusDropdown from 'utils/renderDropDownStatus/crStatusDropDown';
 
@@ -28,6 +29,7 @@ interface IProps {
 const CrManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { employeeData } = authStore((state) => state);
 
   const { mutate: deleteMutate } = useDeleteCr();
   const { mutate: statusMutate } = useCrStatus();
@@ -205,21 +207,25 @@ const CrManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) 
               }}
             />
           </Tooltip>
-          <Tooltip title="Delete cr" placement="top" trigger="hover">
-            <CommonModal
-              title="Delete"
-              content="Are you sure delete this cr?"
-              type="confirm"
-              onConfirm={() => handleDeleteModal(record?.id)}
-            >
-              <Button
-                type="text"
-                size="small"
-                className="cta_btn table_cta_btn"
-                icon={<DeleteOutlined />}
-              />
-            </CommonModal>
-          </Tooltip>
+          {employeeData?.role === EmployeeRoleName.Admin ||
+            employeeData?.role === EmployeeRoleName.Sales_Executive ||
+            (employeeData?.role === EmployeeRoleName.Sales_Manager && (
+              <Tooltip title="Delete cr" placement="top" trigger="hover">
+                <CommonModal
+                  title="Delete"
+                  content="Are you sure delete this cr?"
+                  type="confirm"
+                  onConfirm={() => handleDeleteModal(record?.id)}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    className="cta_btn table_cta_btn"
+                    icon={<DeleteOutlined />}
+                  />
+                </CommonModal>
+              </Tooltip>
+            ))}
         </div>
       )
     }

@@ -5,31 +5,40 @@ import AuthGuard from '../components/common/AuthGuard';
 
 import { ROUTES } from 'utils/constants/routes';
 
+import routesConfig from './routesConfig';
+
 const Layout = lazy(() => import('../components/layout'));
-const PageNotFound = lazy(() => import('../pages/PageNotFound'));
 const SignIn = lazy(() => import('../pages/Auth/SignIn'));
 const ForgotPassword = lazy(() => import('../pages/Auth/ForgotPassword'));
-const ChangePassword = lazy(() => import('../pages/Auth/ChangePassword'));
-const Dashboard = lazy(() => import('../pages/Dashboard'));
-const EmployeesList = lazy(() => import('../pages/EmployeeManagement'));
-const EmployeeView = lazy(() => import('../components/module/employeeManagement/ViewEmployee'));
-const EmployeeAdd = lazy(() => import('../components/module/employeeManagement/AddEditEmployee'));
-const ClientList = lazy(() => import('../pages/ClientManagement/index'));
-const ClientView = lazy(() => import('../components/module/clientManagement/ViewClient'));
-const ClientAdd = lazy(() => import('../components/module/clientManagement/AddEditClient'));
-const VendorList = lazy(() => import('../pages/VendorManagement/index'));
-const VendorView = lazy(() => import('../components/module/vendorManagement/ViewVendor'));
-const VendorAdd = lazy(() => import('../components/module/vendorManagement/AddEditVendor'));
-const ProjectList = lazy(() => import('../pages/ProjectManagement/index'));
-const ProjectView = lazy(() => import('../components/module/projectManagement/ViewProject'));
-const ProjectAdd = lazy(() => import('../components/module/projectManagement/AddEditProject'));
-const CrList = lazy(() => import('../pages/CrManagement/index'));
-const CrView = lazy(() => import('../components/module/crManagement/ViewCr'));
-const CrAdd = lazy(() => import('../components/module/crManagement/AddEditCr'));
-const CompanyList = lazy(() => import('../pages/CompanyManagement/index'));
-const CompanyView = lazy(() => import('../components/module/companyManagement/ViewCompany'));
-const MyProfile = lazy(() => import('../pages/MyProfile'));
-const EditMyProfile = lazy(() => import('../components/module/profileEdit'));
+
+export interface RouteConfig {
+  path: string;
+  component: () => Promise<{ default: React.ComponentType<any> }>;
+  roles?: string[];
+  children?: RouteConfig[];
+}
+
+const generateRoutes = (routes: RouteConfig[]) => {
+  return routes.map((route) => {
+    const Component = lazy(route.component); // Lazy load the component
+    const element = route.roles ? (
+      <AuthGuard roles={route.roles}>
+        <Component />
+      </AuthGuard>
+    ) : (
+      <Component />
+    );
+
+    return route.children ? (
+      <Route key={route.path} path={route.path} element={<Outlet />}>
+        <Route index element={element} />
+        {generateRoutes(route.children)} {/* Recursively handle child routes */}
+      </Route>
+    ) : (
+      <Route key={route.path} path={route.path} element={element} />
+    );
+  });
+};
 
 const Routing = () => {
   return (
@@ -44,58 +53,7 @@ const Routing = () => {
           </AuthGuard>
         }
       >
-        <Route path={ROUTES.pageNotFound} element={<PageNotFound />} />
-        <Route path={ROUTES.changePassword} element={<ChangePassword />} />
-        <Route path={ROUTES.dashboard} element={<Dashboard />} />
-        <Route path={ROUTES.myProfile} element={<MyProfile />} />
-        <Route path={ROUTES.editMyProfile} element={<EditMyProfile />} />
-
-        <Route path={ROUTES.employeeManagement} element={<Outlet />}>
-          <Route path={ROUTES.employeeManagement} element={<EmployeesList />} />
-          <Route path={`${ROUTES.employeeView}/:id`} element={<EmployeeView />} />
-          <Route path={`${ROUTES.employeeAdd}`} element={<EmployeeAdd />} />
-          <Route path={`${ROUTES.employeeEdit}/:id`} element={<EmployeeAdd />} />
-          <Route path="*" element={<Navigate to={ROUTES.employeeManagement} replace={true} />} />
-        </Route>
-
-        <Route path={ROUTES.clientManagement} element={<Outlet />}>
-          <Route path={ROUTES.clientManagement} element={<ClientList />} />
-          <Route path={`${ROUTES.clientView}/:id`} element={<ClientView />} />
-          <Route path={`${ROUTES.clientAdd}`} element={<ClientAdd />} />
-          <Route path={`${ROUTES.clientEdit}/:id`} element={<ClientAdd />} />
-          <Route path="*" element={<Navigate to={ROUTES.clientManagement} replace={true} />} />
-        </Route>
-
-        <Route path={ROUTES.vendorManagement} element={<Outlet />}>
-          <Route path={ROUTES.vendorManagement} element={<VendorList />} />
-          <Route path={`${ROUTES.vendorView}/:id`} element={<VendorView />} />
-          <Route path={`${ROUTES.vendorAdd}`} element={<VendorAdd />} />
-          <Route path={`${ROUTES.vendorEdit}/:id`} element={<VendorAdd />} />
-          <Route path="*" element={<Navigate to={ROUTES.vendorManagement} replace={true} />} />
-        </Route>
-
-        <Route path={ROUTES.projectManagement} element={<Outlet />}>
-          <Route path={ROUTES.projectManagement} element={<ProjectList />} />
-          <Route path={`${ROUTES.projectView}/:id`} element={<ProjectView />} />
-          <Route path={`${ROUTES.projectAdd}`} element={<ProjectAdd />} />
-          <Route path={`${ROUTES.projectEdit}/:id`} element={<ProjectAdd />} />
-          <Route path="*" element={<Navigate to={ROUTES.projectManagement} replace={true} />} />
-        </Route>
-
-        <Route path={ROUTES.crManagement} element={<Outlet />}>
-          <Route path={ROUTES.crManagement} element={<CrList />} />
-          <Route path={`${ROUTES.crView}/:id`} element={<CrView />} />
-          <Route path={`${ROUTES.crAdd}`} element={<CrAdd />} />
-          <Route path={`${ROUTES.crEdit}/:id`} element={<CrAdd />} />
-          <Route path="*" element={<Navigate to={ROUTES.crManagement} replace={true} />} />
-        </Route>
-
-        <Route path={ROUTES.companyManagement} element={<Outlet />}>
-          <Route path={ROUTES.companyManagement} element={<CompanyList />} />
-          <Route path={`${ROUTES.companyView}/:id`} element={<CompanyView />} />
-          <Route path="*" element={<Navigate to={ROUTES.companyManagement} replace={true} />} />
-        </Route>
-
+        {generateRoutes(routesConfig)}
         <Route path={ROUTES.default} element={<Navigate replace to={ROUTES.dashboard} />} />
         <Route path="*" element={<Navigate replace to={ROUTES.pageNotFound} />} />
       </Route>

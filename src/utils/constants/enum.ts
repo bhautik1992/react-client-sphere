@@ -1,5 +1,15 @@
 export const COMPANY_EMAIL = 'infiazure@gmail.com';
 
+export enum MenuPermissions {
+  DASHBOARD = '1',
+  EMPLOYEES = '2',
+  CLIENTS = '3',
+  VENDORS = '4',
+  PROJECTS = '5',
+  PROJECT_CRS = '6',
+  COMPANIES = '7'
+}
+
 export enum EmployeeStatus {
   Active = 'active',
   Inactive = 'inactive'

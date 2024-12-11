@@ -12,10 +12,11 @@ import { CommonTable } from 'components/common/Table';
 import { IEmployee, IEmployeeReq } from 'services/api/employee/types';
 import { useDeleteEmployee, useEmployeeList } from 'services/hooks/employee';
 import { employeeKeys } from 'services/hooks/queryKeys';
+import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { Department, EmployeeRole } from 'utils/constants/enum';
+import { Department, EmployeeRole, EmployeeRoleName } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
@@ -27,6 +28,7 @@ interface IProps {
 const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { employeeData } = authStore((state) => state);
 
   const { data: employeeList, isLoading } = useEmployeeList({ ...args, search: searchDebounce });
   const { mutate } = useDeleteEmployee();
@@ -162,21 +164,23 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
               }}
             />
           </Tooltip>
-          <Tooltip title="Delete employee" placement="top" trigger="hover">
-            <CommonModal
-              title="Delete"
-              content="Are you sure delete this employee?"
-              type="confirm"
-              onConfirm={() => handleDeleteModal(record?.id)}
-            >
-              <Button
-                type="text"
-                size="small"
-                className="cta_btn table_cta_btn"
-                icon={<DeleteOutlined />}
-              />
-            </CommonModal>
-          </Tooltip>
+          {employeeData?.role === EmployeeRoleName.Admin && (
+            <Tooltip title="Delete employee" placement="top" trigger="hover">
+              <CommonModal
+                title="Delete"
+                content="Are you sure delete this employee?"
+                type="confirm"
+                onConfirm={() => handleDeleteModal(record?.id)}
+              >
+                <Button
+                  type="text"
+                  size="small"
+                  className="cta_btn table_cta_btn"
+                  icon={<DeleteOutlined />}
+                />
+              </CommonModal>
+            </Tooltip>
+          )}
         </div>
       )
     }

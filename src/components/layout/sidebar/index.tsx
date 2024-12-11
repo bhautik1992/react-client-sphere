@@ -10,10 +10,51 @@ import EmployeeManagement from 'components/svg/EmployeeManagement';
 import ProjectManagement from 'components/svg/ProjectManagement';
 import Vendor from 'components/svg/Vendor';
 
+import { authStore } from 'services/store/auth';
+
+import { EmployeeRoleName, MenuPermissions } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import { toAbsoluteUrl } from 'utils/functions';
 
 import { StyledLayout } from '../Layout.Styled';
+
+const menuAccessByRole = {
+  [EmployeeRoleName.Admin]: [
+    MenuPermissions.DASHBOARD,
+    MenuPermissions.EMPLOYEES,
+    MenuPermissions.CLIENTS,
+    MenuPermissions.VENDORS,
+    MenuPermissions.PROJECTS,
+    MenuPermissions.PROJECT_CRS,
+    MenuPermissions.COMPANIES
+  ],
+  [EmployeeRoleName.Sales_Manager]: [
+    MenuPermissions.DASHBOARD,
+    MenuPermissions.EMPLOYEES,
+    MenuPermissions.CLIENTS,
+    MenuPermissions.VENDORS,
+    MenuPermissions.PROJECTS,
+    MenuPermissions.PROJECT_CRS
+  ],
+  [EmployeeRoleName.Sales_Executive]: [
+    MenuPermissions.DASHBOARD,
+    MenuPermissions.EMPLOYEES,
+    MenuPermissions.CLIENTS,
+    MenuPermissions.VENDORS,
+    MenuPermissions.PROJECTS,
+    MenuPermissions.PROJECT_CRS
+  ],
+  [EmployeeRoleName.Project_Manager]: [
+    MenuPermissions.DASHBOARD,
+    MenuPermissions.EMPLOYEES,
+    MenuPermissions.PROJECTS,
+    MenuPermissions.PROJECT_CRS
+  ],
+  [EmployeeRoleName.Team_Leader]: [MenuPermissions.DASHBOARD],
+  [EmployeeRoleName.Senior_Software_Engineer]: [MenuPermissions.DASHBOARD],
+  [EmployeeRoleName.Software_Engineer]: [MenuPermissions.DASHBOARD],
+  [EmployeeRoleName.Trainee]: [MenuPermissions.DASHBOARD]
+};
 
 function createMenuItem(
   link?: string,
@@ -34,13 +75,33 @@ function createMenuItem(
 }
 
 const items = [
-  createMenuItem(ROUTES.dashboard, 'Dashboard', '1', <Dashboard />),
-  createMenuItem(ROUTES.employeeManagement, 'Employees', '2', <EmployeeManagement />),
-  createMenuItem(ROUTES.clientManagement, 'Clients', '3', <Client />),
-  createMenuItem(ROUTES.vendorManagement, 'Vendors', '4', <Vendor />),
-  createMenuItem(ROUTES.projectManagement, 'Projects', '5', <ProjectManagement />),
-  createMenuItem(ROUTES.crManagement, 'Project CRs', '6', <ProjectManagement />),
-  createMenuItem(ROUTES.companyManagement, 'Companies', '7', <CompanyManagement />)
+  createMenuItem(ROUTES.dashboard, 'Dashboard', MenuPermissions.DASHBOARD, <Dashboard />),
+  createMenuItem(
+    ROUTES.employeeManagement,
+    'Employees',
+    MenuPermissions.EMPLOYEES,
+    <EmployeeManagement />
+  ),
+  createMenuItem(ROUTES.clientManagement, 'Clients', MenuPermissions.CLIENTS, <Client />),
+  createMenuItem(ROUTES.vendorManagement, 'Vendors', MenuPermissions.VENDORS, <Vendor />),
+  createMenuItem(
+    ROUTES.projectManagement,
+    'Projects',
+    MenuPermissions.PROJECTS,
+    <ProjectManagement />
+  ),
+  createMenuItem(
+    ROUTES.crManagement,
+    'Project CRs',
+    MenuPermissions.PROJECT_CRS,
+    <ProjectManagement />
+  ),
+  createMenuItem(
+    ROUTES.companyManagement,
+    'Companies',
+    MenuPermissions.COMPANIES,
+    <CompanyManagement />
+  )
 ];
 
 function compareLinkAndReturnKey(items: any, currentPath: any): any {
@@ -63,14 +124,16 @@ const Sidebar = () => {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(true);
 
+  const { employeeData } = authStore.getState();
+  const employeeRole = employeeData?.role || EmployeeRoleName.Trainee;
+
+  const allowedKeys = menuAccessByRole[employeeRole as EmployeeRoleName] || [];
+  const filteredItems = items.filter((item) => allowedKeys.includes(item.key));
+
   const activeTab = useMemo(() => {
-    const activeLinkKey = compareLinkAndReturnKey(items, location?.pathname);
-    if (activeLinkKey) {
-      return [activeLinkKey];
-    } else {
-      return [items?.find((item) => item?.link?.split('/')[1].includes(location?.pathname))];
-    }
-  }, [location.pathname]);
+    const activeLinkKey = compareLinkAndReturnKey(filteredItems, location?.pathname);
+    return activeLinkKey ? [activeLinkKey] : [];
+  }, [location.pathname, filteredItems]);
 
   return (
     <StyledLayout.Sider
@@ -96,7 +159,7 @@ const Sidebar = () => {
         defaultSelectedKeys={activeTab}
         mode="inline"
         onClick={({ item }: any) => navigate(item.props.link)}
-        items={items}
+        items={filteredItems}
       />
     </StyledLayout.Sider>
   );

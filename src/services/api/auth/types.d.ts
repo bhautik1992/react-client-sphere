@@ -7,8 +7,10 @@ export interface ISignInRes {
   id: number;
   firstName: string;
   lastName: string;
-  email: string;
+  personalEmail: string;
+  companyEmail: string;
   access_token: string;
+  role: string;
 }
 
 export interface IForgotPwdReq {

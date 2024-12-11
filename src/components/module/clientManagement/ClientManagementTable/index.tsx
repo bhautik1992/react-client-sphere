@@ -11,9 +11,10 @@ import { CommonTable } from 'components/common/Table';
 import { IClient, IClientReq } from 'services/api/client/types';
 import { useClientList, useClientStatus, useDeleteClient } from 'services/hooks/client';
 import { clientKeys } from 'services/hooks/queryKeys';
+import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
-import { EmployeeStatus } from 'utils/constants/enum';
+import { EmployeeRoleName, EmployeeStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import { renderTagColor } from 'utils/renderColor';
 
@@ -26,6 +27,7 @@ interface IProps {
 const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { employeeData } = authStore((state) => state);
 
   const { mutate: deleteMutate } = useDeleteClient();
   const { mutate: statusMutate } = useClientStatus();
@@ -206,21 +208,23 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
               }}
             />
           </Tooltip>
-          <Tooltip title="Delete client" placement="top" trigger="hover">
-            <CommonModal
-              title="Delete"
-              content="Are you sure delete this client?"
-              type="confirm"
-              onConfirm={() => handleDeleteModal(record?.id)}
-            >
-              <Button
-                type="text"
-                size="small"
-                className="cta_btn table_cta_btn"
-                icon={<DeleteOutlined />}
-              />
-            </CommonModal>
-          </Tooltip>
+          {employeeData?.role === EmployeeRoleName.Admin && (
+            <Tooltip title="Delete client" placement="top" trigger="hover">
+              <CommonModal
+                title="Delete"
+                content="Are you sure delete this client?"
+                type="confirm"
+                onConfirm={() => handleDeleteModal(record?.id)}
+              >
+                <Button
+                  type="text"
+                  size="small"
+                  className="cta_btn table_cta_btn"
+                  icon={<DeleteOutlined />}
+                />
+              </CommonModal>
+            </Tooltip>
+          )}
         </div>
       )
     }

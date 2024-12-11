@@ -11,8 +11,10 @@ import { CommonTable } from 'components/common/Table';
 import { IVendor, IVendorReq } from 'services/api/vendor/types';
 import { vendorKeys } from 'services/hooks/queryKeys';
 import { useDeleteVendor, useVendorList } from 'services/hooks/vendor';
+import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
+import { EmployeeRoleName } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
@@ -24,6 +26,8 @@ interface IProps {
 const VendorManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { employeeData } = authStore((state) => state);
+
   const { mutate: deleteMutate } = useDeleteVendor();
   const { data: vendorList, isLoading } = useVendorList({
     ...args,
@@ -132,21 +136,25 @@ const VendorManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
               }}
             />
           </Tooltip>
-          <Tooltip title="Delete vendor" placement="top" trigger="hover">
-            <CommonModal
-              title="Delete"
-              content="Are you sure delete this vendor?"
-              type="confirm"
-              onConfirm={() => handleDeleteModal(record?.id)}
-            >
-              <Button
-                type="text"
-                size="small"
-                className="cta_btn table_cta_btn"
-                icon={<DeleteOutlined />}
-              />
-            </CommonModal>
-          </Tooltip>
+          {employeeData?.role === EmployeeRoleName.Admin ||
+            employeeData?.role === EmployeeRoleName.Sales_Executive ||
+            (employeeData?.role === EmployeeRoleName.Sales_Manager && (
+              <Tooltip title="Delete vendor" placement="top" trigger="hover">
+                <CommonModal
+                  title="Delete"
+                  content="Are you sure delete this vendor?"
+                  type="confirm"
+                  onConfirm={() => handleDeleteModal(record?.id)}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    className="cta_btn table_cta_btn"
+                    icon={<DeleteOutlined />}
+                  />
+                </CommonModal>
+              </Tooltip>
+            ))}
         </div>
       )
     }

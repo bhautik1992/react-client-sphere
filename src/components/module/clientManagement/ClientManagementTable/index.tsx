@@ -119,14 +119,14 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       title: 'Company name',
       dataIndex: 'company.id',
       key: 'company.id',
-      sorter: true,
+      sorter: false,
       render: (_, record: IClient) => <>{record?.company?.name ?? '-'}</>
     },
     {
       title: 'Client Company Name',
       dataIndex: 'clientCompanyName',
       key: 'clientCompanyName',
-      sorter: true,
+      sorter: false,
       render: (_, record: IClient) => <>{record?.clientCompanyName ?? '-'}</>
     },
     {

@@ -87,14 +87,14 @@ const VendorManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       title: 'Company name',
       dataIndex: 'company.id',
       key: 'company.id',
-      sorter: true,
+      sorter: false,
       render: (_, record: IVendor) => <>{record?.company?.name ?? '-'}</>
     },
     {
       title: 'Vendor Company Name',
       dataIndex: 'vendorCompanyName',
       key: 'vendorCompanyName',
-      sorter: true,
+      sorter: false,
       render: (_, record: IVendor) => <>{record?.vendorCompanyName ?? '-'}</>
     },
     {
@@ -136,25 +136,25 @@ const VendorManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
               }}
             />
           </Tooltip>
-          {employeeData?.role === EmployeeRoleName.Admin ||
+          {(employeeData?.role === EmployeeRoleName.Admin ||
             employeeData?.role === EmployeeRoleName.Sales_Executive ||
-            (employeeData?.role === EmployeeRoleName.Sales_Manager && (
-              <Tooltip title="Delete vendor" placement="top" trigger="hover">
-                <CommonModal
-                  title="Delete"
-                  content="Are you sure delete this vendor?"
-                  type="confirm"
-                  onConfirm={() => handleDeleteModal(record?.id)}
-                >
-                  <Button
-                    type="text"
-                    size="small"
-                    className="cta_btn table_cta_btn"
-                    icon={<DeleteOutlined />}
-                  />
-                </CommonModal>
-              </Tooltip>
-            ))}
+            employeeData?.role === EmployeeRoleName.Sales_Manager) && (
+            <Tooltip title="Delete vendor" placement="top" trigger="hover">
+              <CommonModal
+                title="Delete"
+                content="Are you sure delete this vendor?"
+                type="confirm"
+                onConfirm={() => handleDeleteModal(record?.id)}
+              >
+                <Button
+                  type="text"
+                  size="small"
+                  className="cta_btn table_cta_btn"
+                  icon={<DeleteOutlined />}
+                />
+              </CommonModal>
+            </Tooltip>
+          )}
         </div>
       )
     }

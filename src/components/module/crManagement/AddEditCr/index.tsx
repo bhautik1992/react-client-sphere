@@ -234,10 +234,10 @@ const AddEditCr = () => {
 
   const BreadcrumbsPath = [
     {
-      title: <Link to={ROUTES.crManagement}>Crs</Link>
+      title: <Link to={ROUTES.crManagement}>Project CRs</Link>
     },
     {
-      title: id ? 'Edit Cr' : 'Add Cr'
+      title: id ? 'Edit CR' : 'Add CR'
     }
   ];
   return (
@@ -245,7 +245,7 @@ const AddEditCr = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">{id ? 'Edit Cr' : 'Add Cr'}</h2>
+          <h2 className="pageTitle">{id ? 'Edit CR' : 'Add CR'}</h2>
         </div>
 
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">

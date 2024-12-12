@@ -19,10 +19,10 @@ import CrStatusDropdown from 'utils/renderDropDownStatus/crStatusDropDown';
 
 const BreadcrumbsPath = [
   {
-    title: <Link to={ROUTES.crManagement}>Project Cr</Link>
+    title: <Link to={ROUTES.crManagement}>Project CR</Link>
   },
   {
-    title: 'Cr Detail'
+    title: 'CR Detail'
   }
 ];
 
@@ -68,7 +68,7 @@ const ViewCr = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">Cr Detail</h2>
+          <h2 className="pageTitle">CR Detail</h2>
           <CrStatusDropdown
             status={crData?.status ?? 'not_started'}
             crId={crData?.id ?? 0}

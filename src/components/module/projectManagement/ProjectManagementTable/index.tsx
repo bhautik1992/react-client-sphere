@@ -112,7 +112,8 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      sorter: true
+      sorter: true,
+      render: (_, record: IProject) => <>{record?.name ?? '-'}</>
     },
     {
       title: 'Start Date',
@@ -148,7 +149,7 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       title: 'Project Manager',
       dataIndex: 'projectManager',
       key: 'projectManager',
-      sorter: true,
+      sorter: false,
       render: (_, record: IProject) => (
         <>
           {record?.projectManager
@@ -161,7 +162,7 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       title: 'Team Leader',
       dataIndex: 'teamLeader',
       key: 'teamLeader',
-      sorter: true,
+      sorter: false,
       render: (_, record: IProject) => (
         <>
           {record?.teamLeader?.firstName ?? ''} {record?.teamLeader?.lastName ?? '-'}
@@ -301,25 +302,25 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
               }}
             />
           </Tooltip>
-          {employeeData?.role === EmployeeRoleName.Admin ||
+          {(employeeData?.role === EmployeeRoleName.Admin ||
             employeeData?.role === EmployeeRoleName.Sales_Executive ||
-            (employeeData?.role === EmployeeRoleName.Sales_Manager && (
-              <Tooltip title="Delete project" placement="top" trigger="hover">
-                <CommonModal
-                  title="Delete"
-                  content="Are you sure delete this project?"
-                  type="confirm"
-                  onConfirm={() => handleDeleteModal(record?.id)}
-                >
-                  <Button
-                    type="text"
-                    size="small"
-                    className="cta_btn table_cta_btn"
-                    icon={<DeleteOutlined />}
-                  />
-                </CommonModal>
-              </Tooltip>
-            ))}
+            employeeData?.role === EmployeeRoleName.Sales_Manager) && (
+            <Tooltip title="Delete project" placement="top" trigger="hover">
+              <CommonModal
+                title="Delete"
+                content="Are you sure delete this project?"
+                type="confirm"
+                onConfirm={() => handleDeleteModal(record?.id)}
+              >
+                <Button
+                  type="text"
+                  size="small"
+                  className="cta_btn table_cta_btn"
+                  icon={<DeleteOutlined />}
+                />
+              </CommonModal>
+            </Tooltip>
+          )}
         </div>
       )
     }

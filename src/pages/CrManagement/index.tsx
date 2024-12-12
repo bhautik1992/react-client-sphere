@@ -17,7 +17,7 @@ import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
   {
-    title: 'Project Crs'
+    title: 'Project CRs'
   }
 ];
 
@@ -57,7 +57,7 @@ const CrManagement = () => {
       <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
       <div className="shadow-paper">
         <div className="pageHeader">
-          <h2 className="pageTitle">Project Crs</h2>
+          <h2 className="pageTitle">Project CRs</h2>
           <div className="pageHeaderButton">
             <Form form={form}>
               <RenderTextInput
@@ -76,7 +76,7 @@ const CrManagement = () => {
               Export
             </Button>
             <Button type="primary" onClick={() => navigate(ROUTES.crAdd)}>
-              Add Cr
+              Add CR
             </Button>
           </div>
         </div>

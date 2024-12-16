@@ -46,7 +46,7 @@ const ForgotPassword: React.FC = () => {
                 <RenderTextInput
                   col={{ xs: 24 }}
                   name="email"
-                  placeholder="Enter your email id here..."
+                  placeholder="Enter email id here..."
                   allowClear="allowClear"
                   size="large"
                   prefix={<UserOutlined style={{ color: '#0000ff' }} />}

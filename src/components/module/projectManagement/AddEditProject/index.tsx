@@ -31,6 +31,7 @@ import {
   COMPANY_EMAIL,
   CurrencyType,
   InvoicePaymentCycle,
+  InvoicePaymentCycleDay,
   InvoicePaymentCycleName,
   ProjectStatus
 } from 'utils/constants/enum';
@@ -50,6 +51,7 @@ const AddEditProject = () => {
   const [filteredInvoicePaymentCycle, setFilteredInvoicePaymentCycle] = useState<
     { value: string; label: string }[]
   >([]);
+  const [invoicePaymentCycle, setInvoicePaymentCycle] = useState<string>('');
 
   const { data: employeeList } = useDashboardEmployee();
   const projectManagerListOption = [
@@ -97,13 +99,7 @@ const AddEditProject = () => {
     });
   };
 
-  const handleBillingTypeChange = (value: string) => {
-    setBillingType(value);
-    form.setFieldsValue({
-      hourlyMonthlyRate: '',
-      projectHours: '',
-      projectCost: ''
-    });
+  const setInvoicePaymentDropDown = (value: string) => {
     if (value === BillingTypeName.Hourly) {
       setFilteredInvoicePaymentCycle(InvoicePaymentCycle);
     } else if (value === BillingTypeName.Monthly) {
@@ -113,6 +109,16 @@ const AddEditProject = () => {
     } else {
       setFilteredInvoicePaymentCycle([]); // Hide dropdown for other cases
     }
+  };
+
+  const handleBillingTypeChange = (value: string) => {
+    setBillingType(value);
+    form.setFieldsValue({
+      hourlyMonthlyRate: '',
+      projectHours: '',
+      projectCost: ''
+    });
+    setInvoicePaymentDropDown(value);
   };
 
   const handleHourlyMonthlyRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -213,7 +219,7 @@ const AddEditProject = () => {
 
   useEffect(() => {
     setIsChecked(projectData?.isInternalProject ?? false);
-    form.setFieldsValue({ isInternalCr: projectData?.isInternalProject ?? false });
+    form.setFieldsValue({ isInternalProject: projectData?.isInternalProject ?? false });
   }, [projectData, form]);
 
   useEffect(() => {
@@ -222,6 +228,8 @@ const AddEditProject = () => {
     });
     if (!projectData) return;
     setBillingType(projectData?.billingType ?? '');
+    setInvoicePaymentCycle(projectData?.invoicePaymentCycle ?? '');
+    setInvoicePaymentDropDown(projectData?.billingType ?? '');
     form.setFieldsValue({
       name: projectData?.name ?? '',
       description: projectData?.description ?? '',
@@ -241,7 +249,9 @@ const AddEditProject = () => {
       currency: projectData?.currency ?? null,
       projectCost: projectData?.projectCost ?? null,
       paymentTermDays: projectData?.paymentTermDays ?? null,
-      invoicePaymentCycle: projectData?.invoicePaymentCycle ?? null
+      invoicePaymentCycle: projectData?.invoicePaymentCycle ?? null,
+      invoiceDay: projectData?.invoiceDay ?? null,
+      invoiceDate: projectData?.invoiceDate ? dayjs(projectData?.invoiceDate) : null
     });
   }, [projectData, form, companyList]);
 
@@ -536,6 +546,43 @@ const AddEditProject = () => {
                   {
                     required: true,
                     message: 'Please select invoice payment cycle'
+                  }
+                ]}
+                onChange={(e: string) => {
+                  setInvoicePaymentCycle(e);
+                }}
+              />
+            )}
+            {invoicePaymentCycle === InvoicePaymentCycleName.Monthly && (
+              <RenderDatePicker
+                col={{ xs: 12 }}
+                name="invoiceDate"
+                placeholder="Select invoice date"
+                label="Invoice Day"
+                allowClear={true}
+                size="middle"
+                format={DATE_FORMAT}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select invoice day'
+                  }
+                ]}
+              />
+            )}
+            {(invoicePaymentCycle === InvoicePaymentCycleName.Weekly ||
+              invoicePaymentCycle === InvoicePaymentCycleName.BiWeekly) && (
+              <RenderSelectInput
+                col={{ xs: 12 }}
+                name="invoiceDay"
+                placeholder="Select invoice day"
+                label="Invoice Day"
+                allowClear={true}
+                optionLabel={InvoicePaymentCycleDay}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select invoice day'
                   }
                 ]}
               />

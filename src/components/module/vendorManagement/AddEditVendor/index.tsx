@@ -198,9 +198,9 @@ const AddEditVendor = () => {
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">
           <Row gutter={[0, 30]}>
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="firstName"
-              placeholder="Enter your first name"
+              placeholder="Enter first name"
               label="First Name"
               allowClear="allowClear"
               size="middle"
@@ -212,9 +212,9 @@ const AddEditVendor = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="lastName"
-              placeholder="Enter your last name"
+              placeholder="Enter last name"
               label="Last Name"
               allowClear="allowClear"
               size="middle"
@@ -226,9 +226,9 @@ const AddEditVendor = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="email"
-              placeholder="Enter your email address"
+              placeholder="Enter email address"
               label="Email"
               allowClear="allowClear"
               size="middle"
@@ -245,9 +245,9 @@ const AddEditVendor = () => {
               ]}
             />
             <RenderPhoneNumber
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="phone"
-              placeholder="Enter your phone number "
+              placeholder="Enter phone number "
               label="Phone Number"
               onChange={(value: any) => setValue(value)}
               value={value}
@@ -264,15 +264,15 @@ const AddEditVendor = () => {
               ]}
             />
             <RenderTextArea
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="address"
-              placeholder="Enter your address"
+              placeholder="Enter address"
               label="Address"
               allowClear="allowClear"
               size="middle"
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="companyId"
               placeholder="Select company"
               label="Company"
@@ -287,23 +287,23 @@ const AddEditVendor = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="vendorCompanyName"
-              placeholder="Enter your vendor company name"
-              label="Vendor Company Name"
+              placeholder="Enter vendor company"
+              label="Vendor Company"
               allowClear="allowClear"
               size="middle"
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your vendor company name'
+                  message: 'Please enter your vendor company'
                 }
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="accountManager"
-              placeholder="Enter your account manager"
+              placeholder="Enter account manager"
               label="Account Manager"
               allowClear="allowClear"
               size="middle"
@@ -318,15 +318,15 @@ const AddEditVendor = () => {
               ]}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="website"
-              placeholder="Enter your vendor website"
+              placeholder="Enter vendor website"
               label="Website"
               allowClear="allowClear"
               size="middle"
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="countryCode"
               placeholder="Select country"
               label="Country"
@@ -345,7 +345,7 @@ const AddEditVendor = () => {
               ]}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="stateCode"
               placeholder="Select state"
               label="State"
@@ -359,7 +359,7 @@ const AddEditVendor = () => {
               onSelect={handleStateChange}
             />
             <RenderSelectInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="cityName"
               placeholder="Select city"
               label="City"
@@ -372,9 +372,9 @@ const AddEditVendor = () => {
               }))}
             />
             <RenderTextInput
-              col={{ xs: 18 }}
+              col={{ xs: 12 }}
               name="skypeId"
-              placeholder="Enter your Skype Id"
+              placeholder="Enter Skype Id"
               label="Skype Id"
               allowClear="allowClear"
               size="middle"

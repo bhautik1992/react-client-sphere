@@ -251,19 +251,21 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       className: 'text-center',
       render: (_, record: IProject) => (
         <div className="d-flex flex-row">
-          <Tooltip title="Add Cr" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<PlusOutlined />}
-              onClick={() => {
-                navigate(`${ROUTES.crAdd}`, {
-                  state: { project: record }
-                });
-              }}
-            />
-          </Tooltip>
+          {record?.status === ProjectStatusName.Started && (
+            <Tooltip title="Add Cr" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  navigate(`${ROUTES.crAdd}`, {
+                    state: { project: record }
+                  });
+                }}
+              />
+            </Tooltip>
+          )}
           <Tooltip title="View project" placement="top" trigger="hover">
             <Button
               type="text"

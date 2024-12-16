@@ -86,7 +86,7 @@ const ChangePassword = () => {
                   name="currentPassword"
                   label="Current Password"
                   required={true}
-                  placeholder="Enter your current password "
+                  placeholder="Enter current password "
                   type="password"
                   size="middle"
                   prefix={<LockOutlined style={{ color: '#0000ff' }} />}
@@ -112,7 +112,7 @@ const ChangePassword = () => {
                   col={{ xs: 13 }}
                   name="newPassword"
                   required={true}
-                  placeholder="Enter your new password "
+                  placeholder="Enter new password "
                   type="password"
                   size="middle"
                   label="New Password"
@@ -142,7 +142,7 @@ const ChangePassword = () => {
                   col={{ xs: 13 }}
                   name="confirmPassword"
                   required={true}
-                  placeholder="Enter your confirm password "
+                  placeholder="Enter confirm password "
                   type="password"
                   size="middle"
                   prefix={<LockOutlined style={{ color: '#0000ff' }} />}

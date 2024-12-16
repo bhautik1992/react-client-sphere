@@ -215,7 +215,7 @@ const AddEditClient = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="firstName"
-              placeholder="Enter your first name"
+              placeholder="Enter first name"
               label="First Name"
               allowClear="allowClear"
               size="middle"
@@ -229,7 +229,7 @@ const AddEditClient = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="lastName"
-              placeholder="Enter your last name"
+              placeholder="Enter last name"
               label="Last Name"
               allowClear="allowClear"
               size="middle"
@@ -243,7 +243,7 @@ const AddEditClient = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="email"
-              placeholder="Enter your email address"
+              placeholder="Enter email address"
               label="Email"
               allowClear="allowClear"
               size="middle"
@@ -262,7 +262,7 @@ const AddEditClient = () => {
             <RenderPhoneNumber
               col={{ xs: 12 }}
               name="phone"
-              placeholder="Enter your phone number "
+              placeholder="Enter phone number "
               label="Phone Number"
               onChange={(value: any) => setValue(value)}
               value={value}
@@ -281,7 +281,7 @@ const AddEditClient = () => {
             <RenderTextArea
               col={{ xs: 12 }}
               name="address"
-              placeholder="Enter your address"
+              placeholder="Enter address"
               label="Address"
               allowClear="allowClear"
               size="middle"
@@ -304,7 +304,7 @@ const AddEditClient = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="clientCompanyName"
-              placeholder="Enter your client company name"
+              placeholder="Enter client company name"
               label="Client Company"
               allowClear="allowClear"
               size="middle"
@@ -318,7 +318,7 @@ const AddEditClient = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="accountManager"
-              placeholder="Enter your account manager"
+              placeholder="Enter account manager"
               label="Account Manager"
               allowClear="allowClear"
               size="middle"
@@ -352,7 +352,7 @@ const AddEditClient = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="website"
-              placeholder="Enter your client website"
+              placeholder="Enter client website"
               label="Website"
               allowClear="allowClear"
               size="middle"
@@ -423,7 +423,7 @@ const AddEditClient = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="skypeId"
-              placeholder="Enter your Skype Id"
+              placeholder="Enter Skype Id"
               label="Skype Id"
               allowClear="allowClear"
               size="middle"
@@ -431,7 +431,7 @@ const AddEditClient = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="zipCode"
-              placeholder="Enter your zip code"
+              placeholder="Enter zip code"
               label="Zip Code"
               allowClear="allowClear"
               size="middle"

@@ -78,7 +78,7 @@ const EditProfile = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="firstName"
-              placeholder="Enter your first name"
+              placeholder="Enter first name"
               label="First Name"
               allowClear="allowClear"
               size="middle"
@@ -92,7 +92,7 @@ const EditProfile = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="lastName"
-              placeholder="Enter your last name"
+              placeholder="Enter last name"
               label="Last Name"
               allowClear="allowClear"
               size="middle"
@@ -106,7 +106,7 @@ const EditProfile = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="personalEmail"
-              placeholder="Enter your personal email address"
+              placeholder="Enter personal email address"
               label="Personal Email"
               allowClear="allowClear"
               size="middle"
@@ -121,7 +121,7 @@ const EditProfile = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="companyEmail"
-              placeholder="Enter your company email address"
+              placeholder="Enter company email address"
               label="Company Email"
               allowClear="allowClear"
               size="middle"
@@ -136,7 +136,7 @@ const EditProfile = () => {
             <RenderPhoneNumber
               col={{ xs: 12 }}
               name="phone"
-              placeholder="Enter your phone number "
+              placeholder="Enter phone number "
               label="Phone Number"
               onChange={(value: any) => setValue(value)}
               value={value}

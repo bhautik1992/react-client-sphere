@@ -30,6 +30,8 @@ interface IProject {
   currency: string;
   paymentTermDays: number;
   invoicePaymentCycle: string;
+  invoiceDay: string;
+  invoiceDate: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -62,6 +64,8 @@ export interface IAddProjectReq {
   currency: string;
   paymentTermDays: number;
   invoicePaymentCycle: string;
+  invoiceDay: string;
+  invoiceDate: string;
 }
 
 export interface IProjectRes {

@@ -171,7 +171,7 @@ const AddEditEmployee = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="firstName"
-              placeholder="Enter your first name"
+              placeholder="Enter first name"
               label="First Name"
               allowClear="allowClear"
               size="middle"
@@ -185,7 +185,7 @@ const AddEditEmployee = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="lastName"
-              placeholder="Enter your last name"
+              placeholder="Enter last name"
               label="Last Name"
               allowClear="allowClear"
               size="middle"
@@ -199,7 +199,7 @@ const AddEditEmployee = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="personalEmail"
-              placeholder="Enter your personal email"
+              placeholder="Enter personal email"
               label="Personal Email"
               allowClear="allowClear"
               size="middle"
@@ -217,7 +217,7 @@ const AddEditEmployee = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="companyEmail"
-              placeholder="Enter your company email"
+              placeholder="Enter company email"
               label="Company Email"
               allowClear="allowClear"
               size="middle"
@@ -235,7 +235,7 @@ const AddEditEmployee = () => {
             <RenderTextInput
               col={{ xs: 12 }}
               name="phone"
-              placeholder="Enter your phone number"
+              placeholder="Enter phone number"
               label="Phone Number"
               allowClear="allowClear"
               size="middle"

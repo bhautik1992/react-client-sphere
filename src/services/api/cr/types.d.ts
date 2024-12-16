@@ -27,6 +27,8 @@ interface ICr {
   currency: string;
   paymentTermDays: number;
   invoicePaymentCycle: string;
+  invoiceDay: string;
+  invoiceDate: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -57,6 +59,8 @@ export interface IAddCrReq {
   currency: string;
   paymentTermDays: number;
   invoicePaymentCycle: string;
+  invoiceDay: string;
+  invoiceDate: string;
 }
 
 export interface ICrRes {

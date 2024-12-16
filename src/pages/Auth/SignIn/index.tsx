@@ -55,7 +55,7 @@ const SignIn: React.FC = () => {
                 <RenderTextInput
                   col={{ xs: 24 }}
                   name="email"
-                  placeholder="Enter your email id "
+                  placeholder="Enter email id "
                   // label="Email ID"
                   allowClear="allowClear"
                   size="large"
@@ -75,7 +75,7 @@ const SignIn: React.FC = () => {
                   col={{ xs: 24 }}
                   name="password"
                   required={true}
-                  placeholder="Enter your password "
+                  placeholder="Enter password "
                   type="password"
                   size="middle"
                   prefix={<LockOutlined style={{ color: '#0000ff' }} />}

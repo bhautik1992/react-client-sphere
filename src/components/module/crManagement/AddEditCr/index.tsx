@@ -33,7 +33,9 @@ import {
   CrStatus,
   CurrencyType,
   InvoicePaymentCycle,
-  InvoicePaymentCycleName
+  InvoicePaymentCycleDay,
+  InvoicePaymentCycleName,
+  ProjectStatusName
 } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
@@ -48,6 +50,7 @@ const AddEditCr = () => {
   const { mutate: editMutate, isLoading: isEditLoading } = useEditCr();
   const { data: crData } = useCrDetail(Number(id));
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [invoicePaymentCycle, setInvoicePaymentCycle] = useState<string>('');
 
   const [billingType, setBillingType] = useState<string>('');
   const [filteredInvoicePaymentCycle, setFilteredInvoicePaymentCycle] = useState<
@@ -71,28 +74,26 @@ const AddEditCr = () => {
   });
 
   const { data: projectList } = useDashboardProject();
-  const projectListOption = projectList?.map((item) => {
-    return {
-      label: item.name,
-      value: item.id
-    };
-  });
+  const projectListOption = projectList
+    ?.filter((item) => item.status === ProjectStatusName.Started)
+    .map((item) => {
+      return {
+        label: item.name,
+        value: item.id
+      };
+    });
 
   const handleProjectChange = (projectId: number) => {
     form.setFieldsValue({
       clientId: projectList?.find((item) => item.id === projectId)?.client?.id,
       clientCompanyName: projectList?.find((item) => item.id === projectId)?.client
-        ?.clientCompanyName
+        ?.clientCompanyName,
+      billingType: projectList?.find((item) => item.id === projectId)?.billingType,
+      currency: projectList?.find((item) => item.id === projectId)?.currency
     });
   };
 
-  const handleBillingTypeChange = (value: string) => {
-    setBillingType(value);
-    form.setFieldsValue({
-      hourlyMonthlyRate: '',
-      crHours: '',
-      crCost: ''
-    });
+  const setInvoicePaymentDropDown = (value: string) => {
     if (value === BillingTypeName.Hourly) {
       setFilteredInvoicePaymentCycle(InvoicePaymentCycle);
     } else if (value === BillingTypeName.Monthly) {
@@ -102,6 +103,16 @@ const AddEditCr = () => {
     } else {
       setFilteredInvoicePaymentCycle([]); // Hide dropdown for other cases
     }
+  };
+
+  const handleBillingTypeChange = (value: string) => {
+    setBillingType(value);
+    form.setFieldsValue({
+      hourlyMonthlyRate: '',
+      crHours: '',
+      crCost: ''
+    });
+    setInvoicePaymentDropDown(value);
   };
 
   const handleHourlyMonthlyRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,9 +212,12 @@ const AddEditCr = () => {
       projectId: project?.id,
       clientId: project?.clientId,
       clientCompanyName: project?.client.clientCompanyName,
-      currency: project?.currency
+      currency: project?.currency,
+      billingType: project?.billingType
     });
-  });
+    setBillingType(project?.billingType ?? '');
+    setInvoicePaymentDropDown(project?.billingType ?? '');
+  }, [project, form]);
 
   useEffect(() => {
     form.setFieldsValue({
@@ -211,6 +225,8 @@ const AddEditCr = () => {
     });
     if (!crData) return;
     setBillingType(crData?.billingType ?? '');
+    setInvoicePaymentCycle(crData?.invoicePaymentCycle ?? '');
+    setInvoicePaymentDropDown(crData?.billingType ?? '');
     form.setFieldsValue({
       name: crData?.name ?? '',
       description: crData?.description ?? '',
@@ -228,7 +244,9 @@ const AddEditCr = () => {
       currency: crData?.currency ?? null,
       crCost: crData?.crCost ?? null,
       paymentTermDays: crData?.paymentTermDays ?? null,
-      invoicePaymentCycle: crData?.invoicePaymentCycle ?? null
+      invoicePaymentCycle: crData?.invoicePaymentCycle ?? null,
+      invoiceDay: crData?.invoiceDay ?? null,
+      invoiceDate: crData?.invoiceDate ? dayjs(crData?.invoiceDate) : null
     });
   }, [crData, form, companyList]);
 
@@ -388,6 +406,7 @@ const AddEditCr = () => {
               label="Billing Type"
               allowClear={true}
               optionLabel={BillingType}
+              disabled={!!project?.billingType}
               rules={[
                 {
                   required: true,
@@ -403,7 +422,7 @@ const AddEditCr = () => {
               label="Currency"
               allowClear={true}
               optionLabel={CurrencyType}
-              disabled={true}
+              disabled={!!project?.currency}
               rules={[
                 {
                   required: true,
@@ -506,6 +525,43 @@ const AddEditCr = () => {
                   {
                     required: true,
                     message: 'Please select invoice payment cycle'
+                  }
+                ]}
+                onChange={(e: string) => {
+                  setInvoicePaymentCycle(e);
+                }}
+              />
+            )}
+            {invoicePaymentCycle === InvoicePaymentCycleName.Monthly && (
+              <RenderDatePicker
+                col={{ xs: 12 }}
+                name="invoiceDate"
+                placeholder="Select invoice date"
+                label="Invoice Day"
+                allowClear={true}
+                size="middle"
+                format={DATE_FORMAT}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select invoice day'
+                  }
+                ]}
+              />
+            )}
+            {(invoicePaymentCycle === InvoicePaymentCycleName.Weekly ||
+              invoicePaymentCycle === InvoicePaymentCycleName.BiWeekly) && (
+              <RenderSelectInput
+                col={{ xs: 12 }}
+                name="invoiceDay"
+                placeholder="Select invoice day"
+                label="Invoice Day"
+                allowClear={true}
+                optionLabel={InvoicePaymentCycleDay}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Please select invoice day'
                   }
                 ]}
               />

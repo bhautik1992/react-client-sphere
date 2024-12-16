@@ -59,6 +59,14 @@ export enum InvoicePaymentCycleName {
   Monthly = 'monthly'
 }
 
+export enum InvoiceDayName {
+  Monday = 'monday',
+  Tuesday = 'tuesday',
+  Wednesday = 'wednesday',
+  Thursday = 'thursday',
+  Friday = 'friday'
+}
+
 export enum PaymentStatusName {
   Paid = 'paid',
   Unpaid = 'unpaid',
@@ -245,5 +253,28 @@ export const CrStatus = [
   {
     value: CrStatusName.Cancelled,
     label: 'Cancelled'
+  }
+];
+
+export const InvoicePaymentCycleDay = [
+  {
+    value: InvoiceDayName.Monday,
+    label: 'Monday'
+  },
+  {
+    value: InvoiceDayName.Tuesday,
+    label: 'Tuesday'
+  },
+  {
+    value: InvoiceDayName.Wednesday,
+    label: 'Wednesday'
+  },
+  {
+    value: InvoiceDayName.Thursday,
+    label: 'Thursday'
+  },
+  {
+    value: InvoiceDayName.Friday,
+    label: 'Friday'
   }
 ];

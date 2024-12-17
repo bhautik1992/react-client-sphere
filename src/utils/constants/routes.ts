@@ -38,5 +38,9 @@ export const ROUTES = {
   companyManagement: `/company-management`,
   companyView: `/company-management/view-company`,
 
+  invoiceManagement: `/invoice-management`,
+  invoiceView: `/invoice-management/view-invoice`,
+  invoiceAdd: `/invoice-management/add-invoice`,
+
   dynamicPath: (path: string) => `/static-path/${path}`
 };

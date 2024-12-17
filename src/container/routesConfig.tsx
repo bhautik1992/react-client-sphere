@@ -284,6 +284,38 @@ const projectCrRoute = [
   }
 ];
 
+const invoiceRoute = [
+  {
+    path: ROUTES.invoiceManagement,
+    component: () => import('../pages/InvoiceManagement'),
+    roles: [
+      EmployeeRoleName.Admin,
+      EmployeeRoleName.Sales_Executive,
+      EmployeeRoleName.Sales_Manager
+    ],
+    children: [
+      {
+        path: `${ROUTES.invoiceView}/:id`,
+        component: () => import('../components/module/invoiceManagement/ViewInvoice'),
+        roles: [
+          EmployeeRoleName.Admin,
+          EmployeeRoleName.Sales_Executive,
+          EmployeeRoleName.Sales_Manager
+        ]
+      },
+      {
+        path: `${ROUTES.invoiceAdd}`,
+        component: () => import('../components/module/invoiceManagement/AddEditInvoice'),
+        roles: [
+          EmployeeRoleName.Admin,
+          EmployeeRoleName.Sales_Executive,
+          EmployeeRoleName.Sales_Manager
+        ]
+      }
+    ]
+  }
+];
+
 const routesConfig = [
   ...pageNotFoundRoute,
   ...changePasswordRoute,
@@ -295,7 +327,8 @@ const routesConfig = [
   ...clientRoute,
   ...vendorRoute,
   ...projectRoute,
-  ...projectCrRoute
+  ...projectCrRoute,
+  ...invoiceRoute
 ];
 
 export default routesConfig;

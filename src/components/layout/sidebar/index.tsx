@@ -9,6 +9,7 @@ import Dashboard from 'components/svg/Dashboard';
 import EmployeeManagement from 'components/svg/EmployeeManagement';
 import ProjectManagement from 'components/svg/ProjectManagement';
 import Vendor from 'components/svg/Vendor';
+import Invoice from 'components/svg/invoice';
 
 import { authStore } from 'services/store/auth';
 
@@ -26,6 +27,7 @@ const menuAccessByRole = {
     MenuPermissions.VENDORS,
     MenuPermissions.PROJECTS,
     MenuPermissions.PROJECT_CRS,
+    MenuPermissions.INVOICES,
     MenuPermissions.COMPANIES
   ],
   [EmployeeRoleName.Sales_Manager]: [
@@ -34,7 +36,8 @@ const menuAccessByRole = {
     MenuPermissions.CLIENTS,
     MenuPermissions.VENDORS,
     MenuPermissions.PROJECTS,
-    MenuPermissions.PROJECT_CRS
+    MenuPermissions.PROJECT_CRS,
+    MenuPermissions.INVOICES
   ],
   [EmployeeRoleName.Sales_Executive]: [
     MenuPermissions.DASHBOARD,
@@ -42,7 +45,8 @@ const menuAccessByRole = {
     MenuPermissions.CLIENTS,
     MenuPermissions.VENDORS,
     MenuPermissions.PROJECTS,
-    MenuPermissions.PROJECT_CRS
+    MenuPermissions.PROJECT_CRS,
+    MenuPermissions.INVOICES
   ],
   [EmployeeRoleName.Project_Manager]: [
     MenuPermissions.DASHBOARD,
@@ -96,6 +100,7 @@ const items = [
     MenuPermissions.PROJECT_CRS,
     <ProjectManagement />
   ),
+  createMenuItem(ROUTES.invoiceManagement, 'Invoices', MenuPermissions.INVOICES, <Invoice />),
   createMenuItem(
     ROUTES.companyManagement,
     'Companies',

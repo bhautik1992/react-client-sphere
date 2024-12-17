@@ -3,6 +3,7 @@ import { ICompanyReq } from 'services/api/company/types';
 import { ICityReq, IStateReq } from 'services/api/country/types';
 import { ICrReq } from 'services/api/cr/types';
 import { IEmployeeReq } from 'services/api/employee/types';
+import { IInvoiceReq } from 'services/api/invoice/types';
 import { IProjectReq } from 'services/api/project/types';
 import { IVendorReq } from 'services/api/vendor/types';
 
@@ -126,4 +127,18 @@ export const employeeKeys = {
   employeeDelete: [`employee-delete`],
   employeeAdd: [`add-employee`],
   employeeEdit: [`edit-employee`]
+};
+
+export const invoiceKeys = {
+  invoiceList: (data: IInvoiceReq) => [
+    `invoice-list`,
+    `${data?.limit}`,
+    `${data?.offset}`,
+    `${data?.search ?? ''}`,
+    `${data?.sortBy ?? ''}`,
+    `${data?.sortOrder ?? ''}`
+  ],
+  invoiceDetail: (id: number) => [`invoice-detail-${id}`],
+  invoiceAdd: [`add-invoice`],
+  invoiceDelete: [`invoice-delete`]
 };

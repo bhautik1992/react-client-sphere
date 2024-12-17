@@ -29,6 +29,7 @@ interface ICr {
   invoicePaymentCycle: string;
   invoiceDay: string;
   invoiceDate: string;
+  isInvoiced: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -77,4 +78,9 @@ export interface IEditCrReq extends IAddCrReq {
 export interface ICrStatusReq {
   crId: number;
   status: string;
+}
+
+export interface ICrInvoiceAmt {
+  id: number;
+  crCost: number;
 }

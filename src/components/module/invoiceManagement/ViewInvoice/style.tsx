@@ -5,10 +5,19 @@ export const DetailWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
-  &.employeeDetail {
-    margin-top: 60px;
+  .invoiceRow {
+    justify-content: space-between;
+    h4 {
+      margin-bottom: 5px;
+    }
   }
-  .crRow {
+`;
+
+export const CRDetailWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  .invoiceRow {
     justify-content: space-between;
     h4 {
       margin-bottom: 5px;

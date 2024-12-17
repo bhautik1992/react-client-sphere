@@ -7,7 +7,9 @@ export enum MenuPermissions {
   VENDORS = '4',
   PROJECTS = '5',
   PROJECT_CRS = '6',
-  COMPANIES = '7'
+  INVOICES = '7',
+  PAYMENT = '8',
+  COMPANIES = '9'
 }
 
 export enum EmployeeStatus {

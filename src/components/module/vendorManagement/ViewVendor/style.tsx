@@ -13,12 +13,7 @@ export const DetailWrapper = styled.div`
     h4 {
       margin-bottom: 5px;
     }
-    audio {
-      width: 400px;
-    }
-    .ant-image {
-      margin-right: 15px;
-    }
+
     .ant-tooltip-inner {
       white-space: pre-wrap;
     }

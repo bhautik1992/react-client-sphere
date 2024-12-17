@@ -232,38 +232,36 @@ const CrManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) 
   ];
 
   return (
-    <>
-      <CommonTable
-        bordered
-        columns={columns}
-        dataSource={
-          (crList?.result ?? []).length > 0
-            ? crList?.result.map((item) => ({ ...item, key: item.id }))
-            : []
+    <CommonTable
+      bordered
+      columns={columns}
+      dataSource={
+        (crList?.result ?? []).length > 0
+          ? crList?.result.map((item) => ({ ...item, key: item.id }))
+          : []
+      }
+      currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
+      onChange={(pagination, _, sorter, extra) => {
+        const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
+        const pageIndex = pagination?.current ?? 1;
+        if (extra?.action === 'paginate') {
+          setArgs({
+            ...args,
+            offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
+            limit: pagination?.pageSize ?? 10
+          });
+        } else {
+          setArgs({
+            ...args,
+            sortBy: order ? columnKey : '',
+            sortOrder: order?.replace('end', '') ?? '',
+            offset: (pageIndex - 1) * args.limit
+          });
         }
-        currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
-        onChange={(pagination, _, sorter, extra) => {
-          const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
-          const pageIndex = pagination?.current ?? 1;
-          if (extra?.action === 'paginate') {
-            setArgs({
-              ...args,
-              offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
-              limit: pagination?.pageSize ?? 10
-            });
-          } else {
-            setArgs({
-              ...args,
-              sortBy: order ? columnKey : '',
-              sortOrder: order?.replace('end', '') ?? '',
-              offset: (pageIndex - 1) * args.limit
-            });
-          }
-        }}
-        loading={isLoading}
-        total={crList?.recordsTotal ?? 10}
-      />
-    </>
+      }}
+      loading={isLoading}
+      total={crList?.recordsTotal ?? 10}
+    />
   );
 };
 

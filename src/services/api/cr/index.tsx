@@ -71,7 +71,7 @@ export const crAPI = {
       });
   },
 
-  async crDetailByProjectId(id: number): Promise<ICr> {
+  async crDetailByProjectId(id: number): Promise<ICr[]> {
     return apiInstance
       .get(`${ApiEndPoints.cr.crDetailByProjectId}/${id}`)
       .then((response) => {

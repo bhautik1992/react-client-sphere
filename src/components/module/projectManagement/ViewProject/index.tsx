@@ -13,7 +13,13 @@ import { projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, EmployeeStatus, ProjectStatus } from 'utils/constants/enum';
+import {
+  BillingType,
+  EmployeeStatus,
+  InvoicePaymentCycle,
+  InvoicePaymentCycleName,
+  ProjectStatus
+} from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/renderDropDownStatus/projectStatusDropDown';
 
@@ -212,7 +218,36 @@ const ViewProject = () => {
               <h4>Currency</h4>
               <p>{projectData?.currency ?? '-'}</p>
             </Col>
-            <Col xs={6}></Col>
+            <Col xs={6}>
+              <h4>Payment Term Days</h4>
+              <p>{projectData?.paymentTermDays ?? '-'}</p>
+            </Col>
+          </Row>
+          <Row className="projectRow">
+            <Col xs={6}>
+              <h4>Invoice Payment Cycle</h4>
+              <p>
+                {projectData?.invoicePaymentCycle
+                  ? projectData?.invoicePaymentCycle
+                  : InvoicePaymentCycle.find(
+                      (item) => item.value == projectData?.invoicePaymentCycle
+                    )?.label ?? '-'}
+              </p>
+            </Col>
+            <Col xs={6}>
+              <h4>Invoice Day</h4>
+              <p>
+                {(() => {
+                  if (projectData?.invoicePaymentCycle === InvoicePaymentCycleName.Monthly) {
+                    return projectData?.invoiceDate
+                      ? dayjs(projectData?.invoiceDate).format(DATE_FORMAT)
+                      : '-';
+                  } else {
+                    return projectData?.invoiceDay ?? '-';
+                  }
+                })()}
+              </p>
+            </Col>
           </Row>
         </DetailWrapper>
       </div>

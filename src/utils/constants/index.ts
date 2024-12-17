@@ -78,5 +78,11 @@ export const ApiEndPoints = {
     countryList: `country-state-city/country-list`,
     stateList: `country-state-city/state-list`,
     cityList: `country-state-city/city-list`
+  },
+  invoice: {
+    invoiceList: `invoice/list`,
+    invoiceDetail: `invoice/get`,
+    addInvoice: `invoice/create`,
+    deleteInvoice: `invoice/delete`
   }
 };

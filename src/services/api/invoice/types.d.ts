@@ -21,7 +21,9 @@ interface IInvoice {
   crIds: number[];
   crs: ICr[];
   amount: number;
+  additionalAmount: number;
   additionalChargeDesc: string;
+  isPaymentReceived: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -43,6 +45,7 @@ export interface IAddInvoiceReq {
   projectId: number;
   crIds: number[];
   amount: number;
+  additionalAmount: number;
   additionalChargeDesc: string;
   isUpdateCrAmount: boolean;
   crInvoiceAmount: ICrInvoiceAmt[];
@@ -57,4 +60,9 @@ export interface IAddInvoiceRes {}
 
 export interface IEditInvoiceReq extends IAddInvoiceReq {
   id: number;
+}
+
+export interface IInvoiceAmount {
+  id: number;
+  invoicedCost: number;
 }

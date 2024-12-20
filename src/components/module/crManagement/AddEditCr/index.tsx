@@ -51,6 +51,7 @@ const AddEditCr = () => {
   const { data: crData } = useCrDetail(Number(id));
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [invoicePaymentCycle, setInvoicePaymentCycle] = useState<string>('');
+  const [projectId, setProjectId] = useState<number>(project?.id);
 
   const [billingType, setBillingType] = useState<string>('');
   const [filteredInvoicePaymentCycle, setFilteredInvoicePaymentCycle] = useState<
@@ -84,13 +85,21 @@ const AddEditCr = () => {
     });
 
   const handleProjectChange = (projectId: number) => {
+    setProjectId(projectId);
+    const projectDetails = projectList?.find((item) => item.id === projectId);
     form.setFieldsValue({
-      clientId: projectList?.find((item) => item.id === projectId)?.client?.id,
-      clientCompanyName: projectList?.find((item) => item.id === projectId)?.client
-        ?.clientCompanyName,
-      billingType: projectList?.find((item) => item.id === projectId)?.billingType,
-      currency: projectList?.find((item) => item.id === projectId)?.currency
+      clientId: projectDetails?.client?.id,
+      clientCompanyName: projectDetails?.client?.clientCompanyName,
+      billingType: projectDetails?.billingType,
+      currency: projectDetails?.currency,
+      paymentTermDays: projectDetails?.paymentTermDays ?? null,
+      invoicePaymentCycle: projectDetails?.invoicePaymentCycle ?? null,
+      invoiceDay: projectDetails?.invoiceDay ?? null,
+      invoiceDate: projectDetails?.invoiceDate ? dayjs(projectDetails?.invoiceDate) : null
     });
+    setBillingType(projectDetails?.billingType || '');
+    setInvoicePaymentCycle(projectDetails?.invoicePaymentCycle || '');
+    setInvoicePaymentDropDown(projectDetails?.billingType || '');
   };
 
   const setInvoicePaymentDropDown = (value: string) => {
@@ -213,10 +222,15 @@ const AddEditCr = () => {
       clientId: project?.clientId,
       clientCompanyName: project?.client.clientCompanyName,
       currency: project?.currency,
-      billingType: project?.billingType
+      billingType: project?.billingType,
+      paymentTermDays: project?.paymentTermDays ?? null,
+      invoicePaymentCycle: project?.invoicePaymentCycle ?? null,
+      invoiceDay: project?.invoiceDay ?? null,
+      invoiceDate: project?.invoiceDate ? dayjs(project?.invoiceDate) : null
     });
-    setBillingType(project?.billingType ?? '');
-    setInvoicePaymentDropDown(project?.billingType ?? '');
+    setBillingType(project?.billingType);
+    setInvoicePaymentCycle(project?.invoicePaymentCycle);
+    setInvoicePaymentDropDown(project?.billingType);
   }, [project, form]);
 
   useEffect(() => {
@@ -406,7 +420,7 @@ const AddEditCr = () => {
               label="Billing Type"
               allowClear={true}
               optionLabel={BillingType}
-              disabled={!!project?.billingType}
+              disabled={!!project?.billingType || !!projectId}
               rules={[
                 {
                   required: true,
@@ -422,7 +436,7 @@ const AddEditCr = () => {
               label="Currency"
               allowClear={true}
               optionLabel={CurrencyType}
-              disabled={!!project?.currency}
+              disabled={!!project?.currency || !!projectId}
               rules={[
                 {
                   required: true,
@@ -490,6 +504,7 @@ const AddEditCr = () => {
                   label="Payment Term Days"
                   allowClear="allowClear"
                   size="middle"
+                  disabled={!!project?.paymentTermDays || !!projectId}
                   rules={[
                     () => ({
                       validator: (_: any, value: string) => {
@@ -520,6 +535,7 @@ const AddEditCr = () => {
                 placeholder="Select invoice payment cycle"
                 label="Invoice Payment Cycle"
                 allowClear={true}
+                disabled={!!project?.invoicePaymentCycle || !!projectId}
                 optionLabel={filteredInvoicePaymentCycle}
                 rules={[
                   {
@@ -540,6 +556,7 @@ const AddEditCr = () => {
                 label="Invoice Day"
                 allowClear={true}
                 size="middle"
+                disabled={!!project?.invoiceDate || !!projectId}
                 format={DATE_FORMAT}
                 rules={[
                   {
@@ -555,6 +572,7 @@ const AddEditCr = () => {
                 col={{ xs: 12 }}
                 name="invoiceDay"
                 placeholder="Select invoice day"
+                disabled={!!project?.invoiceDay || !!projectId}
                 label="Invoice Day"
                 allowClear={true}
                 optionLabel={InvoicePaymentCycleDay}

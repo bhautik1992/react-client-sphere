@@ -4,6 +4,7 @@ import { ICityReq, IStateReq } from 'services/api/country/types';
 import { ICrReq } from 'services/api/cr/types';
 import { IEmployeeReq } from 'services/api/employee/types';
 import { IInvoiceReq } from 'services/api/invoice/types';
+import { IPaymentReq } from 'services/api/payment/types';
 import { IProjectReq } from 'services/api/project/types';
 import { IVendorReq } from 'services/api/vendor/types';
 
@@ -140,5 +141,20 @@ export const invoiceKeys = {
   ],
   invoiceDetail: (id: number) => [`invoice-detail-${id}`],
   invoiceAdd: [`add-invoice`],
-  invoiceDelete: [`invoice-delete`]
+  invoiceDelete: [`invoice-delete`],
+  invoiceByProjectId: (id: number) => [`invoice-by-project-id-${id}`]
+};
+
+export const paymentKeys = {
+  paymentList: (data: IPaymentReq) => [
+    `payment-list`,
+    `${data?.limit}`,
+    `${data?.offset}`,
+    `${data?.search ?? ''}`,
+    `${data?.sortBy ?? ''}`,
+    `${data?.sortOrder ?? ''}`
+  ],
+  paymentDetail: (id: number) => [`payment-detail-${id}`],
+  paymentAdd: [`add-payment`],
+  paymentDelete: [`payment-delete`]
 };

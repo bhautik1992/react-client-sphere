@@ -314,7 +314,9 @@ const AddEditProject = () => {
             />
             <RenderDatePicker
               col={{ xs: 12 }}
-              // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(new Date())}
+              disabledDate={(currentDate: dayjs.Dayjs) =>
+                currentDate.isBefore(form.getFieldValue('startDate'))
+              }
               name="endDate"
               placeholder="Enter project end date"
               label="End Date"

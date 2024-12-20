@@ -1,10 +1,10 @@
 import { ButtonWrapper, TableWrapper } from './style';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Checkbox, Divider, Form, Input, Row, Table, message } from 'antd';
+import { Button, Checkbox, Divider, Form, Input, InputRef, Row, Table, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { RenderDatePicker, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
@@ -19,11 +19,11 @@ import {
   useDashboardProject
 } from 'services/hooks/dashboard';
 import { useAddInvoice, useInvoiceDetail } from 'services/hooks/invoice';
-import { dashboardKey, invoiceKeys } from 'services/hooks/queryKeys';
+import { crKeys, invoiceKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, COMPANY_EMAIL, ProjectStatusName } from 'utils/constants/enum';
+import { BillingType, COMPANY_EMAIL, CrStatusName, ProjectStatusName } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditInvoice = () => {
@@ -41,7 +41,7 @@ const AddEditInvoice = () => {
     []
   );
   const [crInvoiceAmount, setCrInvoiceAmount] = useState<ICrInvoiceAmt[]>([]);
-  const [isUpdateCrAmount, setIsUpdateCrAmount] = useState<boolean>(false);
+  const inputRefs = useRef<{ [key: number]: InputRef | null }>({});
 
   const { data: companyList } = useDashboardCompany();
   const companyListOption = companyList?.map((item) => {
@@ -79,7 +79,9 @@ const AddEditInvoice = () => {
 
   useEffect(() => {
     if (crList && crList.length > 0) {
-      const crListData = crList.filter((item) => item.isInvoiced === false);
+      const crListData = crList.filter(
+        (item) => item.isInvoiced === false && item.status === CrStatusName.Started
+      );
       setCrListData(crListData);
     }
   }, [crList]);
@@ -94,20 +96,49 @@ const AddEditInvoice = () => {
   };
 
   const onSubmit = (value: IAddInvoiceReq) => {
+    if (selectedCrIds.length === 0) {
+      message.error('There are no CRs pending for invoice.');
+      return;
+    }
     value.crIds = selectedCrIds;
-    value.isUpdateCrAmount = isUpdateCrAmount;
     value.crInvoiceAmount = crInvoiceAmount;
     return addInvoice(value);
   };
 
-  const handleCheckboxChange = (e: any, crId: number) => {
+  const setCrCostChange = (crId: number, newAmount: number) => {
+    setCrInvoiceAmount((prevData: ICrInvoiceAmt[]) => {
+      const updatedData = prevData.map((item) => {
+        if (item.id === crId) {
+          return { ...item, crCost: newAmount };
+        }
+        return item;
+      });
+      if (!updatedData.some((item) => item.id === crId)) {
+        updatedData.push({ id: crId, crCost: newAmount });
+      }
+      return updatedData;
+    });
+  };
+
+  const handleCheckboxChange = (e: any, cr: ICr, invoicedAmount: string) => {
+    const isChecked = e.target.checked;
     setSelectedCrIds((prevSelectedCrIds) => {
-      const isChecked = e.target.checked;
       const updatedCrIds = isChecked
-        ? [...prevSelectedCrIds, crId]
-        : prevSelectedCrIds.filter((id) => id !== crId);
+        ? [...prevSelectedCrIds, cr.id]
+        : prevSelectedCrIds.filter((id) => id !== cr.id);
       return updatedCrIds;
     });
+    if (isChecked) {
+      setCrCostChange(cr.id, +invoicedAmount);
+    } else {
+      const crInvoiceAmountUpdate = crInvoiceAmount.filter((item) => item.id !== cr.id);
+      setCrInvoiceAmount(crInvoiceAmountUpdate);
+    }
+  };
+
+  const handleCrCostChange = (e: React.ChangeEvent<HTMLInputElement>, crId: number) => {
+    const newAmount = +e.target.value;
+    setCrCostChange(crId, newAmount);
   };
 
   const addInvoice = (value: IAddInvoiceReq) => {
@@ -127,7 +158,7 @@ const AddEditInvoice = () => {
         // invalidate dashboard
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [dashboardKey.dashboardCount].some((key) => {
+            return [crKeys.crDetailByProductId(Number(projectId))].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -141,23 +172,6 @@ const AddEditInvoice = () => {
         message.error(err.message);
       }
     });
-  };
-
-  const handleCrCostChange = (e: React.ChangeEvent<HTMLInputElement>, crId: number) => {
-    const newAmount = +e.target.value;
-    setCrInvoiceAmount((prevData: ICrInvoiceAmt[]) => {
-      const updatedData = prevData.map((item) => {
-        if (item.id === crId) {
-          return { ...item, crCost: newAmount };
-        }
-        return item;
-      });
-      if (!updatedData.some((item) => item.id === crId)) {
-        updatedData.push({ id: crId, crCost: newAmount });
-      }
-      return updatedData;
-    });
-    setIsUpdateCrAmount(true);
   };
 
   useEffect(() => {
@@ -174,10 +188,10 @@ const AddEditInvoice = () => {
       clientId: invoiceData?.clientId ?? null,
       clientCompanyName: invoiceData?.client.clientCompanyName ?? null,
       projectId: invoiceData?.projectId ?? null,
-      amount: invoiceData?.amount ?? null,
+      additionalAmount: invoiceData?.additionalAmount ?? null,
       additionalChargeDesc: invoiceData?.additionalChargeDesc ?? null
     });
-  }, [invoiceData, form, companyList, isUpdateCrAmount, crInvoiceAmount]);
+  }, [invoiceData, form, companyList, crInvoiceAmount]);
 
   const crTableColumns: ColumnsType<ICr> = [
     {
@@ -186,7 +200,9 @@ const AddEditInvoice = () => {
       key: 'select',
       render: (_, record: ICr) => (
         <Checkbox
-          onChange={(e) => handleCheckboxChange(e, record.id)}
+          onChange={(e) =>
+            handleCheckboxChange(e, record, inputRefs.current[record.id]?.input?.value || '0')
+          }
           checked={selectedCrIds.includes(record.id)}
         />
       )
@@ -248,6 +264,7 @@ const AddEditInvoice = () => {
             defaultValue={record.crCost}
             disabled={isDisabled}
             onChange={(e) => handleCrCostChange(e, record.id)}
+            ref={(el) => (inputRefs.current[record.id] = el)}
           />
         );
       }
@@ -362,15 +379,15 @@ const AddEditInvoice = () => {
             <Divider orientation="left">Add Addition Charges</Divider>
             <RenderTextInput
               col={{ xs: 12 }}
-              name="amount"
-              placeholder="Enter amount"
+              name="additionalAmount"
+              placeholder="Enter Additional Amount"
               label="Amount"
               allowClear="allowClear"
               size="middle"
               onChange={(e: any) => {
                 const amt = parseFloat(e.target.value) || 0;
                 form.setFieldsValue({
-                  amount: amt
+                  additionalAmount: amt
                 });
               }}
             />

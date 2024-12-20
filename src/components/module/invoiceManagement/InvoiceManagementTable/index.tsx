@@ -108,7 +108,7 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'client.company.name',
       key: 'client.company.name',
       sorter: false,
-      render: (_, record: IInvoice) => <>{record?.client?.company?.name ?? '-'}</>
+      render: (_, record: IInvoice) => <>{record?.client?.clientCompanyName ?? '-'}</>
     },
     {
       title: 'Project',
@@ -146,18 +146,18 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       render: (_, record: IInvoice) => <>{record?.project?.projectCost ?? '-'}</>
     },
     {
-      title: 'Add charge',
+      title: 'Additional charge',
       dataIndex: 'addCharge',
       key: 'addCharge',
       sorter: false,
-      render: (_, record: IInvoice) => <>{record?.amount ?? '-'}</>
+      render: (_, record: IInvoice) => <>{record?.additionalAmount ?? '-'}</>
     },
     {
       title: 'Total Amount',
       dataIndex: 'totalAmount',
       key: 'totalAmount',
       sorter: false,
-      render: (_, record: IInvoice) => <>{record?.project?.projectCost ?? '-'}</>
+      render: (_, record: IInvoice) => <>{record?.amount ?? '-'}</>
     },
     {
       title: 'Currency',

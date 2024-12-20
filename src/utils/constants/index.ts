@@ -83,6 +83,13 @@ export const ApiEndPoints = {
     invoiceList: `invoice/list`,
     invoiceDetail: `invoice/get`,
     addInvoice: `invoice/create`,
-    deleteInvoice: `invoice/delete`
+    deleteInvoice: `invoice/delete`,
+    getInvoiceByProjectId: `invoice/getByProjectId`
+  },
+  payment: {
+    paymentList: `payment/list`,
+    paymentDetail: `payment/get`,
+    addPayment: `payment/create`,
+    deletePayment: `payment/delete`
   }
 };

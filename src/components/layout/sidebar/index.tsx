@@ -10,6 +10,7 @@ import EmployeeManagement from 'components/svg/EmployeeManagement';
 import ProjectManagement from 'components/svg/ProjectManagement';
 import Vendor from 'components/svg/Vendor';
 import Invoice from 'components/svg/invoice';
+import Payment from 'components/svg/payment';
 
 import { authStore } from 'services/store/auth';
 
@@ -28,7 +29,8 @@ const menuAccessByRole = {
     MenuPermissions.PROJECTS,
     MenuPermissions.PROJECT_CRS,
     MenuPermissions.INVOICES,
-    MenuPermissions.COMPANIES
+    MenuPermissions.COMPANIES,
+    MenuPermissions.PAYMENT
   ],
   [EmployeeRoleName.Sales_Manager]: [
     MenuPermissions.DASHBOARD,
@@ -101,6 +103,7 @@ const items = [
     <ProjectManagement />
   ),
   createMenuItem(ROUTES.invoiceManagement, 'Invoices', MenuPermissions.INVOICES, <Invoice />),
+  createMenuItem(ROUTES.paymentManagement, 'Payments', MenuPermissions.PAYMENT, <Payment />),
   createMenuItem(
     ROUTES.companyManagement,
     'Companies',
@@ -127,7 +130,7 @@ function compareLinkAndReturnKey(items: any, currentPath: any): any {
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState<boolean>(false);
 
   const { employeeData } = authStore.getState();
   const employeeRole = employeeData?.role || EmployeeRoleName.Trainee;
@@ -145,7 +148,7 @@ const Sidebar = () => {
       collapsible
       breakpoint="lg"
       collapsed={collapsed}
-      width={'260px'}
+      width={'230px'}
       collapsedWidth={60}
       onCollapse={(collapsed) => {
         setCollapsed(collapsed);

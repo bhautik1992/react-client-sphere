@@ -62,7 +62,8 @@ const AddEditInvoice = () => {
 
   const handleClientChange = (clientId: number) => {
     form.setFieldsValue({
-      clientCompanyName: clientList?.find((item) => item.id === clientId)?.clientCompanyName
+      clientCompanyName: clientList?.find((item) => item.id === clientId)?.clientCompanyName,
+      projectId: null
     });
     const filteredProjects = projectList
       ?.filter(
@@ -155,10 +156,19 @@ const AddEditInvoice = () => {
           }
         });
 
-        // invalidate dashboard
         queryClient.invalidateQueries({
           predicate: (query) => {
             return [crKeys.crDetailByProductId(Number(projectId))].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [invoiceKeys.invoiceByProjectId(Number(projectId))].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -201,7 +211,7 @@ const AddEditInvoice = () => {
       render: (_, record: ICr) => (
         <Checkbox
           onChange={(e) =>
-            handleCheckboxChange(e, record, inputRefs.current[record.id]?.input?.value || '0')
+            handleCheckboxChange(e, record, inputRefs.current[record.id]?.input?.value ?? '0')
           }
           checked={selectedCrIds.includes(record.id)}
         />

@@ -58,8 +58,10 @@ const ViewInvoice = () => {
               <p>{invoiceData?.dueDate ? dayjs(invoiceData?.dueDate).format(DATE_FORMAT) : '-'}</p>
             </Col>
             <Col xs={6}>
-              <h4>Amount</h4>
-              <p>{invoiceData?.amount ?? '-'}</p>
+              <h4>Total Amount</h4>
+              <p>
+                {(Number(invoiceData?.amount) || 0) + (Number(invoiceData?.additionalAmount) || 0)}
+              </p>
             </Col>
             <Col xs={6}>
               <h4>Addition charges Desc.</h4>

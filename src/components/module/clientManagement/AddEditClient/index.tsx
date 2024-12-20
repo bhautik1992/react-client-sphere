@@ -62,6 +62,7 @@ const AddEditClient = () => {
   const handleCountryChange = (countryCode: string) => {
     setCountryCode(countryCode);
     setStateOptions([]);
+    form.setFieldsValue({ stateCode: '' });
   };
 
   // State changes
@@ -82,6 +83,7 @@ const AddEditClient = () => {
   const handleStateChange = (stateCode: string) => {
     setStateCode(stateCode);
     setCityOptions([]);
+    form.setFieldsValue({ cityCode: '' });
   };
 
   const handleClose = () => {

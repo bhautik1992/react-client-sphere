@@ -316,6 +316,26 @@ const invoiceRoute = [
   }
 ];
 
+const paymentRoute = [
+  {
+    path: ROUTES.paymentManagement,
+    component: () => import('../pages/PaymentManagement'),
+    roles: [EmployeeRoleName.Admin],
+    children: [
+      {
+        path: `${ROUTES.paymentView}/:id`,
+        component: () => import('../components/module/paymentManagement/ViewPayment'),
+        roles: [EmployeeRoleName.Admin]
+      },
+      {
+        path: `${ROUTES.paymentAdd}`,
+        component: () => import('../components/module/paymentManagement/AddEditPayment'),
+        roles: [EmployeeRoleName.Admin]
+      }
+    ]
+  }
+];
+
 const routesConfig = [
   ...pageNotFoundRoute,
   ...changePasswordRoute,
@@ -328,7 +348,8 @@ const routesConfig = [
   ...vendorRoute,
   ...projectRoute,
   ...projectCrRoute,
-  ...invoiceRoute
+  ...invoiceRoute,
+  ...paymentRoute
 ];
 
 export default routesConfig;

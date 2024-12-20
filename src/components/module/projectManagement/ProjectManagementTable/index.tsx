@@ -21,7 +21,7 @@ import { CommonTable } from 'components/common/Table';
 
 import { IProject, IProjectReq } from 'services/api/project/types';
 import { useDeleteProject, useProjectList, useProjectStatus } from 'services/hooks/project';
-import { projectKeys } from 'services/hooks/queryKeys';
+import { dashboardKey, projectKeys } from 'services/hooks/queryKeys';
 import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
@@ -99,6 +99,16 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         // set status in client detail
         queryClient.setQueryData<IProject>(projectKeys.projectDetail(id ?? 0), () => {
           return { ...res } as unknown as IProject;
+        });
+
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [dashboardKey.dashboardProject].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
         });
       },
       onError: (err: IApiError) => {

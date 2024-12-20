@@ -42,5 +42,9 @@ export const ROUTES = {
   invoiceView: `/invoice-management/view-invoice`,
   invoiceAdd: `/invoice-management/add-invoice`,
 
+  paymentManagement: `/payment-management`,
+  paymentView: `/payment-management/view-payment`,
+  paymentAdd: `/payment-management/add-payment`,
+
   dynamicPath: (path: string) => `/static-path/${path}`
 };

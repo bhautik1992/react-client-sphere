@@ -40,3 +40,15 @@ export const useDeleteInvoice = () => {
     mutationKey: invoiceKeys.invoiceDelete
   });
 };
+
+export const useInvoiceByProjectId = (id: number) => {
+  return useFetch({
+    queryFn: () => invoiceAPI.getInvoiceByProjectId(id),
+    queryKey: invoiceKeys.invoiceByProjectId(id),
+    queryOptions: {
+      staleTime: Infinity,
+      retry: false,
+      enabled: Boolean(id)
+    }
+  });
+};

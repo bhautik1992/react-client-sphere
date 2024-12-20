@@ -47,5 +47,16 @@ export const invoiceAPI = {
       .catch((error) => {
         throw error?.response?.data;
       });
+  },
+
+  async getInvoiceByProjectId(id: number): Promise<IInvoice[]> {
+    return apiInstance
+      .get(`${ApiEndPoints.invoice.getInvoiceByProjectId}/${id}`)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
   }
 };

@@ -75,6 +75,14 @@ export enum PaymentStatusName {
   PartialPaid = 'partial_paid'
 }
 
+export enum PaymentMethodName {
+  Payoneer = 'payoneer',
+  Wire_transfer = 'wire_transfer',
+  Bank_transfer = 'bank_transfer',
+  Wise = 'wise',
+  Paypal = 'paypal'
+}
+
 export const EmployeeRole = [
   {
     value: EmployeeRoleName.Admin,
@@ -278,5 +286,28 @@ export const InvoicePaymentCycleDay = [
   {
     value: InvoiceDayName.Friday,
     label: 'Friday'
+  }
+];
+
+export const PaymentMethod = [
+  {
+    value: PaymentMethodName.Payoneer,
+    label: 'Payoneer'
+  },
+  {
+    value: PaymentMethodName.Wire_transfer,
+    label: 'Wire Transfer'
+  },
+  {
+    value: PaymentMethodName.Bank_transfer,
+    label: 'Bank Transfer'
+  },
+  {
+    value: PaymentMethodName.Wise,
+    label: 'Wise'
+  },
+  {
+    value: PaymentMethodName.Paypal,
+    label: 'PayPal'
   }
 ];

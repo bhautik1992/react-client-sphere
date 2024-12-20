@@ -34,6 +34,10 @@ export interface IDashboardProjectRes {
   status: string;
   billingType: string;
   currency: string;
+  paymentTermDays: number;
+  invoicePaymentCycle: string;
+  invoiceDay: string;
+  invoiceDate: string;
   client: Client;
 }
 

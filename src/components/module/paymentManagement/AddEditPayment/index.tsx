@@ -73,7 +73,8 @@ const AddEditPayment = () => {
 
   const handleClientChange = (clientId: number) => {
     form.setFieldsValue({
-      clientCompanyName: clientList?.find((item) => item.id === clientId)?.clientCompanyName
+      clientCompanyName: clientList?.find((item) => item.id === clientId)?.clientCompanyName,
+      projectId: null
     });
     const filteredProjects = projectList
       ?.filter(
@@ -214,7 +215,7 @@ const AddEditPayment = () => {
       render: (_, record: IInvoice) => (
         <Checkbox
           onChange={(e) =>
-            handleCheckboxChange(e, record, inputRefs.current[record.id]?.input?.value || '0')
+            handleCheckboxChange(e, record, inputRefs.current[record.id]?.input?.value ?? '0')
           }
           checked={selectedInvoiceIds.includes(record.id)}
         />

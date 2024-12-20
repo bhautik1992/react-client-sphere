@@ -157,7 +157,7 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'totalAmount',
       key: 'totalAmount',
       sorter: false,
-      render: (_, record: IInvoice) => <>{record?.amount ?? '-'}</>
+      render: (_, record: IInvoice) => <>{+record?.amount + +record?.additionalAmount}</>
     },
     {
       title: 'Currency',

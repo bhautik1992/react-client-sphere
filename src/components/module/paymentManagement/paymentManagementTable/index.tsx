@@ -226,7 +226,8 @@ const PaymentManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         dataIndex: 'totalAmount',
         key: 'totalAmount',
         render: (_, invoice) => {
-          const totalAmount = (invoice.amount ?? 0) + (invoice.additionalAmount ?? 0);
+          const totalAmount =
+            (Number(invoice.amount) || 0) + (Number(invoice.additionalAmount) || 0);
           return totalAmount;
         }
       }

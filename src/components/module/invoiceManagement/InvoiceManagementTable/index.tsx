@@ -132,6 +132,22 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       )
     },
     {
+      title: 'Milestone(s)',
+      dataIndex: 'milestones',
+      key: 'milestones',
+      sorter: false,
+      width: 100,
+      render: (_, record: IInvoice) => (
+        <div>
+          {record?.project?.milestones?.length > 0
+            ? record?.project.milestones.map((milestone) => (
+                <div key={milestone.id}>{' - ' + milestone.name}</div>
+              ))
+            : '-'}
+        </div>
+      )
+    },
+    {
       title: 'Account Manager',
       dataIndex: 'accountManager',
       key: 'accountManager',

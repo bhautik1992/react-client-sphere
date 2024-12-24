@@ -3,6 +3,7 @@ import { Key } from 'react';
 import { IClient } from '../client/types';
 import { ICompany } from '../company/types';
 import { IEmployee } from '../employee/types';
+import { IAddMileStoneReq, IMileStone } from '../mileStone/types';
 
 interface IProject {
   id: number;
@@ -32,6 +33,7 @@ interface IProject {
   invoicePaymentCycle: string;
   invoiceDay: string;
   invoiceDate: string;
+  milestones: IMileStone[];
   createdAt: string;
   updatedAt: string;
 }
@@ -66,6 +68,7 @@ export interface IAddProjectReq {
   invoicePaymentCycle: string;
   invoiceDay: string;
   invoiceDate: string;
+  milestones: IAddMileStoneReq[];
 }
 
 export interface IProjectRes {

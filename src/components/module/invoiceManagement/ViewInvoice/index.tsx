@@ -251,6 +251,48 @@ const ViewInvoice = () => {
               ))}
             </>
           )}
+          {invoiceData?.project?.milestones && invoiceData.project.milestones.length > 0 && (
+            <>
+              <Divider orientation="left">Milestone Details</Divider>
+              {invoiceData.project.milestones.map((milestone) => (
+                <CRDetailWrapper key={milestone?.id}>
+                  <Row className="invoiceRow">
+                    <Col xs={6}>
+                      <h4>Milestone Name</h4>
+                      <p>{milestone.name}</p>
+                    </Col>
+                    <Col xs={6}>
+                      <h4>Start Date</h4>
+                      <p>
+                        {milestone.startDate ? dayjs(milestone.startDate).format(DATE_FORMAT) : '-'}
+                      </p>
+                    </Col>
+                    <Col xs={6}>
+                      <h4>End Date</h4>
+                      <p>
+                        {milestone.endDate ? dayjs(milestone.endDate).format(DATE_FORMAT) : '-'}
+                      </p>
+                    </Col>
+                  </Row>
+                  <Row className="invoiceRow">
+                    <Col xs={6}>
+                      <h4>PIS Hours</h4>
+                      <p>{milestone.PISHours}</p>
+                    </Col>
+                    <Col xs={6}>
+                      <h4>PMS Hours</h4>
+                      <p>{milestone.PMSHours ?? '-'}</p>
+                    </Col>
+                    <Col xs={6}>
+                      <h4>Cost</h4>
+                      <p>{milestone.cost ?? '-'}</p>
+                    </Col>
+                  </Row>
+                  <Divider></Divider>
+                </CRDetailWrapper>
+              ))}
+            </>
+          )}
         </DetailWrapper>
       </div>
     </>

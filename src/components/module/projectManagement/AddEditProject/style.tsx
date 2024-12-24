@@ -19,3 +19,14 @@ export const Wrapper = styled.div`
     }
   }
 `;
+
+export const MileStoneWrapper = styled.div`
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 35px;
+  .addMileStone {
+    margin-left: 20px;
+  }
+`;

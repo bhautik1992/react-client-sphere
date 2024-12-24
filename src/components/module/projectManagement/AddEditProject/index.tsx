@@ -1,4 +1,4 @@
-import { ButtonWrapper } from './style';
+import { ButtonWrapper, MileStoneWrapper } from './style';
 
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Divider, Form, Row, message } from 'antd';
@@ -12,8 +12,10 @@ import {
   RenderSelectInput,
   RenderTextInput
 } from 'components/common/FormField';
+import AddEditMileStoneModal from 'components/common/Modal/AddMileStoneModal';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
+import { IAddMileStoneReq } from 'services/api/mileStone/types';
 import { IAddProjectReq, IProject, IProjectReq } from 'services/api/project/types';
 import {
   useDashboardClient,
@@ -35,6 +37,7 @@ import {
   InvoicePaymentCycleName,
   ProjectStatus
 } from 'utils/constants/enum';
+import pattern from 'utils/constants/pattern';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditProject = () => {
@@ -46,6 +49,7 @@ const AddEditProject = () => {
   const { mutate: editMutate, isLoading: isEditLoading } = useEditProject();
   const { data: projectData } = useProjectDetail(Number(id));
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const [billingType, setBillingType] = useState<string>('');
   const [filteredInvoicePaymentCycle, setFilteredInvoicePaymentCycle] = useState<
@@ -140,7 +144,16 @@ const AddEditProject = () => {
     navigate(ROUTES.projectManagement);
   };
 
+  const handleMileStoneSubmit = (values: IAddMileStoneReq[]) => {
+    if (values) {
+      form.setFieldsValue({
+        milestones: values
+      });
+    }
+  };
+
   const onSubmit = (value: IAddProjectReq) => {
+    value.milestones = form.getFieldValue('milestones') || null;
     return projectData?.id ? editProject(value) : addProject(value);
   };
 
@@ -151,6 +164,16 @@ const AddEditProject = () => {
         queryClient.invalidateQueries({
           predicate: (query) => {
             return [projectKeys.projectList({} as IProjectReq)].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [projectKeys.projectDetail(projectData?.id ?? 0)].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -251,7 +274,8 @@ const AddEditProject = () => {
       paymentTermDays: projectData?.paymentTermDays ?? null,
       invoicePaymentCycle: projectData?.invoicePaymentCycle ?? null,
       invoiceDay: projectData?.invoiceDay ?? null,
-      invoiceDate: projectData?.invoiceDate ? dayjs(projectData?.invoiceDate) : null
+      invoiceDate: projectData?.invoiceDate ? dayjs(projectData?.invoiceDate) : null,
+      milestones: projectData?.milestones ?? null
     });
   }, [projectData, form, companyList]);
 
@@ -483,7 +507,7 @@ const AddEditProject = () => {
               rules={[
                 () => ({
                   validator: (_: any, value: string) => {
-                    const regex = /^[0-9]*$/;
+                    const regex = pattern.regex;
                     if (!regex.test(value)) {
                       return Promise.reject(new Error('Please enter valid project hours'));
                     }
@@ -505,7 +529,7 @@ const AddEditProject = () => {
             />
             {billingType && (
               <>
-                <Divider orientation="left">Project Payment Cycle</Divider>
+                <Divider orientation="left">Payment Cycle</Divider>
                 <RenderTextInput
                   col={{ xs: 12 }}
                   name="paymentTermDays"
@@ -516,7 +540,7 @@ const AddEditProject = () => {
                   rules={[
                     () => ({
                       validator: (_: any, value: string) => {
-                        const regex = /^[0-9]*$/;
+                        const regex = pattern.regex;
                         if (!regex.test(value)) {
                           return Promise.reject(new Error('Please enter valid payment term days'));
                         }
@@ -590,6 +614,22 @@ const AddEditProject = () => {
               />
             )}
           </Row>
+          <Row>
+            {billingType && billingType === BillingTypeName.Fixed && (
+              <MileStoneWrapper>
+                <span>Milestone :</span>
+                <Button
+                  type="primary"
+                  className="addMileStone"
+                  onClick={() => {
+                    setIsOpen(true);
+                  }}
+                >
+                  {projectData?.milestones?.length ? 'Edit Milestone' : 'Add Milestone'}
+                </Button>
+              </MileStoneWrapper>
+            )}
+          </Row>
           <Row justify={'center'}>
             <ButtonWrapper>
               <Button onClick={handleClose}>Cancel</Button>
@@ -606,6 +646,16 @@ const AddEditProject = () => {
           </Row>
         </Form>
       </div>
+      {isOpen && (
+        <AddEditMileStoneModal
+          isOpen={Boolean(isOpen)}
+          setIsOpen={(flag) => setIsOpen(!!flag)}
+          mileStoneData={form.getFieldValue('milestones') || []}
+          projectStartDate={form.getFieldValue('startDate')}
+          projectId={projectData?.id ?? 0}
+          onSubmitSuccess={handleMileStoneSubmit}
+        />
+      )}
     </>
   );
 };

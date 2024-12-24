@@ -91,5 +91,8 @@ export const ApiEndPoints = {
     paymentDetail: `payment/get`,
     addPayment: `payment/create`,
     deletePayment: `payment/delete`
+  },
+  milestone: {
+    deleteMilestone: `milestone/delete`
   }
 };

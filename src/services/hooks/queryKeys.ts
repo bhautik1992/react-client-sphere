@@ -158,3 +158,7 @@ export const paymentKeys = {
   paymentAdd: [`add-payment`],
   paymentDelete: [`payment-delete`]
 };
+
+export const milestoneKeys = {
+  milestoneDelete: [`milestone-delete`]
+};

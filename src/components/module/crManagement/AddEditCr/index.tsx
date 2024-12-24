@@ -37,6 +37,7 @@ import {
   InvoicePaymentCycleName,
   ProjectStatusName
 } from 'utils/constants/enum';
+import pattern from 'utils/constants/pattern';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditCr = () => {
@@ -97,9 +98,9 @@ const AddEditCr = () => {
       invoiceDay: projectDetails?.invoiceDay ?? null,
       invoiceDate: projectDetails?.invoiceDate ? dayjs(projectDetails?.invoiceDate) : null
     });
-    setBillingType(projectDetails?.billingType || '');
-    setInvoicePaymentCycle(projectDetails?.invoicePaymentCycle || '');
-    setInvoicePaymentDropDown(projectDetails?.billingType || '');
+    setBillingType(projectDetails?.billingType ?? '');
+    setInvoicePaymentCycle(projectDetails?.invoicePaymentCycle ?? '');
+    setInvoicePaymentDropDown(projectDetails?.billingType ?? '');
   };
 
   const setInvoicePaymentDropDown = (value: string) => {
@@ -474,7 +475,7 @@ const AddEditCr = () => {
               rules={[
                 () => ({
                   validator: (_: any, value: string) => {
-                    const regex = /^[0-9]*$/;
+                    const regex = pattern.regex;
                     if (!regex.test(value)) {
                       return Promise.reject(new Error('Please enter valid cr hours'));
                     }
@@ -508,7 +509,7 @@ const AddEditCr = () => {
                   rules={[
                     () => ({
                       validator: (_: any, value: string) => {
-                        const regex = /^[0-9]*$/;
+                        const regex = pattern.regex;
                         if (!regex.test(value)) {
                           return Promise.reject(new Error('Please enter valid payment term days'));
                         }

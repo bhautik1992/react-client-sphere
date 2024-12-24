@@ -1,7 +1,7 @@
 import { Wrapper } from './style';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,14 +24,26 @@ const PaymentManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [deletedPayment, setDeletedPayment] = useState<boolean>(false);
 
   const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IPaymentReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: ''
+    sortOrder: '',
+    deletedPayment
   });
+
+  const handleChange = (value: string) => {
+    const deleted = value === 'deleted';
+    setDeletedPayment(deleted);
+    setArgs((prev) => ({
+      ...prev,
+      deletedPayment: deleted,
+      offset: 0
+    }));
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -54,6 +66,10 @@ const PaymentManagement = () => {
                 onChange={onChange}
               />
             </Form>
+            <Select defaultValue="all" style={{ width: 150 }} onChange={handleChange}>
+              <Select.Option value="all">All Payments</Select.Option>
+              <Select.Option value="deleted">Deleted Payments</Select.Option>
+            </Select>
             <Button type="primary" onClick={() => navigate(ROUTES.paymentAdd)}>
               Add Payment
             </Button>

@@ -259,82 +259,87 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: IProject) => (
-        <div className="d-flex flex-row">
-          {record?.status === ProjectStatusName.Started && (
-            <Tooltip title="Add Cr" placement="top" trigger="hover">
-              <Button
-                type="text"
-                size="small"
-                className="cta_btn table_cta_btn"
-                icon={<PlusOutlined />}
-                onClick={() => {
-                  navigate(`${ROUTES.crAdd}`, {
-                    state: { project: record }
-                  });
-                }}
-              />
-            </Tooltip>
-          )}
-          <Tooltip title="View project" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.projectView}/${record?.id}`)}
-            />
-          </Tooltip>
-          <Tooltip title="Mark as completed" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<CheckOutlined />}
-              onClick={() => handleMarkAsCompleted(record?.id)}
-            />
-          </Tooltip>
-          <Tooltip title="On hold" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<PauseOutlined />}
-              onClick={() => handleMarkAsPending(record?.id)}
-            />
-          </Tooltip>
-          <Tooltip title="Edit project" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EditOutlined />}
-              onClick={() => {
-                navigate(`${ROUTES.projectEdit}/${record?.id}`);
-              }}
-            />
-          </Tooltip>
-          {(employeeData?.role === EmployeeRoleName.Admin ||
-            employeeData?.role === EmployeeRoleName.Sales_Executive ||
-            employeeData?.role === EmployeeRoleName.Sales_Manager) && (
-            <Tooltip title="Delete project" placement="top" trigger="hover">
-              <CommonModal
-                title="Delete"
-                content="Are you sure delete this project?"
-                type="confirm"
-                onConfirm={() => handleDeleteModal(record?.id)}
-              >
+      render: (_, record: IProject) => {
+        if (record?.deletedAt) {
+          return '-';
+        }
+        return (
+          <div className="d-flex flex-row">
+            {record?.status === ProjectStatusName.Started && (
+              <Tooltip title="Add Cr" placement="top" trigger="hover">
                 <Button
                   type="text"
                   size="small"
                   className="cta_btn table_cta_btn"
-                  icon={<DeleteOutlined />}
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    navigate(`${ROUTES.crAdd}`, {
+                      state: { project: record }
+                    });
+                  }}
                 />
-              </CommonModal>
+              </Tooltip>
+            )}
+            <Tooltip title="View project" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EyeOutlined />}
+                onClick={() => navigate(`${ROUTES.projectView}/${record?.id}`)}
+              />
             </Tooltip>
-          )}
-        </div>
-      )
+            <Tooltip title="Mark as completed" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<CheckOutlined />}
+                onClick={() => handleMarkAsCompleted(record?.id)}
+              />
+            </Tooltip>
+            <Tooltip title="On hold" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<PauseOutlined />}
+                onClick={() => handleMarkAsPending(record?.id)}
+              />
+            </Tooltip>
+            <Tooltip title="Edit project" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  navigate(`${ROUTES.projectEdit}/${record?.id}`);
+                }}
+              />
+            </Tooltip>
+            {(employeeData?.role === EmployeeRoleName.Admin ||
+              employeeData?.role === EmployeeRoleName.Sales_Executive ||
+              employeeData?.role === EmployeeRoleName.Sales_Manager) && (
+              <Tooltip title="Delete project" placement="top" trigger="hover">
+                <CommonModal
+                  title="Delete"
+                  content="Are you sure delete this project?"
+                  type="confirm"
+                  onConfirm={() => handleDeleteModal(record?.id)}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    className="cta_btn table_cta_btn"
+                    icon={<DeleteOutlined />}
+                  />
+                </CommonModal>
+              </Tooltip>
+            )}
+          </div>
+        );
+      }
     }
   ];
 

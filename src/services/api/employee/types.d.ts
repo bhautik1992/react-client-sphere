@@ -14,8 +14,10 @@ export interface IEmployee {
   reportingPersonId: number;
   reportingPerson: IEmployee;
   employeeCode: string;
+  createdBy: number;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
 }
 
 export interface IEmployeeRes {
@@ -29,6 +31,7 @@ export interface IEmployeeReq {
   search?: string;
   sortOrder?: string;
   sortBy?: Key;
+  deletedEmployee?: boolean;
 }
 
 export interface IAddEmployeeReq {

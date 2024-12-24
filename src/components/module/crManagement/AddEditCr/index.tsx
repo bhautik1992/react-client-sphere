@@ -283,71 +283,6 @@ const AddEditCr = () => {
 
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">
           <Row gutter={[0, 30]}>
-            <Divider orientation="left">Cr Information</Divider>
-            <RenderTextInput
-              col={{ xs: 12 }}
-              name="name"
-              placeholder="Enter cr name"
-              label="Name"
-              allowClear="allowClear"
-              size="middle"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter cr name'
-                }
-              ]}
-            />
-            <RenderTextInput
-              col={{ xs: 12 }}
-              name="description"
-              placeholder="Enter cr description"
-              label="Description"
-              allowClear="allowClear"
-              size="middle"
-            />
-            <RenderDatePicker
-              col={{ xs: 12 }}
-              disabledDate={(currentDate: dayjs.Dayjs) =>
-                currentDate.isBefore(new Date(project?.startDate))
-              }
-              name="startDate"
-              placeholder="Enter cr start date"
-              label="Start Date"
-              allowClear="allowClear"
-              size="middle"
-              format={DATE_FORMAT}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select cr start date'
-                }
-              ]}
-            />
-            <RenderDatePicker
-              col={{ xs: 12 }}
-              // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(new Date())}
-              name="endDate"
-              placeholder="Enter cr end date"
-              label="End Date"
-              allowClear="allowClear"
-              size="middle"
-              format={DATE_FORMAT}
-            />
-            <RenderSelectInput
-              col={{ xs: 12 }}
-              name="status"
-              placeholder="Select cr status"
-              label="Status"
-              allowClear={true}
-              optionLabel={CrStatus}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select cr status'
-                }
-              ]}
-            />
             <Divider orientation="left">Company Information</Divider>
             <RenderSelectInput
               col={{ xs: 12 }}
@@ -412,6 +347,71 @@ const AddEditCr = () => {
                 setIsChecked(e.target.checked);
                 form.setFieldsValue({ isInternalCr: e.target.checked });
               }}
+            />
+            <Divider orientation="left">Cr Information</Divider>
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="name"
+              placeholder="Enter cr name"
+              label="Name"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter cr name'
+                }
+              ]}
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="description"
+              placeholder="Enter cr description"
+              label="Description"
+              allowClear="allowClear"
+              size="middle"
+            />
+            <RenderDatePicker
+              col={{ xs: 12 }}
+              disabledDate={(currentDate: dayjs.Dayjs) =>
+                currentDate.isBefore(new Date(project?.startDate))
+              }
+              name="startDate"
+              placeholder="Enter cr start date"
+              label="Start Date"
+              allowClear="allowClear"
+              size="middle"
+              format={DATE_FORMAT}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select cr start date'
+                }
+              ]}
+            />
+            <RenderDatePicker
+              col={{ xs: 12 }}
+              // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(new Date())}
+              name="endDate"
+              placeholder="Enter cr end date"
+              label="End Date"
+              allowClear="allowClear"
+              size="middle"
+              format={DATE_FORMAT}
+            />
+            <RenderSelectInput
+              col={{ xs: 12 }}
+              name="status"
+              placeholder="Select cr status"
+              label="Status"
+              allowClear={true}
+              optionLabel={CrStatus}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select cr status'
+                }
+              ]}
             />
             <Divider orientation="left">Cr Cost Information</Divider>
             <RenderSelectInput

@@ -26,6 +26,7 @@ const CrManagement = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
   const [isInternalCr, setIsInternalCr] = useState<boolean>(false);
+  const [deletedCr, setDeletedCr] = useState<boolean>(false);
   const { mutate: exportCrs } = useExportCrs();
 
   const searchDebounce = useDebounce(searchValue);
@@ -34,13 +35,16 @@ const CrManagement = () => {
     offset: 0,
     sortBy: '',
     sortOrder: '',
-    isInternalCr
+    isInternalCr,
+    deletedCr
   });
 
   const handleChange = (value: string) => {
+    const deleted = value === 'deleted';
+    setDeletedCr(deleted);
     const internal = value === 'internal';
     setIsInternalCr(internal);
-    setArgs((prev) => ({ ...prev, isInternalCr: internal, offset: 0 }));
+    setArgs((prev) => ({ ...prev, isInternalCr: internal, deleteCr: deleted, offset: 0 }));
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +75,7 @@ const CrManagement = () => {
             <Select defaultValue="all" style={{ width: 100 }} onChange={handleChange}>
               <Select.Option value="all">All CRs</Select.Option>
               <Select.Option value="internal">Internal CRs</Select.Option>
+              <Select.Option value="deleted">Deleted CRs</Select.Option>
             </Select>
             <Button type="primary" onClick={handleExport}>
               Export

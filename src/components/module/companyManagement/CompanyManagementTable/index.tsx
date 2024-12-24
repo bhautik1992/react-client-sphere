@@ -98,46 +98,51 @@ const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: ICompany) => (
-        <>
-          <Tooltip title="View company" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.companyView}/${record?.id}`)}
-            />
-          </Tooltip>
-          <Tooltip title="Edit company" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EditOutlined />}
-              onClick={() => {
-                setIsOpen(true);
-                setCompanyData(record);
-              }}
-            />
-          </Tooltip>
-          <Tooltip title="Delete company" placement="top" trigger="hover">
-            <CommonModal
-              title="Delete"
-              content="Are you sure delete this company?"
-              type="confirm"
-              onConfirm={() => handleDeleteModal(record?.id)}
-            >
+      render: (_, record: ICompany) => {
+        if (record?.deletedAt) {
+          return '-';
+        }
+        return (
+          <>
+            <Tooltip title="View company" placement="top" trigger="hover">
               <Button
                 type="text"
                 size="small"
                 className="cta_btn table_cta_btn"
-                icon={<DeleteOutlined />}
+                icon={<EyeOutlined />}
+                onClick={() => navigate(`${ROUTES.companyView}/${record?.id}`)}
               />
-            </CommonModal>
-          </Tooltip>
-        </>
-      )
+            </Tooltip>
+            <Tooltip title="Edit company" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  setIsOpen(true);
+                  setCompanyData(record);
+                }}
+              />
+            </Tooltip>
+            <Tooltip title="Delete company" placement="top" trigger="hover">
+              <CommonModal
+                title="Delete"
+                content="Are you sure delete this company?"
+                type="confirm"
+                onConfirm={() => handleDeleteModal(record?.id)}
+              >
+                <Button
+                  type="text"
+                  size="small"
+                  className="cta_btn table_cta_btn"
+                  icon={<DeleteOutlined />}
+                />
+              </CommonModal>
+            </Tooltip>
+          </>
+        );
+      }
     }
   ];
 

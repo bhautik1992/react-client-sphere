@@ -26,12 +26,20 @@ const ProjectManagement = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
   const [isInternalProject, setIsInternalProject] = useState<boolean>(false);
+  const [deletedProject, setDeletedProject] = useState<boolean>(false);
   const { mutate: exportProjects } = useExportProjects();
 
   const handleChange = (value: string) => {
+    const deleted = value === 'deleted';
+    setDeletedProject(deleted);
     const internal = value === 'internal';
     setIsInternalProject(internal);
-    setArgs((prev) => ({ ...prev, isInternalProject: internal, offset: 0 }));
+    setArgs((prev) => ({
+      ...prev,
+      isInternalProject: internal,
+      deleteProject: deleted,
+      offset: 0
+    }));
   };
 
   const searchDebounce = useDebounce(searchValue);
@@ -40,7 +48,8 @@ const ProjectManagement = () => {
     offset: 0,
     sortBy: '',
     sortOrder: '',
-    isInternalProject
+    isInternalProject,
+    deletedProject
   });
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +80,7 @@ const ProjectManagement = () => {
             <Select defaultValue="all" style={{ width: 120 }} onChange={handleChange}>
               <Select.Option value="all">All Projects</Select.Option>
               <Select.Option value="internal">Internal Projects</Select.Option>
+              <Select.Option value="deleted">Deleted Projects</Select.Option>
             </Select>
             <Button type="primary" onClick={handleExport}>
               Export

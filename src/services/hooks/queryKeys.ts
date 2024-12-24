@@ -22,7 +22,8 @@ export const clientKeys = {
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`
+    `${data?.sortOrder ?? ''}`,
+    `${data?.deletedClient ?? ''}`
   ],
   clientDetail: (id: number) => [`client-detail-${id}`],
   clientStatus: [`client-status`],
@@ -38,7 +39,8 @@ export const vendorKeys = {
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`
+    `${data?.sortOrder ?? ''}`,
+    `${data?.deletedVendor ?? ''}`
   ],
   vendorDetail: (id: number) => [`vendor-detail-${id}`],
   vendorAdd: [`add-vendor`],
@@ -54,7 +56,8 @@ export const projectKeys = {
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
-    `${data?.isInternalProject ?? ''}`
+    `${data?.isInternalProject ?? ''}`,
+    `${data?.deletedProject ?? ''}`
   ],
   projectDetail: (id: number) => [`project-detail-${id}`],
   projectAdd: [`add-project`],
@@ -71,7 +74,8 @@ export const crKeys = {
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
-    `${data?.isInternalCr ?? ''}`
+    `${data?.isInternalCr ?? ''}`,
+    `${data?.deletedCr ?? ''}`
   ],
   crDetail: (id: number) => [`cr-detail-${id}`],
   crAdd: [`add-cr`],
@@ -88,7 +92,8 @@ export const companyKeys = {
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`
+    `${data?.sortOrder ?? ''}`,
+    `${data?.deletedCompany ?? ''}`
   ],
   companyDetail: (id: number) => [`company-detail-${id}`],
   companyDelete: [`company-delete`],
@@ -122,7 +127,8 @@ export const employeeKeys = {
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`
+    `${data?.sortOrder ?? ''}`,
+    `${data?.deletedEmployee ?? ''}`
   ],
   employeeDetail: (id: number) => [`employee-detail-${id}`],
   employeeDelete: [`employee-delete`],
@@ -137,7 +143,8 @@ export const invoiceKeys = {
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`
+    `${data?.sortOrder ?? ''}`,
+    `${data?.deletedInvoice ?? ''}`
   ],
   invoiceDetail: (id: number) => [`invoice-detail-${id}`],
   invoiceAdd: [`add-invoice`],
@@ -152,7 +159,8 @@ export const paymentKeys = {
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`
+    `${data?.sortOrder ?? ''},
+    ${data?.deletedPayment ?? ''}`
   ],
   paymentDetail: (id: number) => [`payment-detail-${id}`],
   paymentAdd: [`add-payment`],

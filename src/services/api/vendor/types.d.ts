@@ -17,6 +17,9 @@ export interface IVendor {
   cityName: string;
   skypeId: string;
   website: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }
 
 export interface IVendorReq {
@@ -25,6 +28,7 @@ export interface IVendorReq {
   search?: string;
   sortOrder?: Key;
   sortBy?: Key;
+  deletedVendor?: boolean;
 }
 
 export interface IAddVendorReq {

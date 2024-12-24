@@ -187,47 +187,52 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: IInvoice) => (
-        <div className="d-flex flex-row">
-          <Tooltip title="View invoice" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.invoiceView}/${record?.id}`)}
-            />
-          </Tooltip>
-          <Tooltip title="download invoice" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<DownloadOutlined />}
-              onClick={() => handleDownloadInvoice(record?.id)}
-            />
-          </Tooltip>
-          {(employeeData?.role === EmployeeRoleName.Admin ||
-            employeeData?.role === EmployeeRoleName.Sales_Executive ||
-            employeeData?.role === EmployeeRoleName.Sales_Manager) && (
-            <Tooltip title="Delete invoice" placement="top" trigger="hover">
-              <CommonModal
-                title="Delete"
-                content="Are you sure delete this invoice?"
-                type="confirm"
-                onConfirm={() => handleDeleteModal(record?.id)}
-              >
-                <Button
-                  type="text"
-                  size="small"
-                  className="cta_btn table_cta_btn"
-                  icon={<DeleteOutlined />}
-                />
-              </CommonModal>
+      render: (_, record: IInvoice) => {
+        if (record?.deletedAt) {
+          return '-';
+        }
+        return (
+          <div className="d-flex flex-row">
+            <Tooltip title="View invoice" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EyeOutlined />}
+                onClick={() => navigate(`${ROUTES.invoiceView}/${record?.id}`)}
+              />
             </Tooltip>
-          )}
-        </div>
-      )
+            <Tooltip title="download invoice" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<DownloadOutlined />}
+                onClick={() => handleDownloadInvoice(record?.id)}
+              />
+            </Tooltip>
+            {(employeeData?.role === EmployeeRoleName.Admin ||
+              employeeData?.role === EmployeeRoleName.Sales_Executive ||
+              employeeData?.role === EmployeeRoleName.Sales_Manager) && (
+              <Tooltip title="Delete invoice" placement="top" trigger="hover">
+                <CommonModal
+                  title="Delete"
+                  content="Are you sure delete this invoice?"
+                  type="confirm"
+                  onConfirm={() => handleDeleteModal(record?.id)}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    className="cta_btn table_cta_btn"
+                    icon={<DeleteOutlined />}
+                  />
+                </CommonModal>
+              </Tooltip>
+            )}
+          </div>
+        );
+      }
     }
   ];
 

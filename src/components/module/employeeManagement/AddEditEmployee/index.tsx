@@ -31,8 +31,9 @@ const AddEditEmployee = () => {
 
   const { data: employeeList } = useDashboardEmployee();
   const employeeListOption = employeeList?.map((item) => {
+    const role = EmployeeRole.find((role) => role.value === item.role)?.label ?? '';
     return {
-      label: item.firstName + ' ' + item.lastName,
+      label: item.firstName + ' ' + item.lastName + ' (' + role + ')',
       value: item.id
     };
   });

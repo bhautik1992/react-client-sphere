@@ -72,21 +72,21 @@ const ViewEmployee = () => {
                 {data?.reportingPerson?.firstName ?? '-'} {data?.reportingPerson?.lastName ?? '-'}
               </p>
             </Col>
-            <Col xs={6}></Col>
-          </Row>
-          <Row className="employeeRow">
             <Col xs={6}>
               <h4>Phone</h4>
               <p>{data?.phone ?? '-'}</p>
+            </Col>
+          </Row>
+          <Row className="employeeRow">
+            <Col xs={6}>
+              <h4>Joining Date</h4>
+              <p>{data?.joiningDate ? dayjs(data?.joiningDate).format(DATE_FORMAT) : '-'}</p>
             </Col>
             <Col xs={6}>
               <h4>Date of Birth</h4>
               <p>{data?.dateOfBirth ? dayjs(data?.dateOfBirth).format(DATE_FORMAT) : '-'}</p>
             </Col>
-            <Col xs={6}>
-              <h4>Joining Date</h4>
-              <p>{data?.joiningDate ? dayjs(data?.joiningDate).format(DATE_FORMAT) : '-'}</p>
-            </Col>
+            <Col xs={6}></Col>
           </Row>
         </DetailWrapper>
       </div>

@@ -186,83 +186,86 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: IClient) => (
-        <div className="d-flex flex-row">
-          <Tooltip title="View client" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.clientView}/${record?.id}`)}
-            />
-          </Tooltip>
-          <Tooltip title="Edit client" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EditOutlined />}
-              onClick={() => {
-                navigate(`${ROUTES.clientEdit}/${record?.id}`);
-              }}
-            />
-          </Tooltip>
-          {employeeData?.role === EmployeeRoleName.Admin && (
-            <Tooltip title="Delete client" placement="top" trigger="hover">
-              <CommonModal
-                title="Delete"
-                content="Are you sure delete this client?"
-                type="confirm"
-                onConfirm={() => handleDeleteModal(record?.id)}
-              >
-                <Button
-                  type="text"
-                  size="small"
-                  className="cta_btn table_cta_btn"
-                  icon={<DeleteOutlined />}
-                />
-              </CommonModal>
+      render: (_, record: IClient) => {
+        if (record?.deletedAt) {
+          return '-';
+        }
+        return (
+          <div className="d-flex flex-row">
+            <Tooltip title="View client" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EyeOutlined />}
+                onClick={() => navigate(`${ROUTES.clientView}/${record?.id}`)}
+              />
             </Tooltip>
-          )}
-        </div>
-      )
+            <Tooltip title="Edit client" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  navigate(`${ROUTES.clientEdit}/${record?.id}`);
+                }}
+              />
+            </Tooltip>
+            {employeeData?.role === EmployeeRoleName.Admin && (
+              <Tooltip title="Delete client" placement="top" trigger="hover">
+                <CommonModal
+                  title="Delete"
+                  content="Are you sure delete this client?"
+                  type="confirm"
+                  onConfirm={() => handleDeleteModal(record?.id)}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    className="cta_btn table_cta_btn"
+                    icon={<DeleteOutlined />}
+                  />
+                </CommonModal>
+              </Tooltip>
+            )}
+          </div>
+        );
+      }
     }
   ];
 
   return (
-    <>
-      <CommonTable
-        bordered
-        columns={columns}
-        dataSource={
-          (clientList?.result ?? []).length > 0
-            ? clientList?.result.map((item) => ({ ...item, key: item.id }))
-            : []
+    <CommonTable
+      bordered
+      columns={columns}
+      dataSource={
+        (clientList?.result ?? []).length > 0
+          ? clientList?.result.map((item) => ({ ...item, key: item.id }))
+          : []
+      }
+      currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
+      onChange={(pagination, _, sorter, extra) => {
+        const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
+        const pageIndex = pagination?.current ?? 1;
+        if (extra?.action === 'paginate') {
+          setArgs({
+            ...args,
+            offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
+            limit: pagination?.pageSize ?? 10
+          });
+        } else {
+          setArgs({
+            ...args,
+            sortBy: order ? columnKey : '',
+            sortOrder: order?.replace('end', '') ?? '',
+            offset: (pageIndex - 1) * args.limit
+          });
         }
-        currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
-        onChange={(pagination, _, sorter, extra) => {
-          const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
-          const pageIndex = pagination?.current ?? 1;
-          if (extra?.action === 'paginate') {
-            setArgs({
-              ...args,
-              offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
-              limit: pagination?.pageSize ?? 10
-            });
-          } else {
-            setArgs({
-              ...args,
-              sortBy: order ? columnKey : '',
-              sortOrder: order?.replace('end', '') ?? '',
-              offset: (pageIndex - 1) * args.limit
-            });
-          }
-        }}
-        loading={isLoading}
-        total={clientList?.recordsTotal ?? 10}
-      />
-    </>
+      }}
+      loading={isLoading}
+      total={clientList?.recordsTotal ?? 10}
+    />
   );
 };
 

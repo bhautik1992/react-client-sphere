@@ -26,6 +26,7 @@ interface IInvoice {
   isPaymentReceived: boolean;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
 }
 
 export interface IInvoiceReq {
@@ -34,6 +35,7 @@ export interface IInvoiceReq {
   search?: string;
   sortOrder?: Key;
   sortBy?: Key;
+  deletedInvoice?: boolean;
 }
 
 export interface IAddInvoiceReq {

@@ -1,7 +1,7 @@
 import { Wrapper } from './style';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,13 +24,25 @@ const VendorManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [deletedVendor, setDeletedVendor] = useState<boolean>(false);
   const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IVendorReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: ''
+    sortOrder: '',
+    deletedVendor
   });
+
+  const handleChange = (value: string) => {
+    const deleted = value === 'deleted';
+    setDeletedVendor(deleted);
+    setArgs((prev) => ({
+      ...prev,
+      deletedVendor: deleted,
+      offset: 0
+    }));
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -53,6 +65,10 @@ const VendorManagement = () => {
                 onChange={onChange}
               />
             </Form>
+            <Select defaultValue="all" style={{ width: 120 }} onChange={handleChange}>
+              <Select.Option value="all">All Vendors</Select.Option>
+              <Select.Option value="deleted">Deleted Vendors</Select.Option>
+            </Select>
             <Button type="primary" onClick={() => navigate(ROUTES.vendorAdd)}>
               Add Vendor
             </Button>

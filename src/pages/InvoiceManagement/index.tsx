@@ -1,7 +1,7 @@
 import { Wrapper } from './style';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,14 +24,26 @@ const InvoiceManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [deletedInvoice, setDeletedInvoice] = useState<boolean>(false);
 
   const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IInvoiceReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: ''
+    sortOrder: '',
+    deletedInvoice
   });
+
+  const handleChange = (value: string) => {
+    const deleted = value === 'deleted';
+    setDeletedInvoice(deleted);
+    setArgs((prev) => ({
+      ...prev,
+      deletedInvoice: deleted,
+      offset: 0
+    }));
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -54,6 +66,10 @@ const InvoiceManagement = () => {
                 onChange={onChange}
               />
             </Form>
+            <Select defaultValue="all" style={{ width: 120 }} onChange={handleChange}>
+              <Select.Option value="all">All Invoices</Select.Option>
+              <Select.Option value="deleted">Deleted Invoices</Select.Option>
+            </Select>
             <Button type="primary" onClick={() => navigate(ROUTES.invoiceAdd)}>
               Add Invoice
             </Button>

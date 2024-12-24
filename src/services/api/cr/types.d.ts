@@ -30,6 +30,7 @@ interface ICr {
   invoiceDay: string;
   invoiceDate: string;
   isInvoiced: boolean;
+  deletedAt: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -41,6 +42,7 @@ export interface ICrReq {
   sortOrder?: Key;
   sortBy?: Key;
   isInternalCr?: boolean;
+  deletedCr?: boolean;
 }
 
 export interface IAddCrReq {

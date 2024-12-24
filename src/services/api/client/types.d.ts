@@ -27,6 +27,9 @@ export interface IClient {
   zipCode: string;
   skypeId: string;
   projects: IProject[];
+  deletedAt: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface IClientReq {
@@ -35,6 +38,7 @@ export interface IClientReq {
   search?: string;
   sortOrder?: Key;
   sortBy?: Key;
+  deletedClient?: boolean;
 }
 
 export interface IAddClientReq {

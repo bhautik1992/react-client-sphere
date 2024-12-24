@@ -34,6 +34,7 @@ interface IProject {
   invoiceDay: string;
   invoiceDate: string;
   milestones: IMileStone[];
+  deletedAt: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -44,7 +45,8 @@ export interface IProjectReq {
   search?: string;
   sortOrder?: Key;
   sortBy?: Key;
-  isInternalProject: boolean;
+  isInternalProject?: boolean;
+  deletedProject?: boolean;
 }
 
 export interface IAddProjectReq {

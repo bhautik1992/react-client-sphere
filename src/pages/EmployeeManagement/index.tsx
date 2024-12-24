@@ -1,7 +1,7 @@
 import { Wrapper } from './style';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,13 +24,25 @@ const EmployeesManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [deletedEmployee, setDeletedEmployee] = useState<boolean>(false);
 
   const [args, setArgs] = useState<IEmployeeReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: ''
+    sortOrder: '',
+    deletedEmployee
   });
+
+  const handleChange = (value: string) => {
+    const deleted = value === 'deleted';
+    setDeletedEmployee(deleted);
+    setArgs((prev) => ({
+      ...prev,
+      deletedEmployee: deleted,
+      offset: 0
+    }));
+  };
 
   const searchDebounce = useDebounce(searchValue);
 
@@ -55,6 +67,10 @@ const EmployeesManagement = () => {
                 onChange={onChange}
               />
             </Form>
+            <Select defaultValue="all" style={{ width: 150 }} onChange={handleChange}>
+              <Select.Option value="all">All Employees</Select.Option>
+              <Select.Option value="deleted">Deleted Employees</Select.Option>
+            </Select>
             <Button type="primary" onClick={() => navigate(ROUTES.employeeAdd)}>
               Add Employee
             </Button>

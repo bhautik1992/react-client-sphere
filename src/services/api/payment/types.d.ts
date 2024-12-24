@@ -24,6 +24,7 @@ interface IPayment {
   comment: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string;
 }
 
 export interface IPaymentReq {
@@ -32,6 +33,7 @@ export interface IPaymentReq {
   search?: string;
   sortOrder?: Key;
   sortBy?: Key;
+  deletedPayment?: boolean;
 }
 
 export interface IAddPaymentReq {

@@ -185,49 +185,54 @@ const CrManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) 
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: ICr) => (
-        <div className="d-flex flex-row">
-          <Tooltip title="View cr" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.crView}/${record?.id}`)}
-            />
-          </Tooltip>
-          <Tooltip title="Edit cr" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EditOutlined />}
-              onClick={() => {
-                navigate(`${ROUTES.crEdit}/${record?.id}`);
-              }}
-            />
-          </Tooltip>
-          {(employeeData?.role === EmployeeRoleName.Admin ||
-            employeeData?.role === EmployeeRoleName.Sales_Executive ||
-            employeeData?.role === EmployeeRoleName.Sales_Manager) && (
-            <Tooltip title="Delete cr" placement="top" trigger="hover">
-              <CommonModal
-                title="Delete"
-                content="Are you sure delete this cr?"
-                type="confirm"
-                onConfirm={() => handleDeleteModal(record?.id)}
-              >
-                <Button
-                  type="text"
-                  size="small"
-                  className="cta_btn table_cta_btn"
-                  icon={<DeleteOutlined />}
-                />
-              </CommonModal>
+      render: (_, record: ICr) => {
+        if (record?.deletedAt) {
+          return '-';
+        }
+        return (
+          <div className="d-flex flex-row">
+            <Tooltip title="View cr" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EyeOutlined />}
+                onClick={() => navigate(`${ROUTES.crView}/${record?.id}`)}
+              />
             </Tooltip>
-          )}
-        </div>
-      )
+            <Tooltip title="Edit cr" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  navigate(`${ROUTES.crEdit}/${record?.id}`);
+                }}
+              />
+            </Tooltip>
+            {(employeeData?.role === EmployeeRoleName.Admin ||
+              employeeData?.role === EmployeeRoleName.Sales_Executive ||
+              employeeData?.role === EmployeeRoleName.Sales_Manager) && (
+              <Tooltip title="Delete cr" placement="top" trigger="hover">
+                <CommonModal
+                  title="Delete"
+                  content="Are you sure delete this cr?"
+                  type="confirm"
+                  onConfirm={() => handleDeleteModal(record?.id)}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    className="cta_btn table_cta_btn"
+                    icon={<DeleteOutlined />}
+                  />
+                </CommonModal>
+              </Tooltip>
+            )}
+          </div>
+        );
+      }
     }
   ];
 

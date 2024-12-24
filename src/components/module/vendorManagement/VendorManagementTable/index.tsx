@@ -114,85 +114,88 @@ const VendorManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: IVendor) => (
-        <div className="d-flex flex-row">
-          <Tooltip title="View vendor" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.vendorView}/${record?.id}`)}
-            />
-          </Tooltip>
-          <Tooltip title="Edit vendor" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EditOutlined />}
-              onClick={() => {
-                navigate(`${ROUTES.vendorEdit}/${record?.id}`);
-              }}
-            />
-          </Tooltip>
-          {(employeeData?.role === EmployeeRoleName.Admin ||
-            employeeData?.role === EmployeeRoleName.Sales_Executive ||
-            employeeData?.role === EmployeeRoleName.Sales_Manager) && (
-            <Tooltip title="Delete vendor" placement="top" trigger="hover">
-              <CommonModal
-                title="Delete"
-                content="Are you sure delete this vendor?"
-                type="confirm"
-                onConfirm={() => handleDeleteModal(record?.id)}
-              >
-                <Button
-                  type="text"
-                  size="small"
-                  className="cta_btn table_cta_btn"
-                  icon={<DeleteOutlined />}
-                />
-              </CommonModal>
+      render: (_, record: IVendor) => {
+        if (record?.deletedAt) {
+          return '-';
+        }
+        return (
+          <div className="d-flex flex-row">
+            <Tooltip title="View vendor" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EyeOutlined />}
+                onClick={() => navigate(`${ROUTES.vendorView}/${record?.id}`)}
+              />
             </Tooltip>
-          )}
-        </div>
-      )
+            <Tooltip title="Edit vendor" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  navigate(`${ROUTES.vendorEdit}/${record?.id}`);
+                }}
+              />
+            </Tooltip>
+            {(employeeData?.role === EmployeeRoleName.Admin ||
+              employeeData?.role === EmployeeRoleName.Sales_Executive ||
+              employeeData?.role === EmployeeRoleName.Sales_Manager) && (
+              <Tooltip title="Delete vendor" placement="top" trigger="hover">
+                <CommonModal
+                  title="Delete"
+                  content="Are you sure delete this vendor?"
+                  type="confirm"
+                  onConfirm={() => handleDeleteModal(record?.id)}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    className="cta_btn table_cta_btn"
+                    icon={<DeleteOutlined />}
+                  />
+                </CommonModal>
+              </Tooltip>
+            )}
+          </div>
+        );
+      }
     }
   ];
 
   return (
-    <>
-      <CommonTable
-        bordered
-        columns={columns}
-        dataSource={
-          (vendorList?.result ?? []).length > 0
-            ? vendorList?.result.map((item) => ({ ...item, key: item.id }))
-            : []
+    <CommonTable
+      bordered
+      columns={columns}
+      dataSource={
+        (vendorList?.result ?? []).length > 0
+          ? vendorList?.result.map((item) => ({ ...item, key: item.id }))
+          : []
+      }
+      currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
+      onChange={(pagination, _, sorter, extra) => {
+        const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
+        const pageIndex = pagination?.current ?? 1;
+        if (extra?.action === 'paginate') {
+          setArgs({
+            ...args,
+            offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
+            limit: pagination?.pageSize ?? 10
+          });
+        } else {
+          setArgs({
+            ...args,
+            sortBy: order ? columnKey : '',
+            sortOrder: order?.replace('end', '') ?? '',
+            offset: (pageIndex - 1) * args.limit
+          });
         }
-        currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
-        onChange={(pagination, _, sorter, extra) => {
-          const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
-          const pageIndex = pagination?.current ?? 1;
-          if (extra?.action === 'paginate') {
-            setArgs({
-              ...args,
-              offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
-              limit: pagination?.pageSize ?? 10
-            });
-          } else {
-            setArgs({
-              ...args,
-              sortBy: order ? columnKey : '',
-              sortOrder: order?.replace('end', '') ?? '',
-              offset: (pageIndex - 1) * args.limit
-            });
-          }
-        }}
-        loading={isLoading}
-        total={vendorList?.recordsTotal ?? 10}
-      />
-    </>
+      }}
+      loading={isLoading}
+      total={vendorList?.recordsTotal ?? 10}
+    />
   );
 };
 

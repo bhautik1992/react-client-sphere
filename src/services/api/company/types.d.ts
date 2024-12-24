@@ -14,6 +14,9 @@ export interface ICompany {
   stateName: string;
   cityName: string;
   assignedToProjects: IProject[];
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }
 
 export interface ICompanyReq {
@@ -22,6 +25,7 @@ export interface ICompanyReq {
   search?: string;
   sortOrder?: string;
   sortBy?: Key;
+  deletedCompany?: boolean;
 }
 
 export interface ICompanyRes {

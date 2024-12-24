@@ -1,7 +1,7 @@
 import { Wrapper } from './style';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { useState } from 'react';
 
 import useDebounce from '../../components/common/useDebounce';
@@ -20,7 +20,7 @@ const BreadcrumbsPath = [
 
 const CompanyManagement = () => {
   const [form] = Form.useForm();
-
+  const [deletedCompany, setDeletedCompany] = useState<boolean>(false);
   const [searchValue, setSearchValue] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -29,8 +29,19 @@ const CompanyManagement = () => {
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: ''
+    sortOrder: '',
+    deletedCompany
   });
+
+  const handleChange = (value: string) => {
+    const deleted = value === 'deleted';
+    setDeletedCompany(deleted);
+    setArgs((prev) => ({
+      ...prev,
+      deletedCompany: deleted,
+      offset: 0
+    }));
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -53,6 +64,10 @@ const CompanyManagement = () => {
                 onChange={onChange}
               />
             </Form>
+            <Select defaultValue="all" style={{ width: 150 }} onChange={handleChange}>
+              <Select.Option value="all">All Companies</Select.Option>
+              <Select.Option value="deleted">Deleted Companies</Select.Option>
+            </Select>
             <Button type="primary" onClick={() => setIsOpen(true)}>
               Add Company
             </Button>

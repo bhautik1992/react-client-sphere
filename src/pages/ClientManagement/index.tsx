@@ -1,7 +1,7 @@
 import { Wrapper } from './style';
 
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form } from 'antd';
+import { Button, Form, Select } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -24,13 +24,25 @@ const ClientManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
+  const [deletedClient, setDeletedClient] = useState<boolean>(false);
   const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IClientReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: ''
+    sortOrder: '',
+    deletedClient
   });
+
+  const handleChange = (value: string) => {
+    const deleted = value === 'deleted';
+    setDeletedClient(deleted);
+    setArgs((prev) => ({
+      ...prev,
+      deletedClient: deleted,
+      offset: 0
+    }));
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -53,6 +65,10 @@ const ClientManagement = () => {
                 onChange={onChange}
               />
             </Form>
+            <Select defaultValue="all" style={{ width: 120 }} onChange={handleChange}>
+              <Select.Option value="all">All Clients</Select.Option>
+              <Select.Option value="deleted">Deleted Clients</Select.Option>
+            </Select>
             <Button type="primary" onClick={() => navigate(ROUTES.clientAdd)}>
               Add Client
             </Button>

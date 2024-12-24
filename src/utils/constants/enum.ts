@@ -1,4 +1,4 @@
-export const COMPANY_EMAIL = 'infiazure@gmail.com';
+export const COMPANY_EMAIL = 'infiazure@gamil.com';
 
 export enum MenuPermissions {
   DASHBOARD = '1',

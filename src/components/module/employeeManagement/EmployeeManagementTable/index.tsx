@@ -142,47 +142,52 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
       dataIndex: 'actions',
       key: 'actions',
       className: 'text-center',
-      render: (_, record: IEmployee) => (
-        <div className="d-flex flex-row">
-          <Tooltip title="View employee" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EyeOutlined />}
-              onClick={() => navigate(`${ROUTES.employeeView}/${record?.id}`)}
-            />
-          </Tooltip>
-          <Tooltip title="Edit employee" placement="top" trigger="hover">
-            <Button
-              type="text"
-              size="small"
-              className="cta_btn table_cta_btn"
-              icon={<EditOutlined />}
-              onClick={() => {
-                navigate(`${ROUTES.employeeEdit}/${record?.id}`);
-              }}
-            />
-          </Tooltip>
-          {employeeData?.role === EmployeeRoleName.Admin && (
-            <Tooltip title="Delete employee" placement="top" trigger="hover">
-              <CommonModal
-                title="Delete"
-                content="Are you sure delete this employee?"
-                type="confirm"
-                onConfirm={() => handleDeleteModal(record?.id)}
-              >
-                <Button
-                  type="text"
-                  size="small"
-                  className="cta_btn table_cta_btn"
-                  icon={<DeleteOutlined />}
-                />
-              </CommonModal>
+      render: (_, record: IEmployee) => {
+        if (record?.deletedAt) {
+          return '-';
+        }
+        return (
+          <div className="d-flex flex-row">
+            <Tooltip title="View employee" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EyeOutlined />}
+                onClick={() => navigate(`${ROUTES.employeeView}/${record?.id}`)}
+              />
             </Tooltip>
-          )}
-        </div>
-      )
+            <Tooltip title="Edit employee" placement="top" trigger="hover">
+              <Button
+                type="text"
+                size="small"
+                className="cta_btn table_cta_btn"
+                icon={<EditOutlined />}
+                onClick={() => {
+                  navigate(`${ROUTES.employeeEdit}/${record?.id}`);
+                }}
+              />
+            </Tooltip>
+            {employeeData?.role === EmployeeRoleName.Admin && (
+              <Tooltip title="Delete employee" placement="top" trigger="hover">
+                <CommonModal
+                  title="Delete"
+                  content="Are you sure delete this employee?"
+                  type="confirm"
+                  onConfirm={() => handleDeleteModal(record?.id)}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    className="cta_btn table_cta_btn"
+                    icon={<DeleteOutlined />}
+                  />
+                </CommonModal>
+              </Tooltip>
+            )}
+          </div>
+        );
+      }
     }
   ];
 

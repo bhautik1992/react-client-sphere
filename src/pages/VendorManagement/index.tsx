@@ -61,7 +61,7 @@ const VendorManagement = () => {
                 size="middle"
                 placeholder="Search vendor"
                 allowClear
-                prefix={<SearchOutlined style={{ color: '#0000ff' }} />}
+                prefix={<SearchOutlined style={{ color: '#FFC7A0' }} />}
                 onChange={onChange}
               />
             </Form>

@@ -49,7 +49,7 @@ const ForgotPassword: React.FC = () => {
                   placeholder="Enter email id here..."
                   allowClear="allowClear"
                   size="large"
-                  prefix={<UserOutlined style={{ color: '#0000ff' }} />}
+                  prefix={<UserOutlined style={{ color: '#FFC7A0' }} />}
                   rules={[
                     {
                       required: true,

@@ -59,7 +59,7 @@ const SignIn: React.FC = () => {
                   // label="Email ID"
                   allowClear="allowClear"
                   size="large"
-                  prefix={<UserOutlined style={{ color: '#0000ff' }} />}
+                  prefix={<UserOutlined style={{ color: '#FFC7A0' }} />}
                   rules={[
                     {
                       required: true,
@@ -78,7 +78,7 @@ const SignIn: React.FC = () => {
                   placeholder="Enter password "
                   type="password"
                   size="middle"
-                  prefix={<LockOutlined style={{ color: '#0000ff' }} />}
+                  prefix={<LockOutlined style={{ color: '#FFC7A0' }} />}
                   rules={[
                     () => ({
                       validator: (_: any, value: string) => {

@@ -89,7 +89,7 @@ const ChangePassword = () => {
                   placeholder="Enter current password "
                   type="password"
                   size="middle"
-                  prefix={<LockOutlined style={{ color: '#0000ff' }} />}
+                  prefix={<LockOutlined style={{ color: '#FFC7A0' }} />}
                   rules={[
                     () => ({
                       validator: (_: any, value: string) => {
@@ -116,7 +116,7 @@ const ChangePassword = () => {
                   type="password"
                   size="middle"
                   label="New Password"
-                  prefix={<LockOutlined style={{ color: '#0000ff' }} />}
+                  prefix={<LockOutlined style={{ color: '#FFC7A0' }} />}
                   rules={[
                     () => ({
                       validator: (_: any, value: string) => {
@@ -145,7 +145,7 @@ const ChangePassword = () => {
                   placeholder="Enter confirm password "
                   type="password"
                   size="middle"
-                  prefix={<LockOutlined style={{ color: '#0000ff' }} />}
+                  prefix={<LockOutlined style={{ color: '#FFC7A0' }} />}
                   label="Confirm Password"
                   rules={[
                     ({ getFieldValue }: { getFieldValue: any }) => ({

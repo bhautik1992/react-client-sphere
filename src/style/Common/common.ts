@@ -111,7 +111,7 @@ input[type=number] {
     background: #ffffff;
     border-width: 1px;
     border-style: solid;
-    border-color: #0000ff;
+    border-color: #FFC7A0;
     position: relative;
     display: inline-flex;
     width: 100%;

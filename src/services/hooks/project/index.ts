@@ -63,7 +63,8 @@ export const useExportProjects = () => {
       console.error('Export failed:', error);
     },
     onSuccess: (data) => {
-      const url = window.URL.createObjectURL(new Blob([data]));
+      const blob = data as unknown as Blob;
+      const url = window.URL.createObjectURL(new Blob([blob]));
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', `Projects_${Date.now()}.xlsx`);

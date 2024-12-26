@@ -507,7 +507,7 @@ const AddEditProject = () => {
               rules={[
                 () => ({
                   validator: (_: any, value: string) => {
-                    const regex = pattern.regex;
+                    const regex = pattern.number;
                     if (!regex.test(value)) {
                       return Promise.reject(new Error('Please enter valid project hours'));
                     }
@@ -540,7 +540,7 @@ const AddEditProject = () => {
                   rules={[
                     () => ({
                       validator: (_: any, value: string) => {
-                        const regex = pattern.regex;
+                        const regex = pattern.number;
                         if (!regex.test(value)) {
                           return Promise.reject(new Error('Please enter valid payment term days'));
                         }

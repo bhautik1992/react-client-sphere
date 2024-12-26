@@ -15,10 +15,11 @@ import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
 import {
   BillingType,
-  EmployeeStatus,
+  ClientStatus,
   InvoicePaymentCycle,
   InvoicePaymentCycleName,
-  ProjectStatus
+  ProjectStatus,
+  ProjectStatusName
 } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/renderDropDownStatus/projectStatusDropDown';
@@ -76,7 +77,7 @@ const ViewProject = () => {
         <div className="pageHeader">
           <h2 className="pageTitle">Project Detail</h2>
           <ProjectStatusDropdown
-            status={projectData?.status ?? 'not_started'}
+            status={projectData?.status ?? ProjectStatusName.NotStarted}
             projectId={projectData?.id ?? 0}
             onStatusChange={(newStatus, projectId) => handleConfirm(newStatus, projectId)}
           />
@@ -175,7 +176,7 @@ const ViewProject = () => {
             </Col>
             <Col xs={6}>
               <h4>Status</h4>
-              <p>{projectData?.client?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'}</p>
+              <p>{projectData?.client?.status === ClientStatus.Active ? 'Active' : 'Inactive'}</p>
             </Col>
           </Row>
           <Row className="projectRow">

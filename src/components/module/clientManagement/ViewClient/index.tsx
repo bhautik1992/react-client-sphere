@@ -12,7 +12,7 @@ import { useClientDetail, useClientStatus } from 'services/hooks/client';
 import { clientKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
-import { EmployeeStatus } from 'utils/constants/enum';
+import { ClientStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import { renderTagColor } from 'utils/renderColor';
 
@@ -35,9 +35,7 @@ const ViewClient = () => {
   const handleConfirm = () => {
     const data = {
       status:
-        clientData?.status === EmployeeStatus.Active
-          ? EmployeeStatus.Inactive
-          : EmployeeStatus.Active,
+        clientData?.status === ClientStatus.Active ? ClientStatus.Inactive : ClientStatus.Active,
       clientId: Number(id)
     };
 
@@ -75,9 +73,9 @@ const ViewClient = () => {
             title="Status"
             placement="bottomLeft"
             description={`Are you sure to ${
-              clientData?.status === EmployeeStatus.Active
-                ? EmployeeStatus.Inactive
-                : EmployeeStatus.Active
+              clientData?.status === ClientStatus.Active
+                ? ClientStatus.Inactive
+                : ClientStatus.Active
             } this client?`}
             okText="Yes"
             cancelText="No"
@@ -85,11 +83,10 @@ const ViewClient = () => {
           >
             <Tag
               color={renderTagColor(
-                clientData?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'
+                clientData?.status === ClientStatus.Active ? 'Active' : 'Inactive'
               )}
             >
-              {clientData?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'}{' '}
-              <DownOutlined />
+              {clientData?.status === ClientStatus.Active ? 'Active' : 'Inactive'} <DownOutlined />
             </Tag>
           </Popconfirm>
         </div>
@@ -151,8 +148,8 @@ const ViewClient = () => {
                 title={
                   clientData?.projects?.length ? (
                     <div>
-                      {clientData.projects.map((project, index) => (
-                        <div key={index}>{project.name}</div>
+                      {clientData.projects.map((project) => (
+                        <div key={project.id}>{project.name}</div>
                       ))}
                     </div>
                   ) : (

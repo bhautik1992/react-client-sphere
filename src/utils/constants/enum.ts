@@ -12,7 +12,15 @@ export enum MenuPermissions {
   COMPANIES = '9'
 }
 
-export enum EmployeeStatus {
+export enum EmployeeStatusName {
+  Active = 'active',
+  Ex_Employee = 'ex-employee',
+  Resigned = 'resigned',
+  Terminated = 'terminated',
+  Pending = 'pending'
+}
+
+export enum ClientStatus {
   Active = 'active',
   Inactive = 'inactive'
 }
@@ -309,5 +317,28 @@ export const PaymentMethod = [
   {
     value: PaymentMethodName.Paypal,
     label: 'PayPal'
+  }
+];
+
+export const EmployeeStatus = [
+  {
+    value: EmployeeStatusName.Active,
+    label: 'Active'
+  },
+  {
+    value: EmployeeStatusName.Ex_Employee,
+    label: 'Ex Employee'
+  },
+  {
+    value: EmployeeStatusName.Resigned,
+    label: 'Resigned'
+  },
+  {
+    value: EmployeeStatusName.Terminated,
+    label: 'Terminated'
+  },
+  {
+    value: EmployeeStatusName.Pending,
+    label: 'Pending'
   }
 ];

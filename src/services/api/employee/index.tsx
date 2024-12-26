@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 import { IApiSuccess } from 'utils/Types';
 import { ApiEndPoints } from 'utils/constants';
 
@@ -8,7 +10,8 @@ import {
   IEditEmployeeReq,
   IEmployee,
   IEmployeeReq,
-  IEmployeeRes
+  IEmployeeRes,
+  IEmployeeStatusReq
 } from './types';
 
 export const employeeAPI = {
@@ -62,6 +65,26 @@ export const employeeAPI = {
       .then((response) => {
         return response?.data;
       })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  },
+
+  async employeeStatus(data: IEmployeeStatusReq): Promise<IApiSuccess<string>> {
+    return apiInstance
+      .post(ApiEndPoints.employee.employeeStatusChange, data)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  },
+
+  async exportEmployees(data: IEmployeeReq): Promise<AxiosResponse<Blob>> {
+    return apiInstance
+      .post(ApiEndPoints.employee.employeeExport, data, { responseType: 'blob' })
+      .then((response) => response)
       .catch((error) => {
         throw error?.response?.data;
       });

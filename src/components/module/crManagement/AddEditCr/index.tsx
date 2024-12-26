@@ -475,7 +475,7 @@ const AddEditCr = () => {
               rules={[
                 () => ({
                   validator: (_: any, value: string) => {
-                    const regex = pattern.regex;
+                    const regex = pattern.number;
                     if (!regex.test(value)) {
                       return Promise.reject(new Error('Please enter valid cr hours'));
                     }
@@ -509,7 +509,7 @@ const AddEditCr = () => {
                   rules={[
                     () => ({
                       validator: (_: any, value: string) => {
-                        const regex = pattern.regex;
+                        const regex = pattern.number;
                         if (!regex.test(value)) {
                           return Promise.reject(new Error('Please enter valid payment term days'));
                         }

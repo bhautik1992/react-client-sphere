@@ -10,14 +10,15 @@ import CommonModal from 'components/common/Modal/CommonModal';
 import { CommonTable } from 'components/common/Table';
 
 import { IEmployee, IEmployeeReq } from 'services/api/employee/types';
-import { useDeleteEmployee, useEmployeeList } from 'services/hooks/employee';
-import { employeeKeys } from 'services/hooks/queryKeys';
+import { useDeleteEmployee, useEmployeeList, useEmployeeStatus } from 'services/hooks/employee';
+import { dashboardKey, employeeKeys } from 'services/hooks/queryKeys';
 import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
 import { Department, EmployeeRole, EmployeeRoleName } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
+import EmployeeStatusDropdown from 'utils/renderDropDownStatus/employeeStatusDropdown';
 
 interface IProps {
   searchDebounce: string;
@@ -32,6 +33,46 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
 
   const { data: employeeList, isLoading } = useEmployeeList({ ...args, search: searchDebounce });
   const { mutate } = useDeleteEmployee();
+  const { mutate: statusMutate } = useEmployeeStatus();
+
+  const handleConfirm = (status: string, id: number) => {
+    const data = {
+      status,
+      id
+    };
+
+    statusMutate(data, {
+      onSuccess: (res) => {
+        // invalidate project list
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [employeeKeys.employeeList({ ...args, search: searchDebounce })].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+        // set status in client detail
+        queryClient.setQueryData<IEmployee>(employeeKeys.employeeDetail(id ?? 0), () => {
+          return { ...res } as unknown as IEmployee;
+        });
+
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [dashboardKey.dashboardEmployee].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+      },
+      onError: (err: IApiError) => {
+        message.error(err.message);
+      }
+    });
+  };
 
   const handleDeleteModal = (id: number) => {
     mutate(id, {
@@ -40,6 +81,16 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
         queryClient.invalidateQueries({
           predicate: (query) => {
             return [employeeKeys.employeeList({ ...args, search: searchDebounce })].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [dashboardKey.dashboardEmployee].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -67,6 +118,12 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
       sorter: true
     },
     {
+      title: 'Middle name',
+      dataIndex: 'middleName',
+      key: 'middleName',
+      sorter: true
+    },
+    {
       title: 'Last name',
       dataIndex: 'lastName',
       key: 'lastName',
@@ -88,13 +145,13 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
       title: 'Phone',
       dataIndex: 'phone',
       key: 'phone',
-      sorter: true
+      sorter: false
     },
     {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      sorter: true,
+      sorter: false,
       render: (_, record: IEmployee) => (
         <>{EmployeeRole.find((role) => role.value === record?.role)?.label ?? '-'}</>
       )
@@ -135,6 +192,30 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
       key: 'dateOfBirth',
       render: (_, record: IEmployee) => (
         <>{record?.dateOfBirth ? dayjs(record?.dateOfBirth).format(DATE_FORMAT) : '-'}</>
+      )
+    },
+    {
+      title: 'PAN Number',
+      dataIndex: 'PAN',
+      key: 'PAN',
+      sorter: false
+    },
+    {
+      title: 'Aadhar Number',
+      dataIndex: 'aadhar',
+      key: 'aadhar',
+      sorter: false
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (_, record: IEmployee) => (
+        <EmployeeStatusDropdown
+          status={record.status}
+          employeeId={record.id}
+          onStatusChange={(newStatus, employeeId) => handleConfirm(newStatus, employeeId)}
+        />
       )
     },
     {

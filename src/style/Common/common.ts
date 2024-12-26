@@ -84,7 +84,7 @@ export const Common = createGlobalStyle`
                         line-height: 30px;
                         text-align: center;
                         font-size: 14px;
-                        max-width: 100px;
+                        max-width: 110px;
                         cursor: pointer;
     }
   }

@@ -144,7 +144,7 @@ const AddEditMileStoneModal: React.FC<IAddMileStoneModalProps & ModalProps> = ({
                     rules={[
                       () => ({
                         validator: (_: any, value: string) => {
-                          const regex = pattern.regex;
+                          const regex = pattern.number;
                           if (!regex.test(value)) {
                             return Promise.reject(new Error('Please enter valid PIS hours'));
                           }
@@ -166,7 +166,7 @@ const AddEditMileStoneModal: React.FC<IAddMileStoneModalProps & ModalProps> = ({
                     rules={[
                       () => ({
                         validator: (_: any, value: string) => {
-                          const regex = pattern.regex;
+                          const regex = pattern.number;
                           if (!regex.test(value)) {
                             return Promise.reject(new Error('Please enter valid PMS hours'));
                           }
@@ -188,7 +188,7 @@ const AddEditMileStoneModal: React.FC<IAddMileStoneModalProps & ModalProps> = ({
                     rules={[
                       () => ({
                         validator: (_: any, value: string) => {
-                          const regex = pattern.regex;
+                          const regex = pattern.number;
                           if (!regex.test(value)) {
                             return Promise.reject(new Error('Please enter valid cost'));
                           }

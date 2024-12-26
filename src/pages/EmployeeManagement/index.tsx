@@ -11,6 +11,7 @@ import StyledBreadcrumb from 'components/layout/breadcrumb';
 import EmployeesManagementTable from 'components/module/employeeManagement/EmployeeManagementTable';
 
 import { IEmployeeReq } from 'services/api/employee/types';
+import { useExportEmployees } from 'services/hooks/employee';
 
 import { ROUTES } from 'utils/constants/routes';
 
@@ -25,6 +26,7 @@ const EmployeesManagement = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState<string>('');
   const [deletedEmployee, setDeletedEmployee] = useState<boolean>(false);
+  const { mutate: exportEmployees } = useExportEmployees();
 
   const [args, setArgs] = useState<IEmployeeReq>({
     limit: 10,
@@ -33,6 +35,10 @@ const EmployeesManagement = () => {
     sortOrder: '',
     deletedEmployee
   });
+
+  const handleExport = () => {
+    exportEmployees({ ...args, search: searchDebounce });
+  };
 
   const handleChange = (value: string) => {
     const deleted = value === 'deleted';
@@ -71,6 +77,9 @@ const EmployeesManagement = () => {
               <Select.Option value="all">All Employees</Select.Option>
               <Select.Option value="deleted">Deleted Employees</Select.Option>
             </Select>
+            <Button type="primary" onClick={handleExport}>
+              Export
+            </Button>
             <Button type="primary" onClick={() => navigate(ROUTES.employeeAdd)}>
               Add Employee
             </Button>

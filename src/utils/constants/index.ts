@@ -31,7 +31,9 @@ export const ApiEndPoints = {
     employeeDetail: `employee/get`,
     employeeAdd: `employee/create`,
     employeeEdit: `employee/update`,
-    employeeDelete: `employee/delete`
+    employeeDelete: `employee/delete`,
+    employeeExport: `employee/export`,
+    employeeStatusChange: `employee/status`
   },
   client: {
     clientList: `client/list`,

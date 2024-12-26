@@ -9,7 +9,7 @@ import StyledBreadcrumb from 'components/layout/breadcrumb';
 import { usePaymentDetail } from 'services/hooks/payment';
 
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, EmployeeStatus, PaymentMethod, ProjectStatus } from 'utils/constants/enum';
+import { BillingType, ClientStatus, PaymentMethod, ProjectStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
@@ -95,7 +95,7 @@ const ViewPayment = () => {
             </Col>
             <Col xs={6}>
               <h4>Status</h4>
-              <p>{paymentData?.client?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'}</p>
+              <p>{paymentData?.client?.status === ClientStatus.Active ? 'Active' : 'Inactive'}</p>
             </Col>
           </Row>
           <Row className="paymentRow">

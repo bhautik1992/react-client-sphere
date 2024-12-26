@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 import { IApiSuccess } from 'utils/Types';
 import { ApiEndPoints } from 'utils/constants';
 
@@ -82,10 +84,10 @@ export const crAPI = {
       });
   },
 
-  async exportCrs(data: ICrReq): Promise<Blob> {
+  async exportCrs(data: ICrReq): Promise<AxiosResponse<Blob>> {
     return apiInstance
       .post(ApiEndPoints.cr.exportCrs, data, { responseType: 'blob' })
-      .then((response) => response.data)
+      .then((response) => response)
       .catch((error) => {
         throw error?.response?.data;
       });

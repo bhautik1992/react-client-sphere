@@ -13,7 +13,7 @@ import { crKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, CrStatus, EmployeeStatus } from 'utils/constants/enum';
+import { BillingType, ClientStatus, CrStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 import CrStatusDropdown from 'utils/renderDropDownStatus/crStatusDropDown';
 
@@ -159,7 +159,7 @@ const ViewCr = () => {
             </Col>
             <Col xs={6}>
               <h4>Status</h4>
-              <p>{crData?.client?.status === EmployeeStatus.Active ? 'Active' : 'Inactive'}</p>
+              <p>{crData?.client?.status === ClientStatus.Active ? 'Active' : 'Inactive'}</p>
             </Col>
           </Row>
           <Row className="crRow">

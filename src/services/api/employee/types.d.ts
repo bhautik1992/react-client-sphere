@@ -2,7 +2,9 @@ import { Key } from 'react';
 
 export interface IEmployee {
   id: number;
+  employeeCode: string;
   firstName: string;
+  middleName: string;
   lastName: string;
   role: string;
   personalEmail: string;
@@ -13,7 +15,15 @@ export interface IEmployee {
   dateOfBirth: string;
   reportingPersonId: number;
   reportingPerson: IEmployee;
-  employeeCode: string;
+  PAN: string;
+  aadhar: string;
+  status: string;
+  address: string;
+  bankName: string;
+  accountNumber: string;
+  IFSC: string;
+  emergencyContactName: string;
+  emergencyContactNumber: string;
   createdBy: number;
   createdAt: string;
   updatedAt: string;
@@ -37,6 +47,7 @@ export interface IEmployeeReq {
 export interface IAddEmployeeReq {
   id?: number;
   firstName: string;
+  middleName: string;
   lastName: string;
   role: string;
   personalEmail: string;
@@ -46,9 +57,23 @@ export interface IAddEmployeeReq {
   joiningDate: string;
   dateOfBirth: string;
   reportingPersonId: number;
+  PAN: string;
+  aadhar: string;
+  status: string;
+  address: string;
+  bankName: string;
+  accountNumber: string;
+  IFSC: string;
+  emergencyContactName: string;
+  emergencyContactNumber: string;
 }
 
 export interface IEditEmployeeReq extends IAddEmployeeReq {
   id: number;
 }
 export interface IAddEmployeeRes {}
+
+export interface IEmployeeStatusReq {
+  id: number;
+  status: string;
+}

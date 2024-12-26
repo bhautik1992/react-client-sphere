@@ -1,5 +1,5 @@
 export const renderTagColor = (status: string | boolean) => {
-  if (status === 'Active' || status === true || status === 'success' || status === 'completed') {
+  if (status === 'active' || status === true || status === 'success' || status === 'completed') {
     return 'green';
   } else if (
     status === 'Inactive' ||
@@ -7,7 +7,10 @@ export const renderTagColor = (status: string | boolean) => {
     status === 'In Progress' ||
     status === 'error' ||
     status === 'not_started' ||
-    status === 'cancelled'
+    status === 'cancelled' ||
+    status === 'ex-employee' ||
+    status === 'resigned' ||
+    status === 'terminated'
   ) {
     return 'red';
   } else if (status === 'Resolved' || status === 'in_progress') {

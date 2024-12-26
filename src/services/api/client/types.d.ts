@@ -1,7 +1,5 @@
 import { Key } from 'react';
 
-import { EmployeeStatus } from 'utils/constants/enum';
-
 import { ICompany } from '../company/types';
 import { ICountry } from '../country/types';
 import { IProject } from '../project/types';

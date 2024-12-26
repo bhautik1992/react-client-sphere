@@ -23,7 +23,7 @@ import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
 import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
-import { EmployeeStatus } from 'utils/constants/enum';
+import { ClientStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditClient = () => {
@@ -347,7 +347,7 @@ const AddEditClient = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please select your gender'
+                  message: 'Please select gender'
                 }
               ]}
             />
@@ -366,13 +366,13 @@ const AddEditClient = () => {
               label="Status"
               allowClear={true}
               optionLabel={[
-                { label: 'Active', value: EmployeeStatus.Active },
-                { label: 'Inactive', value: EmployeeStatus.Inactive }
+                { label: 'Active', value: ClientStatus.Active },
+                { label: 'Inactive', value: ClientStatus.Inactive }
               ]}
               rules={[
                 {
                   required: true,
-                  message: 'Please select your status'
+                  message: 'Please select status'
                 }
               ]}
             />

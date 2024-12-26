@@ -1,3 +1,5 @@
+import { AxiosResponse } from 'axios';
+
 import { IApiSuccess } from 'utils/Types';
 import { ApiEndPoints } from 'utils/constants';
 
@@ -79,10 +81,10 @@ export const projectAPI = {
       });
   },
 
-  async exportProjects(data: IProjectReq): Promise<Blob> {
+  async exportProjects(data: IProjectReq): Promise<AxiosResponse<Blob>> {
     return apiInstance
       .post(ApiEndPoints.project.exportProjects, data, { responseType: 'blob' })
-      .then((response) => response.data)
+      .then((response) => response)
       .catch((error) => {
         throw error?.response?.data;
       });

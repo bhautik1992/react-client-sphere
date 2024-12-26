@@ -1,13 +1,17 @@
 import { ButtonWrapper } from './style';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Form, Row, message } from 'antd';
+import { Button, Divider, Form, Row, message } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect } from 'react';
-import { isValidPhoneNumber } from 'react-phone-number-input';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import { RenderDatePicker, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
+import {
+  RenderDatePicker,
+  RenderSelectInput,
+  RenderTextArea,
+  RenderTextInput
+} from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
 import { IAddEmployeeReq, IEmployee, IEmployeeReq } from 'services/api/employee/types';
@@ -17,7 +21,8 @@ import { dashboardKey, employeeKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { Department, EmployeeRole } from 'utils/constants/enum';
+import { Department, EmployeeRole, EmployeeStatus } from 'utils/constants/enum';
+import pattern from 'utils/constants/pattern';
 import { ROUTES } from 'utils/constants/routes';
 
 const AddEditEmployee = () => {
@@ -139,6 +144,7 @@ const AddEditEmployee = () => {
     if (!employeeData) return;
     form.setFieldsValue({
       firstName: employeeData?.firstName ?? null,
+      middleName: employeeData?.middleName ?? null,
       lastName: employeeData?.lastName ?? null,
       personalEmail: employeeData?.personalEmail ?? null,
       companyEmail: employeeData?.companyEmail ?? null,
@@ -147,7 +153,16 @@ const AddEditEmployee = () => {
       department: employeeData?.department ?? null,
       joiningDate: employeeData?.joiningDate ? dayjs(employeeData?.joiningDate) : null,
       dateOfBirth: employeeData?.dateOfBirth ? dayjs(employeeData?.dateOfBirth) : null,
-      reportingPersonId: employeeData?.reportingPersonId ?? null
+      reportingPersonId: employeeData?.reportingPersonId ?? null,
+      PAN: employeeData?.PAN ?? null,
+      aadhar: employeeData?.aadhar ?? null,
+      status: employeeData?.status ?? null,
+      address: employeeData?.address ?? null,
+      bankName: employeeData?.bankName ?? null,
+      accountNumber: employeeData?.accountNumber ?? null,
+      IFSC: employeeData?.IFSC ?? null,
+      emergencyContactName: employeeData?.emergencyContactName ?? null,
+      emergencyContactNumber: employeeData?.emergencyContactNumber ?? null
     });
   }, [employeeData, form]);
 
@@ -169,6 +184,7 @@ const AddEditEmployee = () => {
 
         <Form onFinish={onSubmit} form={form} autoComplete="off" className="signInForm">
           <Row gutter={[0, 30]}>
+            <Divider orientation="left">Personal Details</Divider>
             <RenderTextInput
               col={{ xs: 12 }}
               name="firstName"
@@ -180,6 +196,20 @@ const AddEditEmployee = () => {
                 {
                   required: true,
                   message: 'Please enter your first name'
+                }
+              ]}
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="middleName"
+              placeholder="Enter middle name"
+              label="Middle Name"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter your middle name'
                 }
               ]}
             />
@@ -203,6 +233,7 @@ const AddEditEmployee = () => {
               placeholder="Enter personal email"
               label="Personal Email"
               allowClear="allowClear"
+              disabled={!!employeeData?.personalEmail}
               size="middle"
               rules={[
                 {
@@ -222,6 +253,7 @@ const AddEditEmployee = () => {
               label="Company Email"
               allowClear="allowClear"
               size="middle"
+              disabled={!!employeeData?.companyEmail}
               rules={[
                 {
                   required: true,
@@ -241,17 +273,10 @@ const AddEditEmployee = () => {
               allowClear="allowClear"
               size="middle"
               rules={[
-                () => ({
-                  validator: (_: any, value: string) => {
-                    if (!value) {
-                      return Promise.reject(new Error('Please enter your phone number'));
-                    } else if (!value || isValidPhoneNumber(value, 'IN')) {
-                      return Promise.resolve();
-                    } else {
-                      return Promise.reject(new Error('Please enter valid phone number'));
-                    }
-                  }
-                })
+                {
+                  required: true,
+                  message: 'Please enter phone number'
+                }
               ]}
             />
             <RenderSelectInput
@@ -264,7 +289,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please select your role'
+                  message: 'Please select role'
                 }
               ]}
             />
@@ -278,7 +303,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please select your department'
+                  message: 'Please select department'
                 }
               ]}
             />
@@ -293,7 +318,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please select your joining date'
+                  message: 'Please select joining date'
                 }
               ]}
             />
@@ -317,7 +342,165 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please select your reporting person'
+                  message: 'Please select reporting person'
+                }
+              ]}
+            />
+            <RenderSelectInput
+              col={{ xs: 12 }}
+              name="status"
+              placeholder="Select your status"
+              label="Status"
+              allowClear={true}
+              optionLabel={EmployeeStatus}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select status'
+                }
+              ]}
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="PAN"
+              placeholder="Enter PAN number"
+              label="PAN Number"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  validator: (_: any, value: string) => {
+                    const regex = pattern.PAN;
+                    if (value && !regex.test(value)) {
+                      return Promise.reject(new Error('Please enter valid PAN number'));
+                    }
+                    return Promise.resolve();
+                  }
+                },
+                {
+                  required: true,
+                  whitespace: true,
+                  message: 'Please enter PAN number'
+                }
+              ]}
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="aadhar"
+              placeholder="Enter Aadhar number"
+              label="Aadhar Number"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  whitespace: true,
+                  message: 'Please enter Aadhar number'
+                },
+                {
+                  validator: (_: any, value: string) => {
+                    const regex = pattern.aadhar; // assuming pattern.aadhar is your regex
+                    if (value && !regex.test(value)) {
+                      return Promise.reject(new Error('Please enter a valid Aadhar number'));
+                    }
+                    return Promise.resolve();
+                  }
+                }
+              ]}
+            />
+            <RenderTextArea
+              col={{ xs: 12 }}
+              name="address"
+              placeholder="Enter your address"
+              label="Address"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter your address'
+                }
+              ]}
+            />
+            <Divider orientation="left">Bank Details</Divider>
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="bankName"
+              placeholder="Enter bank name"
+              label="Bank Name"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter bank name'
+                }
+              ]}
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="accountNumber"
+              placeholder="Enter account number"
+              label="Account Number"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter account number'
+                }
+              ]}
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="IFSC"
+              placeholder="Enter IFSC code"
+              label="IFSC Code"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  whitespace: true,
+                  message: 'Please enter IFSC code'
+                },
+                {
+                  validator: (_: any, value: string) => {
+                    const regex = pattern.IFSC; // assuming pattern.IFSC is your regex
+                    if (value && !regex.test(value)) {
+                      return Promise.reject(new Error('Please enter a valid IFSC code'));
+                    }
+                    return Promise.resolve();
+                  }
+                }
+              ]}
+            />
+            <Divider orientation="left">Emergency Contact</Divider>
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="emergencyContactName"
+              placeholder="Enter emergency contact name"
+              label="Contact Name"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter emergency contact name'
+                }
+              ]}
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="emergencyContactNumber"
+              placeholder="Enter emergency contact number"
+              label="Contact Number"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter emergency contact number'
                 }
               ]}
             />

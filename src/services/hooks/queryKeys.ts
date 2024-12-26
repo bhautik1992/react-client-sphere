@@ -133,7 +133,8 @@ export const employeeKeys = {
   employeeDetail: (id: number) => [`employee-detail-${id}`],
   employeeDelete: [`employee-delete`],
   employeeAdd: [`add-employee`],
-  employeeEdit: [`edit-employee`]
+  employeeEdit: [`edit-employee`],
+  employeeStatus: [`employee-status`]
 };
 
 export const invoiceKeys = {

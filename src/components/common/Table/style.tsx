@@ -33,7 +33,7 @@ export const StyledTable = styled(Table)`
                         line-height: 30px;
                         text-align: center;
                         font-size: 14px;
-                        max-width: 100px;
+                        max-width: 120px;
                         cursor: pointer;
                       }
                     }

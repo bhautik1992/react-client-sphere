@@ -1,3 +1,5 @@
+import { useMutation } from '@tanstack/react-query';
+
 import { employeeAPI } from 'services/api/employee';
 import { IEmployeeReq } from 'services/api/employee/types';
 
@@ -45,5 +47,30 @@ export const useDeleteEmployee = () => {
   return useRequest({
     mutationFn: employeeAPI.deleteEmployee,
     mutationKey: employeeKeys.employeeDelete
+  });
+};
+
+export const useEmployeeStatus = () => {
+  return useRequest({
+    mutationFn: employeeAPI.employeeStatus,
+    mutationKey: employeeKeys.employeeStatus
+  });
+};
+
+export const useExportEmployees = () => {
+  return useMutation((filters: IEmployeeReq) => employeeAPI.exportEmployees(filters), {
+    onError: (error) => {
+      console.error('Export failed:', error);
+    },
+    onSuccess: (data) => {
+      const blob = data as unknown as Blob;
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Employees_${Date.now()}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
   });
 };

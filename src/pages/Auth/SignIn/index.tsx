@@ -45,7 +45,7 @@ const SignIn: React.FC = () => {
 
   return (
     <>
-      <Meta title="Client Sphere - Sign In" />
+      <Meta title="Infiazure PMS - Sign In" />
       <AuthLayout>
         <Wrapper>
           <div className="formTitle">

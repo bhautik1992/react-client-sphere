@@ -108,6 +108,16 @@ const companyRoute = [
     roles: [EmployeeRoleName.Admin],
     children: [
       {
+        path: `${ROUTES.companyAdd}`,
+        component: () => import('../components/module/companyManagement/AddEditCompany'),
+        roles: [EmployeeRoleName.Admin]
+      },
+      {
+        path: `${ROUTES.companyEdit}/:id`,
+        component: () => import('../components/module/companyManagement/AddEditCompany'),
+        roles: [EmployeeRoleName.Admin]
+      },
+      {
         path: `${ROUTES.companyView}/:id`,
         component: () => import('../components/module/companyManagement/ViewCompany'),
         roles: [EmployeeRoleName.Admin]
@@ -147,47 +157,6 @@ const clientRoute = [
       {
         path: `${ROUTES.clientEdit}/:id`,
         component: () => import('../components/module/clientManagement/AddEditClient'),
-        roles: [
-          EmployeeRoleName.Admin,
-          EmployeeRoleName.Sales_Executive,
-          EmployeeRoleName.Sales_Manager
-        ]
-      }
-    ]
-  }
-];
-
-const vendorRoute = [
-  {
-    path: ROUTES.vendorManagement,
-    component: () => import('../pages/VendorManagement'),
-    roles: [
-      EmployeeRoleName.Admin,
-      EmployeeRoleName.Sales_Executive,
-      EmployeeRoleName.Sales_Manager
-    ],
-    children: [
-      {
-        path: `${ROUTES.vendorView}/:id`,
-        component: () => import('../components/module/vendorManagement/ViewVendor'),
-        roles: [
-          EmployeeRoleName.Admin,
-          EmployeeRoleName.Sales_Executive,
-          EmployeeRoleName.Sales_Manager
-        ]
-      },
-      {
-        path: `${ROUTES.vendorAdd}`,
-        component: () => import('../components/module/vendorManagement/AddEditVendor'),
-        roles: [
-          EmployeeRoleName.Admin,
-          EmployeeRoleName.Sales_Executive,
-          EmployeeRoleName.Sales_Manager
-        ]
-      },
-      {
-        path: `${ROUTES.vendorEdit}/:id`,
-        component: () => import('../components/module/vendorManagement/AddEditVendor'),
         roles: [
           EmployeeRoleName.Admin,
           EmployeeRoleName.Sales_Executive,
@@ -345,7 +314,6 @@ const routesConfig = [
   ...employeeRoute,
   ...companyRoute,
   ...clientRoute,
-  ...vendorRoute,
   ...projectRoute,
   ...projectCrRoute,
   ...invoiceRoute,

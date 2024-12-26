@@ -70,11 +70,11 @@ export const ApiEndPoints = {
     exportCrs: `cr/export`
   },
   company: {
-    companyList: `company/list`,
-    addCompany: `company/create`,
-    editCompany: `company/update`,
-    deleteCompany: `company/delete`,
-    companyDetail: `company/get`
+    companyList: `vendor/list`,
+    addCompany: `vendor/create`,
+    editCompany: `vendor/update`,
+    deleteCompany: `vendor/delete`,
+    companyDetail: `vendor/get`
   },
   country_state_city: {
     countryList: `country-state-city/country-list`,

@@ -18,7 +18,7 @@ const Dashboard = () => {
   const { data } = useDashboard();
   return (
     <>
-      <Meta title="Client Sphere - Dashboard" />
+      <Meta title="Infiazure PMS - Dashboard" />
       <Wrapper>
         <StyledBreadcrumb items={BreadcrumbsPath}></StyledBreadcrumb>
         <ContentHeader pageTitle="Dashboard" />

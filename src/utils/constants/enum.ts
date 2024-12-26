@@ -4,7 +4,6 @@ export enum MenuPermissions {
   DASHBOARD = '1',
   EMPLOYEES = '2',
   CLIENTS = '3',
-  VENDORS = '4',
   PROJECTS = '5',
   PROJECT_CRS = '6',
   INVOICES = '7',

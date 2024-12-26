@@ -3,10 +3,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { SorterResult } from 'antd/es/table/interface';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import AddEditCompanyModal from 'components/common/Modal/AddCompanyModal';
 import CommonModal from 'components/common/Modal/CommonModal';
 import { CommonTable } from 'components/common/Table';
 
@@ -26,9 +24,6 @@ interface IProps {
 const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [companyData, setCompanyData] = useState<ICompany | null>(null);
 
   const { data: companyList, isLoading } = useCompanyList({ ...args, search: searchDebounce });
   const { mutate } = useDeleteCompany();
@@ -104,7 +99,7 @@ const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         }
         return (
           <>
-            <Tooltip title="View company" placement="top" trigger="hover">
+            <Tooltip title="View vendor" placement="top" trigger="hover">
               <Button
                 type="text"
                 size="small"
@@ -113,22 +108,21 @@ const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
                 onClick={() => navigate(`${ROUTES.companyView}/${record?.id}`)}
               />
             </Tooltip>
-            <Tooltip title="Edit company" placement="top" trigger="hover">
+            <Tooltip title="Edit vendor" placement="top" trigger="hover">
               <Button
                 type="text"
                 size="small"
                 className="cta_btn table_cta_btn"
                 icon={<EditOutlined />}
                 onClick={() => {
-                  setIsOpen(true);
-                  setCompanyData(record);
+                  navigate(`${ROUTES.companyEdit}/${record?.id}`);
                 }}
               />
             </Tooltip>
-            <Tooltip title="Delete company" placement="top" trigger="hover">
+            <Tooltip title="Delete vendor" placement="top" trigger="hover">
               <CommonModal
                 title="Delete"
-                content="Are you sure delete this company?"
+                content="Are you sure delete this vendor?"
                 type="confirm"
                 onConfirm={() => handleDeleteModal(record?.id)}
               >
@@ -147,45 +141,36 @@ const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
   ];
 
   return (
-    <>
-      <CommonTable
-        bordered
-        columns={columns}
-        dataSource={
-          (companyList?.result ?? []).length > 0
-            ? companyList?.result.map((item) => ({ ...item, key: item.id }))
-            : []
+    <CommonTable
+      bordered
+      columns={columns}
+      dataSource={
+        (companyList?.result ?? []).length > 0
+          ? companyList?.result.map((item) => ({ ...item, key: item.id }))
+          : []
+      }
+      currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
+      onChange={(pagination, _, sorter, extra) => {
+        const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
+        const pageIndex = pagination?.current ?? 1;
+        if (extra?.action === 'paginate') {
+          setArgs({
+            ...args,
+            offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
+            limit: pagination?.pageSize ?? 10
+          });
+        } else {
+          setArgs({
+            ...args,
+            sortBy: order ? columnKey : '',
+            sortOrder: order?.replace('end', '') ?? '',
+            offset: (pageIndex - 1) * args.limit
+          });
         }
-        currentPage={args.offset === 0 ? 1 : args.offset / 10 + 1}
-        onChange={(pagination, _, sorter, extra) => {
-          const { columnKey, order } = sorter as SorterResult<any>; // Type assertion
-          const pageIndex = pagination?.current ?? 1;
-          if (extra?.action === 'paginate') {
-            setArgs({
-              ...args,
-              offset: (pageIndex - 1) * (pagination?.pageSize ?? 10),
-              limit: pagination?.pageSize ?? 10
-            });
-          } else {
-            setArgs({
-              ...args,
-              sortBy: order ? columnKey : '',
-              sortOrder: order?.replace('end', '') ?? '',
-              offset: (pageIndex - 1) * args.limit
-            });
-          }
-        }}
-        loading={isLoading}
-        total={companyList?.recordsTotal ?? 10}
-      />
-      {isOpen && (
-        <AddEditCompanyModal
-          isOpen={Boolean(isOpen)}
-          setIsOpen={(flag) => setIsOpen(!!flag)}
-          companyData={companyData}
-        />
-      )}
-    </>
+      }}
+      loading={isLoading}
+      total={companyList?.recordsTotal ?? 10}
+    />
   );
 };
 

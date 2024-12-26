@@ -8,7 +8,6 @@ import CompanyManagement from 'components/svg/CompanyManagement';
 import Dashboard from 'components/svg/Dashboard';
 import EmployeeManagement from 'components/svg/EmployeeManagement';
 import ProjectManagement from 'components/svg/ProjectManagement';
-import Vendor from 'components/svg/Vendor';
 import Invoice from 'components/svg/invoice';
 import Payment from 'components/svg/payment';
 
@@ -25,7 +24,6 @@ const menuAccessByRole = {
     MenuPermissions.DASHBOARD,
     MenuPermissions.EMPLOYEES,
     MenuPermissions.CLIENTS,
-    MenuPermissions.VENDORS,
     MenuPermissions.PROJECTS,
     MenuPermissions.PROJECT_CRS,
     MenuPermissions.INVOICES,
@@ -36,7 +34,6 @@ const menuAccessByRole = {
     MenuPermissions.DASHBOARD,
     MenuPermissions.EMPLOYEES,
     MenuPermissions.CLIENTS,
-    MenuPermissions.VENDORS,
     MenuPermissions.PROJECTS,
     MenuPermissions.PROJECT_CRS,
     MenuPermissions.INVOICES
@@ -45,7 +42,6 @@ const menuAccessByRole = {
     MenuPermissions.DASHBOARD,
     MenuPermissions.EMPLOYEES,
     MenuPermissions.CLIENTS,
-    MenuPermissions.VENDORS,
     MenuPermissions.PROJECTS,
     MenuPermissions.PROJECT_CRS,
     MenuPermissions.INVOICES
@@ -89,7 +85,12 @@ const items = [
     <EmployeeManagement />
   ),
   createMenuItem(ROUTES.clientManagement, 'Clients', MenuPermissions.CLIENTS, <Client />),
-  createMenuItem(ROUTES.vendorManagement, 'Vendors', MenuPermissions.VENDORS, <Vendor />),
+  createMenuItem(
+    ROUTES.companyManagement,
+    'Vendors',
+    MenuPermissions.COMPANIES,
+    <CompanyManagement />
+  ),
   createMenuItem(
     ROUTES.projectManagement,
     'Projects',
@@ -103,13 +104,7 @@ const items = [
     <ProjectManagement />
   ),
   createMenuItem(ROUTES.invoiceManagement, 'Invoices', MenuPermissions.INVOICES, <Invoice />),
-  createMenuItem(ROUTES.paymentManagement, 'Payments', MenuPermissions.PAYMENT, <Payment />),
-  createMenuItem(
-    ROUTES.companyManagement,
-    'Companies',
-    MenuPermissions.COMPANIES,
-    <CompanyManagement />
-  )
+  createMenuItem(ROUTES.paymentManagement, 'Payments', MenuPermissions.PAYMENT, <Payment />)
 ];
 
 function compareLinkAndReturnKey(items: any, currentPath: any): any {

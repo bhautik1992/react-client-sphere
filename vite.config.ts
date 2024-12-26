@@ -28,9 +28,9 @@ export default defineConfig({
         display: 'standalone',
         scope: '/',
         start_url: '/',
-        name: 'client Sphere',
-        short_name: 'client Sphere',
-        description: 'client Sphere',
+        name: 'Infiazure PMS',
+        short_name: 'Infiazure PMS',
+        description: 'Infiazure PMS',
         icons: [
           {
             src: 'icons/icon-192x192.png',

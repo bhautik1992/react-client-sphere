@@ -37,6 +37,8 @@ export const ROUTES = {
 
   companyManagement: `/company-management`,
   companyView: `/company-management/view-company`,
+  companyAdd: `/company-management/add-company`,
+  companyEdit: `/company-management/edit-company`,
 
   invoiceManagement: `/invoice-management`,
   invoiceView: `/invoice-management/view-invoice`,

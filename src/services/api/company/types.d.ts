@@ -13,6 +13,8 @@ export interface ICompany {
   stateCode: string;
   stateName: string;
   cityName: string;
+  comment: string;
+  createdBy: number;
   assignedToProjects: IProject[];
   createdAt: string;
   updatedAt: string;
@@ -25,7 +27,7 @@ export interface ICompanyReq {
   search?: string;
   sortOrder?: string;
   sortBy?: Key;
-  deletedCompany?: boolean;
+  deletedVendor?: boolean;
 }
 
 export interface ICompanyRes {
@@ -40,6 +42,7 @@ export interface IAddCompanyReq {
   countryCode: string;
   stateCode: string;
   cityName: string;
+  comment: string;
 }
 
 export interface IAddCompanyRes {}

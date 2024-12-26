@@ -6,7 +6,6 @@ import { IEmployeeReq } from 'services/api/employee/types';
 import { IInvoiceReq } from 'services/api/invoice/types';
 import { IPaymentReq } from 'services/api/payment/types';
 import { IProjectReq } from 'services/api/project/types';
-import { IVendorReq } from 'services/api/vendor/types';
 
 export const authKeys = {
   authMutate: ['auth-mutate-key'],
@@ -30,22 +29,6 @@ export const clientKeys = {
   clientAdd: [`add-client`],
   clientEdit: [`edit-client`],
   companyDelete: [`company-delete`]
-};
-
-export const vendorKeys = {
-  vendorList: (data: IVendorReq) => [
-    `vendor-list`,
-    `${data?.limit}`,
-    `${data?.offset}`,
-    `${data?.search ?? ''}`,
-    `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''}`,
-    `${data?.deletedVendor ?? ''}`
-  ],
-  vendorDetail: (id: number) => [`vendor-detail-${id}`],
-  vendorAdd: [`add-vendor`],
-  vendorEdit: [`edit-vendor`],
-  vendorDelete: [`vendor-delete`]
 };
 
 export const projectKeys = {
@@ -93,7 +76,7 @@ export const companyKeys = {
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
-    `${data?.deletedCompany ?? ''}`
+    `${data?.deletedVendor ?? ''}`
   ],
   companyDetail: (id: number) => [`company-detail-${id}`],
   companyDelete: [`company-delete`],

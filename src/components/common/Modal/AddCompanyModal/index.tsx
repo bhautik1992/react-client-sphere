@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Button, Form, Modal, ModalProps, Row, message } from 'antd';
 import React, { useState } from 'react';
 
-import { RenderSelectInput, RenderTextInput } from 'components/common/FormField';
+import { RenderSelectInput, RenderTextArea, RenderTextInput } from 'components/common/FormField';
 
 import { IAddCompanyReq, ICompany, ICompanyReq } from 'services/api/company/types';
 import { ICity, ICountry, IState } from 'services/api/country/types';
@@ -178,7 +178,8 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
           address: companyData?.address ?? null,
           countryCode: companyData?.countryCode ?? null,
           stateCode: companyData?.stateCode ?? null,
-          cityName: companyData?.cityName ?? null
+          cityName: companyData?.cityName ?? null,
+          comment: companyData?.comment ?? ''
         }}
       >
         <Row gutter={[0, 30]}>
@@ -286,6 +287,14 @@ const AddEditCompanyModal: React.FC<IAddCompanyModalProps & ModalProps> = ({
                 message: 'Please select city'
               }
             ]}
+          />
+          <RenderTextArea
+            col={{ xs: 24 }}
+            name="comment"
+            placeholder="Enter comment"
+            label="Comment"
+            allowClear="allowClear"
+            size="middle"
           />
         </Row>
         <ButtonWrapper>

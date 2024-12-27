@@ -3,7 +3,6 @@ import { ButtonWrapper } from './style';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Form, Row, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { isValidPhoneNumber } from 'react-phone-number-input';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import {
@@ -18,7 +17,7 @@ import { IAddClientReq, IClient, IClientReq } from 'services/api/client/types';
 import { ICity, ICountry, IState } from 'services/api/country/types';
 import { useAddClient, useClientDetail, useEditClient } from 'services/hooks/client';
 import { useCityList, useCountryList, useStateList } from 'services/hooks/country';
-import { useDashboardCompany } from 'services/hooks/dashboard';
+import { useDashboardCompany, useDashboardEmployee } from 'services/hooks/dashboard';
 import { clientKeys, dashboardKey } from 'services/hooks/queryKeys';
 import { authStore } from 'services/store/auth';
 
@@ -36,6 +35,14 @@ const AddEditClient = () => {
   const { data: clientData } = useClientDetail(Number(id));
   const [value, setValue] = useState<string>('');
   const { employeeData } = authStore((state) => state);
+
+  const { data: employeeList } = useDashboardEmployee();
+  const employeeListOption = employeeList?.map((item) => {
+    return {
+      label: `${item.firstName} ${item.lastName}`,
+      value: item.id
+    };
+  });
 
   const { data: companyList } = useDashboardCompany();
   const companyListOption = companyList?.map((item) => {
@@ -179,11 +186,12 @@ const AddEditClient = () => {
     form.setFieldsValue({
       firstName: clientData?.firstName ?? null,
       lastName: clientData?.lastName ?? null,
+      nickName: clientData?.nickName ?? null,
       email: clientData?.email ?? null,
       phone: clientData?.phone ?? null,
       companyId: clientData?.company?.id ?? null,
       clientCompanyName: clientData?.clientCompanyName ?? null,
-      accountManager: clientData?.accountManager ?? null,
+      accountManagerId: clientData?.accountManager?.id ?? null,
       website: clientData?.website ?? null,
       gender: clientData?.gender ?? null,
       address: clientData?.address ?? null,
@@ -192,7 +200,7 @@ const AddEditClient = () => {
       cityName: clientData?.cityName ?? null,
       zipCode: clientData?.zipCode ?? null,
       status: clientData?.status ?? null,
-      skypeId: clientData?.skypeId ?? null
+      comment: clientData?.comment ?? null
     });
   }, [clientData, form, employeeData]);
 
@@ -244,6 +252,14 @@ const AddEditClient = () => {
             />
             <RenderTextInput
               col={{ xs: 12 }}
+              name="nickName"
+              placeholder="Enter nick name"
+              label="Nick Name"
+              allowClear="allowClear"
+              size="middle"
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
               name="email"
               placeholder="Enter email address"
               label="Email"
@@ -269,15 +285,10 @@ const AddEditClient = () => {
               onChange={(value: any) => setValue(value)}
               value={value}
               rules={[
-                () => ({
-                  validator: (_: any, value: string) => {
-                    if (!value || isValidPhoneNumber(value)) {
-                      return Promise.resolve();
-                    } else {
-                      return Promise.reject(new Error('Please enter valid phone number'));
-                    }
-                  }
-                })
+                {
+                  required: true,
+                  message: 'Please enter phone number'
+                }
               ]}
             />
             <RenderTextArea
@@ -310,27 +321,17 @@ const AddEditClient = () => {
               label="Client Company"
               allowClear="allowClear"
               size="middle"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please enter your client company name'
-                }
-              ]}
             />
-            <RenderTextInput
+            <RenderSelectInput
               col={{ xs: 12 }}
-              name="accountManager"
-              placeholder="Enter account manager"
+              name="accountManagerId"
+              placeholder="Select account manager"
               label="Account Manager"
-              allowClear="allowClear"
-              size="middle"
-              disabled={Boolean(
-                clientData?.accountManager ?? employeeData?.firstName + ' ' + employeeData?.lastName
-              )}
+              optionLabel={employeeListOption}
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your account manager'
+                  message: 'Please select account manager'
                 }
               ]}
             />
@@ -365,10 +366,7 @@ const AddEditClient = () => {
               placeholder="Select your status"
               label="Status"
               allowClear={true}
-              optionLabel={[
-                { label: 'Active', value: ClientStatus.Active },
-                { label: 'Inactive', value: ClientStatus.Inactive }
-              ]}
+              optionLabel={ClientStatus}
               rules={[
                 {
                   required: true,
@@ -424,17 +422,17 @@ const AddEditClient = () => {
             />
             <RenderTextInput
               col={{ xs: 12 }}
-              name="skypeId"
-              placeholder="Enter Skype Id"
-              label="Skype Id"
-              allowClear="allowClear"
-              size="middle"
-            />
-            <RenderTextInput
-              col={{ xs: 12 }}
               name="zipCode"
               placeholder="Enter zip code"
               label="Zip Code"
+              allowClear="allowClear"
+              size="middle"
+            />
+            <RenderTextArea
+              col={{ xs: 12 }}
+              name="comment"
+              placeholder="Enter comment"
+              label="Comment"
               allowClear="allowClear"
               size="middle"
             />

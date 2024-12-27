@@ -1,6 +1,6 @@
-import { DeleteOutlined, DownOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Popconfirm, Tag, Tooltip, message } from 'antd';
+import { Button, Tooltip, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { SorterResult } from 'antd/es/table/interface';
 import { useNavigate } from 'react-router-dom';
@@ -14,9 +14,9 @@ import { clientKeys } from 'services/hooks/queryKeys';
 import { authStore } from 'services/store/auth';
 
 import { IApiError } from 'utils/Types';
-import { ClientStatus, EmployeeRoleName } from 'utils/constants/enum';
+import { EmployeeRoleName } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
-import { renderTagColor } from 'utils/renderColor';
+import ClientStatusDropdown from 'utils/renderDropDownStatus/clientStatusDropDown';
 
 interface IProps {
   searchDebounce: string;
@@ -59,7 +59,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
 
   const handleConfirm = (status: string, id: number) => {
     const data = {
-      status: status === ClientStatus.Active ? ClientStatus.Inactive : ClientStatus.Active,
+      status: status,
       clientId: id
     };
 
@@ -100,6 +100,12 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       sorter: true
     },
     {
+      title: 'Nick name',
+      dataIndex: 'nickName',
+      key: 'nickName',
+      sorter: true
+    },
+    {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
@@ -110,7 +116,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       title: 'Phone number',
       dataIndex: 'phone',
       key: 'phone',
-      sorter: true,
+      sorter: false,
       render: (_, record: IClient) => (
         <>{record?.phone && record?.phone?.length > 0 ? record?.phone : '-'}</>
       )
@@ -123,17 +129,14 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       render: (_, record: IClient) => <>{record?.company?.name ?? '-'}</>
     },
     {
-      title: 'Client Company Name',
-      dataIndex: 'clientCompanyName',
-      key: 'clientCompanyName',
-      sorter: false,
-      render: (_, record: IClient) => <>{record?.clientCompanyName ?? '-'}</>
-    },
-    {
       title: 'Account Manager',
       dataIndex: 'accountManager',
       key: 'accountManager',
-      render: (_, record: IClient) => <>{record?.accountManager ?? '-'}</>
+      render: (_, record: IClient) => (
+        <>
+          {record?.accountManager?.firstName ?? '-'} {record?.accountManager?.lastName ?? '-'}
+        </>
+      )
     },
     {
       title: 'Country',
@@ -160,23 +163,11 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
       dataIndex: 'status',
       key: 'status',
       render: (_, record: IClient) => (
-        <Popconfirm
-          title="Status"
-          placement="left"
-          description={`Are you sure to ${
-            record?.status === ClientStatus.Active ? ClientStatus.Inactive : ClientStatus.Active
-          } this client?`}
-          okText="Yes"
-          cancelText="No"
-          onConfirm={() => handleConfirm(record?.status, record?.id)}
-        >
-          <Tag
-            className="table-status-tag"
-            color={renderTagColor(record?.status === ClientStatus.Active)}
-          >
-            {record?.status === ClientStatus.Active ? 'Active' : 'Inactive'} <DownOutlined />
-          </Tag>
-        </Popconfirm>
+        <ClientStatusDropdown
+          status={record?.status ?? 'active'}
+          clientId={record?.id ?? 0}
+          onStatusChange={(newStatus, crId) => handleConfirm(newStatus, crId)}
+        />
       )
     },
     {

@@ -2,17 +2,20 @@ import { Key } from 'react';
 
 import { ICompany } from '../company/types';
 import { ICountry } from '../country/types';
+import { IEmployee } from '../employee/types';
 import { IProject } from '../project/types';
 
 export interface IClient {
   id: number;
   firstName: string;
   lastName: string;
+  nickName: string;
   email: string;
   phone: string;
   company: ICompany;
   clientCompanyName: string;
-  accountManager: string;
+  accountManagerId: number;
+  accountManager: IEmployee;
   website: string;
   address: string;
   countryCode: string;
@@ -23,7 +26,7 @@ export interface IClient {
   gender: string;
   status: string;
   zipCode: string;
-  skypeId: string;
+  comment: string;
   projects: IProject[];
   deletedAt: string;
   createdAt: string;
@@ -42,11 +45,12 @@ export interface IClientReq {
 export interface IAddClientReq {
   firstName: string;
   lastName: string;
+  nickName: string;
   email: string;
   phone: string;
   companyId: number;
   clientCompanyName: string;
-  accountManager: string;
+  accountManagerId: number;
   webSite: string;
   gender: string;
   countryCode: string;
@@ -55,7 +59,7 @@ export interface IAddClientReq {
   status: string;
   address: string;
   zipCode: string;
-  skypeId: string;
+  comment: string;
 }
 
 export interface IClientRes {

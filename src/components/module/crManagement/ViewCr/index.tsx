@@ -159,7 +159,9 @@ const ViewCr = () => {
             </Col>
             <Col xs={6}>
               <h4>Status</h4>
-              <p>{crData?.client?.status === ClientStatus.Active ? 'Active' : 'Inactive'}</p>
+              <p>
+                {ClientStatus.find((item) => item.value == crData?.client?.status)?.label ?? '-'}
+              </p>
             </Col>
           </Row>
           <Row className="crRow">

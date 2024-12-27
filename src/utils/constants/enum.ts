@@ -19,9 +19,10 @@ export enum EmployeeStatusName {
   Pending = 'pending'
 }
 
-export enum ClientStatus {
+export enum ClientStatusName {
   Active = 'active',
-  Inactive = 'inactive'
+  Inactive = 'inactive',
+  Hold = 'hold'
 }
 
 export enum ProjectStatusName {
@@ -339,5 +340,20 @@ export const EmployeeStatus = [
   {
     value: EmployeeStatusName.Pending,
     label: 'Pending'
+  }
+];
+
+export const ClientStatus = [
+  {
+    value: ClientStatusName.Active,
+    label: 'Active'
+  },
+  {
+    value: ClientStatusName.Inactive,
+    label: 'Inactive'
+  },
+  {
+    value: ClientStatusName.Hold,
+    label: 'Hold'
   }
 ];

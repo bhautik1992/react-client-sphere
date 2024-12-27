@@ -1,8 +1,7 @@
 import { DetailWrapper } from './style';
 
-import { DownOutlined } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Col, Popconfirm, Row, Tag, Tooltip, message } from 'antd';
+import { Col, Row, Tooltip, message } from 'antd';
 import { Link, useParams } from 'react-router-dom';
 
 import StyledBreadcrumb from 'components/layout/breadcrumb';
@@ -12,9 +11,8 @@ import { useClientDetail, useClientStatus } from 'services/hooks/client';
 import { clientKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
-import { ClientStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
-import { renderTagColor } from 'utils/renderColor';
+import ClientStatusDropdown from 'utils/renderDropDownStatus/clientStatusDropDown';
 
 const BreadcrumbsPath = [
   {
@@ -32,11 +30,10 @@ const ViewClient = () => {
   const { data: clientData } = useClientDetail(Number(id));
   const { mutate } = useClientStatus();
 
-  const handleConfirm = () => {
+  const handleConfirm = (newStatus: string, id: number) => {
     const data = {
-      status:
-        clientData?.status === ClientStatus.Active ? ClientStatus.Inactive : ClientStatus.Active,
-      clientId: Number(id)
+      status: newStatus,
+      clientId: id
     };
 
     mutate(data, {
@@ -69,80 +66,67 @@ const ViewClient = () => {
       <div className="shadow-paper">
         <div className="pageHeader">
           <h2 className="pageTitle">Client Detail</h2>
-          <Popconfirm
-            title="Status"
-            placement="bottomLeft"
-            description={`Are you sure to ${
-              clientData?.status === ClientStatus.Active
-                ? ClientStatus.Inactive
-                : ClientStatus.Active
-            } this client?`}
-            okText="Yes"
-            cancelText="No"
-            onConfirm={() => handleConfirm()}
-          >
-            <Tag
-              color={renderTagColor(
-                clientData?.status === ClientStatus.Active ? 'Active' : 'Inactive'
-              )}
-            >
-              {clientData?.status === ClientStatus.Active ? 'Active' : 'Inactive'} <DownOutlined />
-            </Tag>
-          </Popconfirm>
+          <ClientStatusDropdown
+            status={clientData?.status ?? 'active'}
+            clientId={clientData?.id ?? 0}
+            onStatusChange={(newStatus, crId) => handleConfirm(newStatus, crId)}
+          />
         </div>
         <DetailWrapper>
           <Row className="clientRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>First Name</h4>
               <p>{clientData?.firstName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Last Name</h4>
               <p>{clientData?.lastName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
+              <h4>Nick Name</h4>
+              <p>{clientData?.nickName ?? '-'}</p>
+            </Col>
+            <Col xs={4}>
               <h4>Email</h4>
               <p>{clientData?.email ?? '-'}</p>
             </Col>
-          </Row>
-          <Row className="clientRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Phone</h4>
               <p>{clientData?.phone ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Gender</h4>
               <p>{clientData?.gender ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+          </Row>
+          <Row className="clientRow">
+            <Col xs={4}>
+              <h4>Country</h4>
+              <p>{clientData?.countryName ?? '-'}</p>
+            </Col>
+            <Col xs={4}>
+              <h4>State</h4>
+              <p>{clientData?.stateName ?? '-'}</p>
+            </Col>
+            <Col xs={4}>
+              <h4>City</h4>
+              <p>{clientData?.cityName ?? '-'}</p>
+            </Col>
+            <Col xs={4}>
+              <h4>Company Name</h4>
+              <p>{clientData?.company?.name ?? '-'}</p>
+            </Col>
+            <Col xs={4}>
+              <h4>Client Company</h4>
+              <p>{clientData?.clientCompanyName ?? '-'}</p>
+            </Col>
+            <Col xs={4}>
               <h4>Address</h4>
               <p>{clientData?.address ?? '-'}</p>
             </Col>
           </Row>
           <Row className="clientRow">
-            <Col xs={6}>
-              <h4>Country</h4>
-              <p>{clientData?.countryName ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>State</h4>
-              <p>{clientData?.stateName ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>City</h4>
-              <p>{clientData?.cityName ?? '-'}</p>
-            </Col>
-          </Row>
-          <Row className="clientRow">
-            <Col xs={6}>
-              <h4>Company Name</h4>
-              <p>{clientData?.company?.name ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Client Company Name</h4>
-              <p>{clientData?.clientCompanyName ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>No. of Projects</h4>
               <Tooltip
                 title={
@@ -162,17 +146,22 @@ const ViewClient = () => {
                 <p>{clientData?.projects?.length ?? '-'}</p>
               </Tooltip>
             </Col>
-          </Row>
-          <Row className="clientRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Account Manager</h4>
-              <p>{clientData?.accountManager ?? '-'}</p>
+              <p>
+                {clientData?.accountManager?.firstName + ' ' + clientData?.accountManager?.lastName}
+              </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Website</h4>
               <p>{clientData?.website ?? '-'}</p>
             </Col>
-            <Col xs={6}></Col>
+            <Col xs={4}>
+              <h4>Comment</h4>
+              <p>{clientData?.comment ?? '-'}</p>
+            </Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
           </Row>
         </DetailWrapper>
       </div>

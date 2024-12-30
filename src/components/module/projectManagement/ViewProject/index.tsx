@@ -17,7 +17,6 @@ import {
   BillingType,
   ClientStatus,
   InvoicePaymentCycle,
-  InvoicePaymentCycleName,
   ProjectStatus,
   ProjectStatusName
 } from 'utils/constants/enum';
@@ -85,31 +84,29 @@ const ViewProject = () => {
         <DetailWrapper>
           <Divider orientation="left">Project Information</Divider>
           <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Name</h4>
               <p>{projectData?.name ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Description</h4>
               <p>{projectData?.description ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Status</h4>
               <p>{ProjectStatus.find((item) => item.value == projectData?.status)?.label}</p>
             </Col>
-          </Row>
-          <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Start Date</h4>
               <p>
                 {projectData?.startDate ? dayjs(projectData?.startDate).format(DATE_FORMAT) : '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>End Date</h4>
               <p>{projectData?.endDate ? dayjs(projectData?.endDate).format(DATE_FORMAT) : '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Project Manager</h4>
               <p>
                 {projectData?.projectManager
@@ -120,112 +117,146 @@ const ViewProject = () => {
               </p>
             </Col>
           </Row>
+          <Row className="projectRow">
+            <Col xs={4}>
+              <h4>Team Leader</h4>
+              <p>
+                {projectData?.teamLeader?.firstName
+                  ? `${projectData.teamLeader.firstName} ${projectData.teamLeader.lastName ?? ''}`
+                  : '-'}
+              </p>
+            </Col>
+            <Col xs={4}>
+              <h4>Developers</h4>
+              <p>
+                {projectData?.developers?.length
+                  ? projectData.developers
+                      .map((dev) => `${dev.firstName} ${dev.lastName}`)
+                      .join(', ')
+                  : '-'}
+              </p>
+            </Col>
+            <Col xs={4}>
+              <h4>Technologies</h4>
+              <p>{projectData?.technologies?.length ? projectData.technologies.join(', ') : '-'}</p>
+            </Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+          </Row>
           <Divider orientation="left">Assign From Company</Divider>
           <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Name</h4>
               <p>{projectData?.assignFromCompany?.name ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Email</h4>
               <p>{projectData?.assignFromCompany?.email ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Country</h4>
               <p>{projectData?.assignFromCompany?.countryName ?? '-'}</p>
             </Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
           </Row>
           <Divider orientation="left">Assign To Company</Divider>
           <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Name</h4>
               <p>{projectData?.assignToCompany?.name ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Email</h4>
               <p>{projectData?.assignToCompany?.email ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Country</h4>
               <p>{projectData?.assignToCompany?.countryName ?? '-'}</p>
             </Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
           </Row>
           <Divider orientation="left">Client Details</Divider>
           <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>First Name</h4>
               <p>{projectData?.client?.firstName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Last Name</h4>
               <p>{projectData?.client?.lastName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Email</h4>
               <p>{projectData?.client?.email}</p>
             </Col>
-          </Row>
-          <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Address</h4>
               <p>{projectData?.client?.address ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Phone</h4>
               <p>{projectData?.client?.phone ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Status</h4>
-              <p>{projectData?.client?.status === ClientStatus.Active ? 'Active' : 'Inactive'}</p>
+              <p>
+                {ClientStatus.find((status) => status.value === projectData?.client?.status)?.label}
+              </p>
             </Col>
           </Row>
           <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Country</h4>
               <p>{projectData?.client?.clientCompanyName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>State</h4>
               <p>{projectData?.client?.stateName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>City</h4>
               <p>{projectData?.client?.cityName ?? '-'}</p>
             </Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
           </Row>
           <Divider orientation="left">Project Cost Information</Divider>
           <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Hourly Rate</h4>
               <p>{projectData?.hourlyMonthlyRate ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Project Hours</h4>
               <p>{projectData?.projectHours ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Total Cost</h4>
               <p>{projectData?.projectCost ?? '-'}</p>
             </Col>
-          </Row>
-          <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Billing Type</h4>
               <p>
                 {BillingType.find((item) => item.value == projectData?.billingType)?.label ?? '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Currency</h4>
               <p>{projectData?.currency ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Payment Term Days</h4>
               <p>{projectData?.paymentTermDays ?? '-'}</p>
             </Col>
           </Row>
           <Row className="projectRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Invoice Payment Cycle</h4>
               <p>
                 {projectData?.invoicePaymentCycle
@@ -235,20 +266,14 @@ const ViewProject = () => {
                     )?.label ?? '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Invoice Day</h4>
-              <p>
-                {(() => {
-                  if (projectData?.invoicePaymentCycle === InvoicePaymentCycleName.Monthly) {
-                    return projectData?.invoiceDate
-                      ? dayjs(projectData?.invoiceDate).format(DATE_FORMAT)
-                      : '-';
-                  } else {
-                    return projectData?.invoiceDay ?? '-';
-                  }
-                })()}
-              </p>
+              <p>{projectData?.invoiceDay ?? '-'}</p>
             </Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
           </Row>
         </DetailWrapper>
       </div>

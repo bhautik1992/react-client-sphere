@@ -2,6 +2,7 @@ import { Key } from 'react';
 
 import { IClient } from '../client/types';
 import { ICompany } from '../company/types';
+import { ICr } from '../cr/types';
 import { IEmployee } from '../employee/types';
 import { IAddMileStoneReq, IMileStone } from '../mileStone/types';
 
@@ -32,8 +33,10 @@ interface IProject {
   paymentTermDays: number;
   invoicePaymentCycle: string;
   invoiceDay: string;
-  invoiceDate: string;
+  developers: IEmployee[];
+  technologies: string[];
   milestones: IMileStone[];
+  crs: ICr[];
   deletedAt: string;
   createdAt: string;
   updatedAt: string;
@@ -47,6 +50,11 @@ export interface IProjectReq {
   sortBy?: Key;
   isInternalProject?: boolean;
   deletedProject?: boolean;
+  projectManagerId?: number;
+  clientId?: number;
+  status?: string;
+  name?: string;
+  startDate?: string;
 }
 
 export interface IAddProjectReq {
@@ -60,6 +68,8 @@ export interface IAddProjectReq {
   assignToCompanyId: number;
   projectManagerId: number;
   teamLeaderId: number;
+  developerId: number[];
+  technologies: string[];
   isInternalProject: boolean;
   billingType: string;
   hourlyMonthlyRate: number;
@@ -69,7 +79,6 @@ export interface IAddProjectReq {
   paymentTermDays: number;
   invoicePaymentCycle: string;
   invoiceDay: string;
-  invoiceDate: string;
   milestones: IAddMileStoneReq[];
 }
 

@@ -35,7 +35,7 @@ export enum ProjectStatusName {
 export enum CrStatusName {
   NotStarted = 'not_started',
   Started = 'started',
-  Pending = 'pending',
+  On_Hold = 'on_hold',
   Completed = 'completed',
   Cancelled = 'cancelled'
 }
@@ -261,8 +261,8 @@ export const CrStatus = [
     label: 'Started'
   },
   {
-    value: CrStatusName.Pending,
-    label: 'Pending'
+    value: CrStatusName.On_Hold,
+    label: 'On Hold'
   },
   {
     value: CrStatusName.Completed,

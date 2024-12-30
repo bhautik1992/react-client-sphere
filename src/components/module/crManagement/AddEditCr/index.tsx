@@ -15,14 +15,14 @@ import {
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
 import { IAddCrReq, ICr, ICrReq } from 'services/api/cr/types';
-import { IProject } from 'services/api/project/types';
+import { IProject, IProjectReq } from 'services/api/project/types';
 import { useAddCr, useCrDetail, useEditCr } from 'services/hooks/cr';
 import {
   useDashboardClient,
   useDashboardCompany,
   useDashboardProject
 } from 'services/hooks/dashboard';
-import { crKeys, dashboardKey } from 'services/hooks/queryKeys';
+import { crKeys, projectKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
@@ -32,6 +32,7 @@ import {
   COMPANY_EMAIL,
   CrStatus,
   CurrencyType,
+  InvoiceDayDate,
   InvoicePaymentCycle,
   InvoicePaymentCycleDay,
   InvoicePaymentCycleName,
@@ -53,6 +54,7 @@ const AddEditCr = () => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [invoicePaymentCycle, setInvoicePaymentCycle] = useState<string>('');
   const [projectId, setProjectId] = useState<number>(project?.id);
+  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
 
   const [billingType, setBillingType] = useState<string>('');
   const [filteredInvoicePaymentCycle, setFilteredInvoicePaymentCycle] = useState<
@@ -101,6 +103,7 @@ const AddEditCr = () => {
     setBillingType(projectDetails?.billingType ?? '');
     setInvoicePaymentCycle(projectDetails?.invoicePaymentCycle ?? '');
     setInvoicePaymentDropDown(projectDetails?.billingType ?? '');
+    setStartDate(dayjs(projectDetails?.startDate));
   };
 
   const setInvoicePaymentDropDown = (value: string) => {
@@ -165,7 +168,7 @@ const AddEditCr = () => {
         // invalidate dashboard
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [dashboardKey.dashboardCount].some((key) => {
+            return [projectKeys.projectList({} as IProjectReq)].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -221,17 +224,17 @@ const AddEditCr = () => {
     form.setFieldsValue({
       projectId: project?.id,
       clientId: project?.clientId,
-      clientCompanyName: project?.client.clientCompanyName,
+      clientCompanyName: project?.client?.clientCompanyName,
       currency: project?.currency,
       billingType: project?.billingType,
       paymentTermDays: project?.paymentTermDays ?? null,
       invoicePaymentCycle: project?.invoicePaymentCycle ?? null,
-      invoiceDay: project?.invoiceDay ?? null,
-      invoiceDate: project?.invoiceDate ? dayjs(project?.invoiceDate) : null
+      invoiceDay: project?.invoiceDay ?? null
     });
     setBillingType(project?.billingType);
     setInvoicePaymentCycle(project?.invoicePaymentCycle);
     setInvoicePaymentDropDown(project?.billingType);
+    setStartDate(dayjs(project?.startDate));
   }, [project, form]);
 
   useEffect(() => {
@@ -251,7 +254,7 @@ const AddEditCr = () => {
       assignFromCompanyId: crData?.assignFromCompanyId ?? null,
       projectId: crData?.projectId ?? null,
       clientId: crData?.clientId ?? null,
-      clientCompanyName: crData?.client.clientCompanyName ?? null,
+      clientCompanyName: crData?.client?.clientCompanyName ?? null,
       isInternalCr: crData?.isInternalCr ?? false,
       billingType: crData?.billingType ?? null,
       hourlyMonthlyRate: crData?.hourlyMonthlyRate ?? null,
@@ -260,8 +263,7 @@ const AddEditCr = () => {
       crCost: crData?.crCost ?? null,
       paymentTermDays: crData?.paymentTermDays ?? null,
       invoicePaymentCycle: crData?.invoicePaymentCycle ?? null,
-      invoiceDay: crData?.invoiceDay ?? null,
-      invoiceDate: crData?.invoiceDate ? dayjs(crData?.invoiceDate) : null
+      invoiceDay: crData?.invoiceDay ?? null
     });
   }, [crData, form, companyList]);
 
@@ -286,21 +288,6 @@ const AddEditCr = () => {
             <Divider orientation="left">Company Information</Divider>
             <RenderSelectInput
               col={{ xs: 12 }}
-              name="assignFromCompanyId"
-              placeholder="Select parent company"
-              label="Assign From"
-              allowClear={true}
-              optionLabel={companyListOption}
-              disabled={true}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select parent company'
-                }
-              ]}
-            />
-            <RenderSelectInput
-              col={{ xs: 12 }}
               name="projectId"
               placeholder="Select project"
               label="Project"
@@ -311,7 +298,22 @@ const AddEditCr = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please select cr manager'
+                  message: 'Please select project'
+                }
+              ]}
+            />
+            <RenderSelectInput
+              col={{ xs: 12 }}
+              name="assignFromCompanyId"
+              placeholder="Select parent company"
+              label="Assign From"
+              allowClear={true}
+              optionLabel={companyListOption}
+              disabled={true}
+              rules={[
+                {
+                  required: true,
+                  message: 'Please select parent company'
                 }
               ]}
             />
@@ -373,9 +375,7 @@ const AddEditCr = () => {
             />
             <RenderDatePicker
               col={{ xs: 12 }}
-              disabledDate={(currentDate: dayjs.Dayjs) =>
-                currentDate.isBefore(new Date(project?.startDate))
-              }
+              disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(startDate)}
               name="startDate"
               placeholder="Enter cr start date"
               label="Start Date"
@@ -391,7 +391,9 @@ const AddEditCr = () => {
             />
             <RenderDatePicker
               col={{ xs: 12 }}
-              // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isBefore(new Date())}
+              disabledDate={(currentDate: dayjs.Dayjs) =>
+                currentDate.isBefore(form.getFieldValue('startDate'))
+              }
               name="endDate"
               placeholder="Enter cr end date"
               label="End Date"
@@ -549,40 +551,27 @@ const AddEditCr = () => {
                 }}
               />
             )}
-            {invoicePaymentCycle === InvoicePaymentCycleName.Monthly && (
-              <RenderDatePicker
-                col={{ xs: 12 }}
-                name="invoiceDate"
-                placeholder="Select invoice date"
-                label="Invoice Day"
-                allowClear={true}
-                size="middle"
-                disabled={!!project?.invoiceDate || !!projectId}
-                format={DATE_FORMAT}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please select invoice day'
-                  }
-                ]}
-              />
-            )}
-            {(invoicePaymentCycle === InvoicePaymentCycleName.Weekly ||
-              invoicePaymentCycle === InvoicePaymentCycleName.BiWeekly) && (
+            {invoicePaymentCycle && (
               <RenderSelectInput
                 col={{ xs: 12 }}
                 name="invoiceDay"
                 placeholder="Select invoice day"
-                disabled={!!project?.invoiceDay || !!projectId}
                 label="Invoice Day"
                 allowClear={true}
-                optionLabel={InvoicePaymentCycleDay}
+                optionLabel={
+                  invoicePaymentCycle === InvoicePaymentCycleName.Monthly
+                    ? InvoiceDayDate
+                    : InvoicePaymentCycleDay
+                }
                 rules={[
                   {
                     required: true,
                     message: 'Please select invoice day'
                   }
                 ]}
+                onChange={(e: string) => {
+                  form.setFieldsValue({ invoiceDay: e.toString() });
+                }}
               />
             )}
           </Row>

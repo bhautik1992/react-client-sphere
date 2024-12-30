@@ -21,12 +21,11 @@ import { ROUTES } from 'utils/constants/routes';
 import CrStatusDropdown from 'utils/renderDropDownStatus/crStatusDropDown';
 
 interface IProps {
-  searchDebounce: string;
   args: ICrReq;
   setArgs: React.Dispatch<React.SetStateAction<ICrReq>>;
 }
 
-const CrManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const CrManagementTable: React.FC<IProps> = ({ args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { employeeData } = authStore((state) => state);
@@ -35,8 +34,7 @@ const CrManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) 
   const { mutate: statusMutate } = useCrStatus();
 
   const { data: crList, isLoading } = useCrList({
-    ...args,
-    search: searchDebounce
+    ...args
   });
   const handleDeleteModal = (id: number) => {
     deleteMutate(id, {
@@ -44,7 +42,7 @@ const CrManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) 
         // invalidate cr list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [crKeys.crList({ ...args, search: searchDebounce })].some((key) => {
+            return [crKeys.crList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -69,7 +67,7 @@ const CrManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) 
         // invalidate cr list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [crKeys.crList({ ...args, search: searchDebounce })].some((key) => {
+            return [crKeys.crList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );

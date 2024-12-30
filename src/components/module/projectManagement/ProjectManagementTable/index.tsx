@@ -29,12 +29,11 @@ import { ROUTES } from 'utils/constants/routes';
 import ProjectStatusDropdown from 'utils/renderDropDownStatus/projectStatusDropDown';
 
 interface IProps {
-  searchDebounce: string;
   args: IProjectReq;
   setArgs: React.Dispatch<React.SetStateAction<IProjectReq>>;
 }
 
-const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const ProjectManagementTable: React.FC<IProps> = ({ args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { employeeData } = authStore((state) => state);
@@ -46,8 +45,7 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
   const [selectedRecord, setSelectedRecord] = useState<IProject | null>(null);
 
   const { data: projectList, isLoading } = useProjectList({
-    ...args,
-    search: searchDebounce
+    ...args
   });
   const handleDeleteModal = (id: number) => {
     deleteMutate(id, {
@@ -55,7 +53,7 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         // invalidate project list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [projectKeys.projectList({ ...args, search: searchDebounce })].some((key) => {
+            return [projectKeys.projectList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -80,7 +78,7 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         // invalidate project list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [projectKeys.projectList({ ...args, search: searchDebounce })].some((key) => {
+            return [projectKeys.projectList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -193,7 +191,7 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       render: (_, record: IProject) => <>{record?.projectHours ?? '-'}</>
     },
     {
-      title: 'Total Cost',
+      title: 'Project Cost',
       dataIndex: 'projectCost',
       key: 'projectCost',
       sorter: false,

@@ -31,6 +31,7 @@ export interface IDashboardEmployeeRes {
 export interface IDashboardProjectRes {
   id: number;
   name: string;
+  startDate: string;
   status: string;
   billingType: string;
   currency: string;

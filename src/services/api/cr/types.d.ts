@@ -28,7 +28,6 @@ interface ICr {
   paymentTermDays: number;
   invoicePaymentCycle: string;
   invoiceDay: string;
-  invoiceDate: string;
   isInvoiced: boolean;
   deletedAt: string;
   createdAt: string;
@@ -43,6 +42,11 @@ export interface ICrReq {
   sortBy?: Key;
   isInternalCr?: boolean;
   deletedCr?: boolean;
+  clientId?: number;
+  projectId?: number;
+  status?: string;
+  name?: string;
+  startDate?: string;
 }
 
 export interface IAddCrReq {
@@ -63,7 +67,6 @@ export interface IAddCrReq {
   paymentTermDays: number;
   invoicePaymentCycle: string;
   invoiceDay: string;
-  invoiceDate: string;
 }
 
 export interface ICrRes {

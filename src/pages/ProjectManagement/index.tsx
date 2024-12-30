@@ -5,7 +5,6 @@ import { Button, Form, Row } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useDebounce from '../../components/common/useDebounce';
 import { RenderDatePicker, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 import ProjectManagementTable from 'components/module/projectManagement/ProjectManagementTable';
@@ -26,9 +25,6 @@ const BreadcrumbsPath = [
 const ProjectManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [isInternalProject, setIsInternalProject] = useState<boolean>(false);
-  const [deletedProject, setDeletedProject] = useState<boolean>(false);
   const { mutate: exportProjects } = useExportProjects();
   const [filterVisible, setFilterVisible] = useState(false);
 
@@ -55,45 +51,24 @@ const ProjectManagement = () => {
           }))
       : [])
   ];
-
-  const handleChange = (value: string) => {
-    const deleted = value === 'deleted';
-    setDeletedProject(deleted);
-    const internal = value === 'internal';
-    setIsInternalProject(internal);
-    setArgs((prev) => ({
-      ...prev,
-      isInternalProject: internal,
-      deleteProject: deleted,
-      offset: 0
-    }));
-  };
-
-  const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IProjectReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: '',
-    isInternalProject,
-    deletedProject
+    sortOrder: ''
   });
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-    setArgs((prev) => ({ ...prev, offset: 0 }));
-  };
 
   const handleExport = () => {
     exportProjects(args);
   };
 
   const onSubmit = (value: IProjectReq) => {
+    setArgs((prev) => ({ ...prev, ...value, offset: 0 }));
+  };
+
+  const resetFilter = (value: IProjectReq) => {
     setFilterVisible(false);
-    setArgs((prev) => {
-      const updatedArgs = { ...prev, ...value, offset: 0 };
-      return updatedArgs;
-    });
+    setArgs((prev) => ({ ...prev, ...value, offset: 0, limit: 10 }));
   };
 
   return (
@@ -103,7 +78,11 @@ const ProjectManagement = () => {
         <div className="pageHeader">
           <h2 className="pageTitle">Projects</h2>
           <div className="pageHeaderButton">
-            <Button icon={<PlusOutlined />} onClick={() => setFilterVisible((prev) => !prev)}>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setFilterVisible((prev) => !prev)}
+            >
               Add Filter
             </Button>
             <Button type="primary" onClick={handleExport}>
@@ -159,7 +138,7 @@ const ProjectManagement = () => {
                 <Button
                   onClick={() => {
                     form.resetFields();
-                    setFilterVisible(false);
+                    resetFilter(form.getFieldsValue());
                   }}
                 >
                   Reset
@@ -168,7 +147,7 @@ const ProjectManagement = () => {
             </Row>
           </Form>
         )}
-        <ProjectManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
+        <ProjectManagementTable args={args} setArgs={setArgs} />
       </div>
     </Wrapper>
   );

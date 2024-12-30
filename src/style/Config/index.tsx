@@ -80,6 +80,9 @@ const ThemeConfig = ({ children }: any) => {
           Pagination: {
             itemSize: 30,
             itemSizeSM: 30
+          },
+          Button: {
+            primaryColor: `${theme?.color?.black}`
           }
         }
       }}

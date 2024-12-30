@@ -40,7 +40,12 @@ export const projectKeys = {
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
     `${data?.isInternalProject ?? ''}`,
-    `${data?.deletedProject ?? ''}`
+    `${data?.deletedProject ?? ''}`,
+    `${data?.projectManagerId ?? ''}`,
+    `${data?.clientId ?? ''}`,
+    `${data?.status ?? ''}`,
+    `${data?.name ?? ''}`,
+    `${data?.startDate ?? ''}`
   ],
   projectDetail: (id: number) => [`project-detail-${id}`],
   projectAdd: [`add-project`],
@@ -58,7 +63,12 @@ export const crKeys = {
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
     `${data?.isInternalCr ?? ''}`,
-    `${data?.deletedCr ?? ''}`
+    `${data?.deletedCr ?? ''}`,
+    `${data?.clientId ?? ''}`,
+    `${data?.projectId ?? ''}`,
+    `${data?.status ?? ''}`,
+    `${data?.name ?? ''}`,
+    `${data?.startDate ?? ''}`
   ],
   crDetail: (id: number) => [`cr-detail-${id}`],
   crAdd: [`add-cr`],

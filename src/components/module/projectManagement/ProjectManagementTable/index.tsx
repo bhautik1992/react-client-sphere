@@ -1,10 +1,8 @@
 import {
-  CheckOutlined,
   DeleteOutlined,
   EditOutlined,
   EyeOutlined,
   InfoCircleOutlined,
-  PauseOutlined,
   PlusOutlined
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
@@ -45,6 +43,7 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
   const { mutate: statusMutate } = useProjectStatus();
 
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [selectedRecord, setSelectedRecord] = useState<IProject | null>(null);
 
   const { data: projectList, isLoading } = useProjectList({
     ...args,
@@ -68,14 +67,6 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         message.error(err.message);
       }
     });
-  };
-
-  const handleMarkAsCompleted = (id: number) => {
-    handleConfirm(ProjectStatusName.Completed, id);
-  };
-
-  const handleMarkAsPending = (id: number) => {
-    handleConfirm(ProjectStatusName.Pending, id);
   };
 
   const handleConfirm = (status: string, id: number) => {
@@ -134,7 +125,6 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         <>{record?.startDate ? dayjs(record?.startDate).format(DATE_FORMAT) : '-'}</>
       )
     },
-
     {
       title: 'End Date',
       dataIndex: 'endDate',
@@ -216,21 +206,34 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
               size="small"
               className="cta_btn table_cta_btn"
               icon={<InfoCircleOutlined />}
-              onClick={() => setIsModalVisible(true)}
+              onClick={() => {
+                setIsModalVisible(true);
+                setSelectedRecord(record);
+              }}
             />
           </Tooltip>
           <Modal
+            width={800}
             title="Project Cost"
             open={isModalVisible}
-            onCancel={() => setIsModalVisible(false)}
+            onCancel={() => {
+              setIsModalVisible(false);
+              setSelectedRecord(null);
+            }}
             footer={[
-              <Button key="cancel" onClick={() => setIsModalVisible(false)}>
+              <Button
+                key="cancel"
+                onClick={() => {
+                  setIsModalVisible(false);
+                  setSelectedRecord(null);
+                }}
+              >
                 Cancel
               </Button>
             ]}
             destroyOnClose={true}
           >
-            <ProjectInfoTable record={record} />
+            {selectedRecord && <ProjectInfoTable record={selectedRecord} />}
           </Modal>
         </div>
       )
@@ -287,24 +290,6 @@ const ProjectManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
                 className="cta_btn table_cta_btn"
                 icon={<EyeOutlined />}
                 onClick={() => navigate(`${ROUTES.projectView}/${record?.id}`)}
-              />
-            </Tooltip>
-            <Tooltip title="Mark as completed" placement="top" trigger="hover">
-              <Button
-                type="text"
-                size="small"
-                className="cta_btn table_cta_btn"
-                icon={<CheckOutlined />}
-                onClick={() => handleMarkAsCompleted(record?.id)}
-              />
-            </Tooltip>
-            <Tooltip title="On hold" placement="top" trigger="hover">
-              <Button
-                type="text"
-                size="small"
-                className="cta_btn table_cta_btn"
-                icon={<PauseOutlined />}
-                onClick={() => handleMarkAsPending(record?.id)}
               />
             </Tooltip>
             <Tooltip title="Edit project" placement="top" trigger="hover">

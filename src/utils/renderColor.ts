@@ -15,9 +15,14 @@ export const renderTagColor = (status: string | boolean) => {
     return 'red';
   } else if (status === 'Resolved' || status === 'in_progress') {
     return 'orange';
-  } else if (status === 'confirm' || status === 'warning' || status === 'pending') {
+  } else if (
+    status === 'confirm' ||
+    status === 'warning' ||
+    status === 'pending' ||
+    status === 'on_hold'
+  ) {
     return 'yellow';
-  } else if (status === 'info' || status === 'start') {
+  } else if (status === 'info' || status === 'start' || status === 'started') {
     return 'blue';
   } else {
     return;

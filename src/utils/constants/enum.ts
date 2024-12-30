@@ -28,7 +28,7 @@ export enum ClientStatusName {
 export enum ProjectStatusName {
   NotStarted = 'not_started',
   Started = 'started',
-  Pending = 'pending',
+  On_Hold = 'on_hold',
   Completed = 'completed'
 }
 
@@ -136,8 +136,8 @@ export const ProjectStatus = [
     label: 'Started'
   },
   {
-    value: ProjectStatusName.Pending,
-    label: 'Pending'
+    value: ProjectStatusName.On_Hold,
+    label: 'On Hold'
   },
   {
     value: ProjectStatusName.Completed,
@@ -297,6 +297,11 @@ export const InvoicePaymentCycleDay = [
   }
 ];
 
+export const InvoiceDayDate = Array.from({ length: 31 }, (_, i) => ({
+  value: i + 1,
+  label: i + 1
+}));
+
 export const PaymentMethod = [
   {
     value: PaymentMethodName.Payoneer,
@@ -355,5 +360,36 @@ export const ClientStatus = [
   {
     value: ClientStatusName.Hold,
     label: 'Hold'
+  }
+];
+
+export const Technologies = [
+  {
+    value: 'Angular',
+    label: 'Angular'
+  },
+  {
+    value: 'React',
+    label: 'React'
+  },
+  {
+    value: 'Vue',
+    label: 'Vue'
+  },
+  {
+    value: 'NodeJS',
+    label: 'NodeJS'
+  },
+  {
+    value: 'PHP',
+    label: 'PHP'
+  },
+  {
+    value: 'JavaScript',
+    label: 'JavaScript'
+  },
+  {
+    value: 'TypeScript',
+    label: 'TypeScript'
   }
 ];

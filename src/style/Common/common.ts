@@ -93,6 +93,16 @@ export const Common = createGlobalStyle`
     width: 100%;
   }
 
+.filterForm {
+    margin: 10px 0 10px 0;
+    border-radius: 6px;
+    border: 1px solid ${theme.color.primary};
+    padding: 10px;
+    .ant-form-item {
+      margin-bottom: 10px;
+    }
+}
+
 /* hide spin button from number input */
  /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

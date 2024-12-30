@@ -1,7 +1,7 @@
 import { ButtonWrapper, MileStoneWrapper } from './style';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Divider, Form, Row, message } from 'antd';
+import { Button, Col, Divider, Form, Row, message } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -32,6 +32,8 @@ import {
   BillingTypeName,
   COMPANY_EMAIL,
   CurrencyType,
+  EmployeeRoleName,
+  InvoiceDayDate,
   InvoicePaymentCycle,
   InvoicePaymentCycleDay,
   InvoicePaymentCycleName,
@@ -39,6 +41,7 @@ import {
 } from 'utils/constants/enum';
 import pattern from 'utils/constants/pattern';
 import { ROUTES } from 'utils/constants/routes';
+import TechnologiesDropdown from 'utils/renderDropDownStatus/technologiesDropDown';
 
 const AddEditProject = () => {
   const [form] = Form.useForm();
@@ -56,6 +59,10 @@ const AddEditProject = () => {
     { value: string; label: string }[]
   >([]);
   const [invoicePaymentCycle, setInvoicePaymentCycle] = useState<string>('');
+  const [selectedTechnologies, setSelectedTechnologies] = useState<string[]>([]);
+  const handleTechnologyChange = (selected: string[]) => {
+    setSelectedTechnologies(selected);
+  };
 
   const { data: employeeList } = useDashboardEmployee();
   const projectManagerListOption = [
@@ -65,7 +72,7 @@ const AddEditProject = () => {
     },
     ...(Array.isArray(employeeList)
       ? employeeList
-          .filter((item) => item.role === 'project_manager')
+          .filter((item) => item.role === EmployeeRoleName.Project_Manager)
           .map((item) => ({
             label: `${item.firstName} ${item.lastName}`,
             value: item.id
@@ -74,7 +81,19 @@ const AddEditProject = () => {
   ];
   const teamLeaderListOption = Array.isArray(employeeList)
     ? employeeList
-        .filter((item) => item.role === 'team_leader')
+        .filter((item) => item.role === EmployeeRoleName.Team_Leader)
+        .map((item) => ({
+          label: `${item.firstName} ${item.lastName}`,
+          value: item.id
+        }))
+    : [];
+  const developerListOption = Array.isArray(employeeList)
+    ? employeeList
+        .filter(
+          (item) =>
+            item.role === EmployeeRoleName.Senior_Software_Engineer ||
+            item.role === EmployeeRoleName.Software_Engineer
+        )
         .map((item) => ({
           label: `${item.firstName} ${item.lastName}`,
           value: item.id
@@ -154,6 +173,7 @@ const AddEditProject = () => {
 
   const onSubmit = (value: IAddProjectReq) => {
     value.milestones = form.getFieldValue('milestones') || null;
+    value.technologies = selectedTechnologies;
     return projectData?.id ? editProject(value) : addProject(value);
   };
 
@@ -253,6 +273,7 @@ const AddEditProject = () => {
     setBillingType(projectData?.billingType ?? '');
     setInvoicePaymentCycle(projectData?.invoicePaymentCycle ?? '');
     setInvoicePaymentDropDown(projectData?.billingType ?? '');
+    setSelectedTechnologies(projectData?.technologies ?? []);
     form.setFieldsValue({
       name: projectData?.name ?? '',
       description: projectData?.description ?? '',
@@ -274,7 +295,8 @@ const AddEditProject = () => {
       paymentTermDays: projectData?.paymentTermDays ?? null,
       invoicePaymentCycle: projectData?.invoicePaymentCycle ?? null,
       invoiceDay: projectData?.invoiceDay ?? null,
-      invoiceDate: projectData?.invoiceDate ? dayjs(projectData?.invoiceDate) : null,
+      developerId: projectData?.developers?.map((item) => item.id) ?? [],
+      technologies: projectData?.technologies ?? [],
       milestones: projectData?.milestones ?? null
     });
   }, [projectData, form, companyList]);
@@ -437,6 +459,21 @@ const AddEditProject = () => {
               allowClear={true}
               optionLabel={teamLeaderListOption}
             />
+            <RenderSelectInput
+              col={{ xs: 12 }}
+              mode={'multiple'}
+              name="developerId"
+              placeholder="Select developer"
+              label="Developer"
+              allowClear={true}
+              optionLabel={developerListOption}
+            />
+            <Col xs={12}>
+              <TechnologiesDropdown
+                onTechnologyChange={handleTechnologyChange}
+                selectedTech={form.getFieldValue('technologies')}
+              />
+            </Col>
             <RenderCheckBox
               col={{ xs: 12 }}
               name="isInternalProject"
@@ -579,38 +616,27 @@ const AddEditProject = () => {
                 }}
               />
             )}
-            {invoicePaymentCycle === InvoicePaymentCycleName.Monthly && (
-              <RenderDatePicker
-                col={{ xs: 12 }}
-                name="invoiceDate"
-                placeholder="Select invoice date"
-                label="Invoice Day"
-                allowClear={true}
-                size="middle"
-                format={DATE_FORMAT}
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please select invoice day'
-                  }
-                ]}
-              />
-            )}
-            {(invoicePaymentCycle === InvoicePaymentCycleName.Weekly ||
-              invoicePaymentCycle === InvoicePaymentCycleName.BiWeekly) && (
+            {invoicePaymentCycle && (
               <RenderSelectInput
                 col={{ xs: 12 }}
                 name="invoiceDay"
                 placeholder="Select invoice day"
                 label="Invoice Day"
                 allowClear={true}
-                optionLabel={InvoicePaymentCycleDay}
+                optionLabel={
+                  invoicePaymentCycle === InvoicePaymentCycleName.Monthly
+                    ? InvoiceDayDate
+                    : InvoicePaymentCycleDay
+                }
                 rules={[
                   {
                     required: true,
                     message: 'Please select invoice day'
                   }
                 ]}
+                onChange={(e: string) => {
+                  form.setFieldsValue({ invoiceDay: e.toString() });
+                }}
               />
             )}
           </Row>

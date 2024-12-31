@@ -148,7 +148,8 @@ export const invoiceKeys = {
   invoiceAdd: [`add-invoice`],
   invoiceDelete: [`invoice-delete`],
   invoiceByProjectId: (id: number) => [`invoice-by-project-id-${id}`],
-  generatedInvoiceNumber: [`generated-invoice-number`]
+  generatedInvoiceNumber: [`generated-invoice-number`],
+  markAsPaid: [`mark-as-paid`]
 };
 
 export const paymentKeys = {
@@ -158,12 +159,16 @@ export const paymentKeys = {
     `${data?.offset}`,
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
-    `${data?.sortOrder ?? ''},
-    ${data?.deletedPayment ?? ''}`
+    `${data?.sortOrder ?? ''}`,
+    `${data?.deletedPayment ?? ''}`,
+    `${data?.projectId ?? ''}`,
+    `${data?.paymentNumber ?? ''}`,
+    `${data?.paymentDate ?? ''}`
   ],
   paymentDetail: (id: number) => [`payment-detail-${id}`],
   paymentAdd: [`add-payment`],
-  paymentDelete: [`payment-delete`]
+  paymentDelete: [`payment-delete`],
+  generatedPaymentNumber: [`generated-payment-number`]
 };
 
 export const milestoneKeys = {

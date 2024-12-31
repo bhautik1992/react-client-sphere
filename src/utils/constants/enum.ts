@@ -88,7 +88,8 @@ export enum PaymentMethodName {
   Wire_transfer = 'wire_transfer',
   Bank_transfer = 'bank_transfer',
   Wise = 'wise',
-  Paypal = 'paypal'
+  Paypal = 'paypal',
+  Cash = 'cash'
 }
 
 export const EmployeeRole = [
@@ -322,6 +323,10 @@ export const PaymentMethod = [
   {
     value: PaymentMethodName.Paypal,
     label: 'PayPal'
+  },
+  {
+    value: PaymentMethodName.Cash,
+    label: 'Cash'
   }
 ];
 

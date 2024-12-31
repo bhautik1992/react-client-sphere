@@ -59,3 +59,10 @@ export const useGenerateInvoiceNumber = () => {
     queryKey: invoiceKeys.generatedInvoiceNumber
   });
 };
+
+export const useMarkAsPaidInvoice = () => {
+  return useRequest({
+    mutationFn: invoiceAPI.markAsPaid,
+    mutationKey: invoiceKeys.markAsPaid
+  });
+};

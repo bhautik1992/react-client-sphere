@@ -23,20 +23,18 @@ import { EmployeeRoleName, PaymentMethod } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
-  searchDebounce: string;
   args: IPaymentReq;
   setArgs: React.Dispatch<React.SetStateAction<IPaymentReq>>;
 }
 
-const PaymentManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const PaymentManagementTable: React.FC<IProps> = ({ args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { employeeData } = authStore((state) => state);
 
   const { mutate: deleteMutate } = useDeletePayment();
   const { data: paymentList, isLoading } = usePaymentList({
-    ...args,
-    search: searchDebounce
+    ...args
   });
   const handleDeleteModal = (id: number) => {
     deleteMutate(id, {
@@ -44,7 +42,7 @@ const PaymentManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         // invalidate payment list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [paymentKeys.paymentList({ ...args, search: searchDebounce })].some((key) => {
+            return [paymentKeys.paymentList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -67,36 +65,11 @@ const PaymentManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       render: (_, record: IPayment) => <>{record?.paymentNumber ?? '-'}</>
     },
     {
-      title: 'Payment Unique Id',
-      dataIndex: 'uniquePaymentId',
-      key: 'uniquePaymentId',
-      sorter: true,
-      render: (_, record: IPayment) => <>{record?.uniquePaymentId ?? '-'}</>
-    },
-    {
       title: 'Project',
       dataIndex: 'project.name',
       key: 'project.name',
       sorter: false,
       render: (_, record: IPayment) => <>{record?.project?.name ?? '-'}</>
-    },
-    {
-      title: 'Client Name',
-      dataIndex: 'client.firstName',
-      key: 'client.firstName',
-      sorter: false,
-      render: (_, record: IPayment) => (
-        <>
-          {record?.client?.firstName ?? '-'} {record?.client?.lastName ?? '-'}
-        </>
-      )
-    },
-    {
-      title: 'Client Company',
-      dataIndex: 'client.company.name',
-      key: 'client.company.name',
-      sorter: false,
-      render: (_, record: IPayment) => <>{record?.client?.clientCompanyName ?? '-'}</>
     },
     {
       title: 'Account Manager',

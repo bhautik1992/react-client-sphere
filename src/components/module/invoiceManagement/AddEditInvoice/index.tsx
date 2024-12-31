@@ -173,7 +173,7 @@ const AddEditInvoice = () => {
     const newAmount = +e.target.value;
     const receivedAmt = cr.crCost - cr.invoicedAmount;
     if (newAmount > receivedAmt)
-      message.error('Invoice amount cannot be greater than Project/CR cost.');
+      return message.error('Invoice amount cannot be greater than Project/CR cost.');
     setCrCostChange(cr.id, newAmount, cr.isCR);
   };
 

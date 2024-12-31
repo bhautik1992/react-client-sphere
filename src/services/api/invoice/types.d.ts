@@ -24,6 +24,8 @@ interface IInvoice {
   additionalChargeDesc: string;
   additionalDiscountAmount: number;
   isPaymentReceived: boolean;
+  paidAmount: number;
+  markAsPaid: boolean;
   createdBy: number;
   createdAt: string;
   updatedAt: string;

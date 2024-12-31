@@ -1,16 +1,16 @@
-import { Wrapper } from './style';
+import { ButtonWrapper, Wrapper } from './style';
 
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form, Select } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Row } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useDebounce from '../../components/common/useDebounce';
-import { RenderTextInput } from 'components/common/FormField';
+import { RenderDatePicker, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 import PaymentManagementTable from 'components/module/paymentManagement/paymentManagementTable';
 
 import { IPaymentReq } from 'services/api/payment/types';
+import { useDashboardProject } from 'services/hooks/dashboard';
 
 import { ROUTES } from 'utils/constants/routes';
 
@@ -23,31 +23,30 @@ const BreadcrumbsPath = [
 const PaymentManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [deletedPayment, setDeletedPayment] = useState<boolean>(false);
+  const [filterVisible, setFilterVisible] = useState(false);
 
-  const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IPaymentReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: '',
-    deletedPayment
+    sortOrder: ''
   });
 
-  const handleChange = (value: string) => {
-    const deleted = value === 'deleted';
-    setDeletedPayment(deleted);
-    setArgs((prev) => ({
-      ...prev,
-      deletedPayment: deleted,
-      offset: 0
-    }));
+  const { data: projectList } = useDashboardProject();
+  const projectListOption = projectList?.map((item) => {
+    return {
+      label: item.name,
+      value: item.id
+    };
+  });
+
+  const onSubmit = (value: IPaymentReq) => {
+    setArgs((prev) => ({ ...prev, ...value, offset: 0 }));
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-    setArgs((prev) => ({ ...prev, offset: 0 }));
+  const resetFilter = (value: IPaymentReq) => {
+    setFilterVisible(false);
+    setArgs((prev) => ({ ...prev, ...value, offset: 0, limit: 10 }));
   };
 
   return (
@@ -57,25 +56,62 @@ const PaymentManagement = () => {
         <div className="pageHeader">
           <h2 className="pageTitle">Payments</h2>
           <div className="pageHeaderButton">
-            <Form form={form}>
-              <RenderTextInput
-                size="middle"
-                placeholder="Search payment"
-                allowClear
-                prefix={<SearchOutlined style={{ color: '#0000ff' }} />}
-                onChange={onChange}
-              />
-            </Form>
-            <Select defaultValue="all" style={{ width: 150 }} onChange={handleChange}>
-              <Select.Option value="all">All Payments</Select.Option>
-              <Select.Option value="deleted">Deleted Payments</Select.Option>
-            </Select>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setFilterVisible((prev) => !prev)}
+            >
+              Add Filter
+            </Button>
             <Button type="primary" onClick={() => navigate(ROUTES.paymentAdd)}>
               Add Payment
             </Button>
           </div>
         </div>
-        <PaymentManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
+        {filterVisible && (
+          <Form onFinish={onSubmit} form={form} autoComplete="off" className="filterForm">
+            <Row gutter={[0, 30]}>
+              <RenderTextInput
+                col={{ xs: 8 }}
+                name="paymentNumber"
+                placeholder="Enter payment no."
+                label="Payment no."
+                allowClear="allowClear"
+                size="middle"
+              />
+              <RenderDatePicker
+                col={{ xs: 8 }}
+                name="paymentDate"
+                label="Payment Date"
+                size="middle"
+              />
+              <RenderSelectInput
+                col={{ xs: 8 }}
+                name="projectId"
+                placeholder="Select project"
+                label="Project"
+                allowClear={true}
+                optionLabel={projectListOption}
+              />
+            </Row>
+            <Row justify={'end'}>
+              <ButtonWrapper>
+                <Button className="submitButton" type="primary" size="middle" htmlType="submit">
+                  Apply Filter
+                </Button>
+                <Button
+                  onClick={() => {
+                    form.resetFields();
+                    resetFilter(form.getFieldsValue());
+                  }}
+                >
+                  Reset
+                </Button>
+              </ButtonWrapper>
+            </Row>
+          </Form>
+        )}
+        <PaymentManagementTable args={args} setArgs={setArgs} />
       </div>
     </Wrapper>
   );

@@ -62,6 +62,7 @@ const ViewPayment = () => {
               <h4>Comment</h4>
               <p>{paymentData?.comment ?? '-'}</p>
             </Col>
+            <Col xs={4}></Col>
           </Row>
           <Divider orientation="left">Company Details</Divider>
           <Row className="paymentRow">
@@ -77,6 +78,9 @@ const ViewPayment = () => {
               <h4>Country</h4>
               <p>{paymentData?.company?.countryName ?? '-'}</p>
             </Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
           </Row>
           <Divider orientation="left">Project Details</Divider>
           <Row className="paymentRow">
@@ -99,8 +103,6 @@ const ViewPayment = () => {
                   '-'}
               </p>
             </Col>
-          </Row>
-          <Row className="paymentRow">
             <Col xs={4}>
               <h4>Project Manager</h4>
               <p>
@@ -133,8 +135,6 @@ const ViewPayment = () => {
               <h4>Total Cost</h4>
               <p>{paymentData?.project?.projectCost ?? '-'}</p>
             </Col>
-          </Row>
-          <Row className="paymentRow">
             <Col xs={4}>
               <h4>Billing Type</h4>
               <p>
@@ -171,6 +171,9 @@ const ViewPayment = () => {
                       <h4>Invoice Amount</h4>
                       <p>{invoice.amount ?? '-'}</p>
                     </Col>
+                    <Col xs={4}></Col>
+                    <Col xs={4}></Col>
+                    <Col xs={4}></Col>
                   </Row>
                   <Divider></Divider>
                 </InvoiceDetailWrapper>

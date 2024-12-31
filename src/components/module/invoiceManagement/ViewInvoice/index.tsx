@@ -35,15 +35,11 @@ const ViewInvoice = () => {
         <DetailWrapper>
           <Divider orientation="left">Invoice Information</Divider>
           <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Invoice Number</h4>
               <p>{invoiceData?.invoiceNumber ?? '-'}</p>
             </Col>
-            <Col xs={6}>
-              <h4>Custom Invoice Number</h4>
-              <p>{invoiceData?.customInvoiceNumber ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Invoice Date</h4>
               <p>
                 {invoiceData?.invoiceDate
@@ -51,102 +47,103 @@ const ViewInvoice = () => {
                   : '-'}
               </p>
             </Col>
-          </Row>
-          <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Due Date</h4>
               <p>{invoiceData?.dueDate ? dayjs(invoiceData?.dueDate).format(DATE_FORMAT) : '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Total Amount</h4>
               <p>
                 {(Number(invoiceData?.amount) || 0) + (Number(invoiceData?.additionalAmount) || 0)}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Addition charges Desc.</h4>
               <p>{invoiceData?.additionalChargeDesc ?? '-'}</p>
             </Col>
+            <Col xs={4}></Col>
           </Row>
           <Divider orientation="left">Client Details</Divider>
           <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>First Name</h4>
               <p>{invoiceData?.client?.firstName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Last Name</h4>
               <p>{invoiceData?.client?.lastName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Email</h4>
               <p>{invoiceData?.client?.email}</p>
             </Col>
-          </Row>
-          <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Address</h4>
               <p>{invoiceData?.client?.address ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Phone</h4>
               <p>{invoiceData?.client?.phone ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Status</h4>
-              <p>{invoiceData?.client?.status === ClientStatus.Active ? 'Active' : 'Inactive'}</p>
+              <p>
+                {ClientStatus.find((item) => item.value === invoiceData?.client?.status)?.label ??
+                  '-'}
+              </p>
             </Col>
           </Row>
           <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Client Company</h4>
               <p>{invoiceData?.client?.clientCompanyName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Account Manager</h4>
-              <p>{invoiceData?.client?.accountManager ?? '-'}</p>
+              <p>{invoiceData?.client?.accountManager?.firstName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
-              <h4>Skype Id</h4>
-              <p>{invoiceData?.client?.skypeId ?? '-'}</p>
+            <Col xs={4}>
+              <h4>Comment</h4>
+              <p>{invoiceData?.client?.comment ?? '-'}</p>
             </Col>
-          </Row>
-          <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Country</h4>
               <p>{invoiceData?.client?.countryName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>State</h4>
               <p>{invoiceData?.client?.stateName ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>City</h4>
               <p>{invoiceData?.client?.cityName ?? '-'}</p>
             </Col>
           </Row>
           <Divider orientation="left">Company Details</Divider>
           <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Name</h4>
               <p>{invoiceData?.company?.name ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Email</h4>
               <p>{invoiceData?.company?.email ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Country</h4>
               <p>{invoiceData?.company?.countryName ?? '-'}</p>
             </Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
+            <Col xs={4}></Col>
           </Row>
           <Divider orientation="left">Project Details</Divider>
           <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Name</h4>
               <p>{invoiceData?.project?.name ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Start Date</h4>
               <p>
                 {invoiceData?.project?.startDate
@@ -154,61 +151,57 @@ const ViewInvoice = () => {
                   : '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Status</h4>
               <p>
                 {ProjectStatus.find((item) => item.value == invoiceData?.project?.status)?.label ??
                   '-'}
               </p>
             </Col>
-          </Row>
-          <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Project Manager</h4>
               <p>
                 {invoiceData?.project?.projectManager?.firstName ?? '-'}{' '}
                 {invoiceData?.project?.projectManager?.lastName ?? '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Team Leader</h4>
               <p>
                 {invoiceData?.project?.teamLeader?.firstName ?? '-'}{' '}
                 {invoiceData?.project?.teamLeader?.lastName ?? '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Is Internal Project?</h4>
               <p>{invoiceData?.project.isInternalProject ? 'Yes' : 'No'}</p>
             </Col>
           </Row>
           <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Hourly Rate</h4>
               <p>{invoiceData?.project?.hourlyMonthlyRate ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Project Hours</h4>
               <p>{invoiceData?.project?.projectHours ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Total Cost</h4>
               <p>{invoiceData?.project?.projectCost ?? '-'}</p>
             </Col>
-          </Row>
-          <Row className="invoiceRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Billing Type</h4>
               <p>
                 {BillingType.find((item) => item.value == invoiceData?.project?.billingType)
                   ?.label ?? '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Currency</h4>
               <p>{invoiceData?.project?.currency ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Payment Term Days</h4>
               <p>{invoiceData?.project?.paymentTermDays ?? '-'}</p>
             </Col>
@@ -219,29 +212,27 @@ const ViewInvoice = () => {
               {invoiceData.crs.map((cr) => (
                 <CRDetailWrapper key={cr?.id}>
                   <Row className="invoiceRow">
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>CR Name</h4>
                       <p>{cr.name}</p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Start Date</h4>
                       <p>{cr.startDate ? dayjs(cr.startDate).format(DATE_FORMAT) : '-'}</p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Is Internal CR</h4>
                       <p>{cr.isInternalCr ? 'Yes' : 'No'}</p>
                     </Col>
-                  </Row>
-                  <Row className="invoiceRow">
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>CR Hours</h4>
                       <p>{cr.crHours}</p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Hourly Rate</h4>
                       <p>{cr.hourlyMonthlyRate ?? '-'}</p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>CR Cost</h4>
                       <p>{cr.crCost ?? '-'}</p>
                     </Col>
@@ -257,33 +248,31 @@ const ViewInvoice = () => {
               {invoiceData.project.milestones.map((milestone) => (
                 <CRDetailWrapper key={milestone?.id}>
                   <Row className="invoiceRow">
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Milestone Name</h4>
                       <p>{milestone.name}</p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Start Date</h4>
                       <p>
                         {milestone.startDate ? dayjs(milestone.startDate).format(DATE_FORMAT) : '-'}
                       </p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>End Date</h4>
                       <p>
                         {milestone.endDate ? dayjs(milestone.endDate).format(DATE_FORMAT) : '-'}
                       </p>
                     </Col>
-                  </Row>
-                  <Row className="invoiceRow">
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>PIS Hours</h4>
                       <p>{milestone.PISHours}</p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>PMS Hours</h4>
                       <p>{milestone.PMSHours ?? '-'}</p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Cost</h4>
                       <p>{milestone.cost ?? '-'}</p>
                     </Col>

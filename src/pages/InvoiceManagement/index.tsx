@@ -1,16 +1,16 @@
-import { Wrapper } from './style';
+import { ButtonWrapper, Wrapper } from './style';
 
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form, Select } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Row } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useDebounce from '../../components/common/useDebounce';
-import { RenderTextInput } from 'components/common/FormField';
+import { RenderDatePicker, RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 import InvoiceManagementTable from 'components/module/invoiceManagement/InvoiceManagementTable';
 
 import { IInvoiceReq } from 'services/api/invoice/types';
+import { useDashboardClient, useDashboardProject } from 'services/hooks/dashboard';
 
 import { ROUTES } from 'utils/constants/routes';
 
@@ -23,31 +23,38 @@ const BreadcrumbsPath = [
 const InvoiceManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [deletedInvoice, setDeletedInvoice] = useState<boolean>(false);
+  const [filterVisible, setFilterVisible] = useState(false);
 
-  const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<IInvoiceReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: '',
-    deletedInvoice
+    sortOrder: ''
   });
 
-  const handleChange = (value: string) => {
-    const deleted = value === 'deleted';
-    setDeletedInvoice(deleted);
-    setArgs((prev) => ({
-      ...prev,
-      deletedInvoice: deleted,
-      offset: 0
-    }));
+  const { data: clientList } = useDashboardClient();
+  const clientListOption = clientList?.map((item) => {
+    return {
+      label: item.firstName + ' ' + item.lastName,
+      value: item.id
+    };
+  });
+
+  const { data: projectList } = useDashboardProject();
+  const projectListOption = projectList?.map((item) => {
+    return {
+      label: item.name,
+      value: item.id
+    };
+  });
+
+  const onSubmit = (value: IInvoiceReq) => {
+    setArgs((prev) => ({ ...prev, ...value, offset: 0 }));
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-    setArgs((prev) => ({ ...prev, offset: 0 }));
+  const resetFilter = (value: IInvoiceReq) => {
+    setFilterVisible(false);
+    setArgs((prev) => ({ ...prev, ...value, offset: 0, limit: 10 }));
   };
 
   return (
@@ -57,25 +64,70 @@ const InvoiceManagement = () => {
         <div className="pageHeader">
           <h2 className="pageTitle">Invoices</h2>
           <div className="pageHeaderButton">
-            <Form form={form}>
-              <RenderTextInput
-                size="middle"
-                placeholder="Search invoice"
-                allowClear
-                prefix={<SearchOutlined style={{ color: '#FFC7A0' }} />}
-                onChange={onChange}
-              />
-            </Form>
-            <Select defaultValue="all" style={{ width: 120 }} onChange={handleChange}>
-              <Select.Option value="all">All Invoices</Select.Option>
-              <Select.Option value="deleted">Deleted Invoices</Select.Option>
-            </Select>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setFilterVisible((prev) => !prev)}
+            >
+              Add Filter
+            </Button>
             <Button type="primary" onClick={() => navigate(ROUTES.invoiceAdd)}>
               Add Invoice
             </Button>
           </div>
         </div>
-        <InvoiceManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
+        {filterVisible && (
+          <Form onFinish={onSubmit} form={form} autoComplete="off" className="filterForm">
+            <Row gutter={[0, 30]}>
+              <RenderTextInput
+                col={{ xs: 8 }}
+                name="invoiceNumber"
+                placeholder="Enter invoice no."
+                label="Invoice no."
+                allowClear="allowClear"
+                size="middle"
+              />
+              <RenderDatePicker
+                col={{ xs: 8 }}
+                name="invoiceDate"
+                label="Invoice Date"
+                size="middle"
+              />
+              <RenderSelectInput
+                col={{ xs: 8 }}
+                name="clientId"
+                placeholder="Select client"
+                label="Client"
+                allowClear={true}
+                optionLabel={clientListOption}
+              />
+              <RenderSelectInput
+                col={{ xs: 8 }}
+                name="projectId"
+                placeholder="Select project"
+                label="Project"
+                allowClear={true}
+                optionLabel={projectListOption}
+              />
+            </Row>
+            <Row justify={'end'}>
+              <ButtonWrapper>
+                <Button className="submitButton" type="primary" size="middle" htmlType="submit">
+                  Apply Filter
+                </Button>
+                <Button
+                  onClick={() => {
+                    form.resetFields();
+                    resetFilter(form.getFieldsValue());
+                  }}
+                >
+                  Reset
+                </Button>
+              </ButtonWrapper>
+            </Row>
+          </Form>
+        )}
+        <InvoiceManagementTable args={args} setArgs={setArgs} />
       </div>
     </Wrapper>
   );

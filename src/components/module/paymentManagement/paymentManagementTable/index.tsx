@@ -103,7 +103,7 @@ const PaymentManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'accountManager',
       key: 'accountManager',
       sorter: false,
-      render: (_, record: IPayment) => <>{record?.client?.accountManager ?? '-'}</>
+      render: (_, record: IPayment) => <>{record?.client?.accountManager?.firstName ?? '-'}</>
     },
     {
       title: 'Payment Method',

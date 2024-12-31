@@ -9,7 +9,6 @@ import { IProject } from '../project/types';
 interface IInvoice {
   id: number;
   invoiceNumber: string;
-  customInvoiceNumber: string;
   invoiceDate: string;
   dueDate: string;
   companyId: number;
@@ -23,7 +22,9 @@ interface IInvoice {
   amount: number;
   additionalAmount: number;
   additionalChargeDesc: string;
+  additionalDiscountAmount: number;
   isPaymentReceived: boolean;
+  createdBy: number;
   createdAt: string;
   updatedAt: string;
   deletedAt: string;
@@ -36,10 +37,14 @@ export interface IInvoiceReq {
   sortOrder?: Key;
   sortBy?: Key;
   deletedInvoice?: boolean;
+  clientId?: number;
+  projectId?: number;
+  invoiceNumber?: string;
+  invoiceDate?: string;
 }
 
 export interface IAddInvoiceReq {
-  customInvoiceNumber: string;
+  invoiceNumber: string;
   invoiceDate: string;
   dueDate: string;
   companyId: number;
@@ -49,6 +54,7 @@ export interface IAddInvoiceReq {
   amount: number;
   additionalAmount: number;
   additionalChargeDesc: string;
+  additionalDiscountAmount: number;
   isUpdateCrAmount: boolean;
   crInvoiceAmount: ICrInvoiceAmt[];
 }

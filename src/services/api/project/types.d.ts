@@ -37,6 +37,8 @@ interface IProject {
   technologies: string[];
   milestones: IMileStone[];
   crs: ICr[];
+  invoicedAmount: number;
+  isInvoiced: boolean;
   deletedAt: string;
   createdAt: string;
   updatedAt: string;

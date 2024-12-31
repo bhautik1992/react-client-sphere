@@ -46,7 +46,7 @@ const AddEditInvoice = () => {
     []
   );
   const [crInvoiceAmount, setCrInvoiceAmount] = useState<ICrInvoiceAmt[]>([]);
-  const inputRefs = useRef<{ [key: number]: InputRef | null }>({});
+  const inputRefs = useRef<{ [key: string]: InputRef | null }>({});
   const { data: generatedInvoiceNumber } = useGenerateInvoiceNumber();
 
   const { data: companyList } = useDashboardCompany();
@@ -173,7 +173,7 @@ const AddEditInvoice = () => {
     const newAmount = +e.target.value;
     const receivedAmt = cr.crCost - cr.invoicedAmount;
     if (newAmount > receivedAmt)
-      return message.error('Invoice amount cannot be greater than Project/CR cost.');
+      message.error('Invoice amount cannot be greater than Project/CR cost.');
     setCrCostChange(cr.id, newAmount, cr.isCR);
   };
 
@@ -247,7 +247,11 @@ const AddEditInvoice = () => {
       render: (_, record: CrWithIsCR) => (
         <Checkbox
           onChange={(e) =>
-            handleCheckboxChange(e, record, inputRefs.current[record.id]?.input?.value ?? '0')
+            handleCheckboxChange(
+              e,
+              record,
+              inputRefs.current[`${record.isCR}-${record.id}`]?.input?.value ?? '0'
+            )
           }
           checked={selectedCrIds.some((item) => item.id === record.id && item.isCR === record.isCR)}
         />
@@ -320,7 +324,7 @@ const AddEditInvoice = () => {
             defaultValue={record.crCost - record.invoicedAmount}
             disabled={isDisabled}
             onChange={(e) => handleCrCostChange(e, record)}
-            ref={(el) => (inputRefs.current[record.id] = el)}
+            ref={(el) => (inputRefs.current[`${record.isCR}-${record.id}`] = el)}
           />
         );
       }

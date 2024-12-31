@@ -40,3 +40,10 @@ export const useDeletePayment = () => {
     mutationKey: paymentKeys.paymentDelete
   });
 };
+
+export const useGeneratePaymentNumber = () => {
+  return useFetch({
+    queryFn: () => paymentAPI.generatedPaymentNumber(),
+    queryKey: paymentKeys.generatedPaymentNumber
+  });
+};

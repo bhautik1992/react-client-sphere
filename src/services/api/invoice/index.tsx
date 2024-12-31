@@ -69,5 +69,16 @@ export const invoiceAPI = {
       .catch((error) => {
         throw error?.response?.data;
       });
+  },
+
+  async markAsPaid(id: number): Promise<IApiSuccess<string>> {
+    return apiInstance
+      .post(`${ApiEndPoints.invoice.markAsPaid}/${id}`)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
   }
 };

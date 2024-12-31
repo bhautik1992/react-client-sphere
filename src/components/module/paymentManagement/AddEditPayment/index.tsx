@@ -21,15 +21,11 @@ import {
 } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
-import { IInvoice, IInvoiceAmount } from 'services/api/invoice/types';
+import { IInvoice, IInvoiceAmount, IInvoiceReq } from 'services/api/invoice/types';
 import { IAddPaymentReq, IPaymentReq } from 'services/api/payment/types';
-import {
-  useDashboardClient,
-  useDashboardCompany,
-  useDashboardProject
-} from 'services/hooks/dashboard';
-import { useInvoiceByProjectId } from 'services/hooks/invoice';
-import { useAddPayment, usePaymentDetail } from 'services/hooks/payment';
+import { useDashboardCompany, useDashboardProject } from 'services/hooks/dashboard';
+import { useInvoiceByProjectId, useMarkAsPaidInvoice } from 'services/hooks/invoice';
+import { useAddPayment, useGeneratePaymentNumber, usePaymentDetail } from 'services/hooks/payment';
 import { invoiceKeys, paymentKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
@@ -47,12 +43,11 @@ const AddEditPayment = () => {
   const [projectId, setProjectId] = useState<number>();
   const [invoiceListData, setInvoiceListData] = useState<IInvoice[]>([]);
   const { data: invoiceList } = useInvoiceByProjectId(Number(projectId));
-  const [projectListOption, setProjectListOption] = useState<{ label: string; value: number }[]>(
-    []
-  );
   const [selectedInvoiceIds, setSelectedInvoiceIds] = useState<number[]>([]);
   const [invoiceAmount, setInvoiceAmount] = useState<IInvoiceAmount[]>([]);
   const inputRefs = useRef<{ [key: number]: InputRef | null }>({});
+  const { data: generatedPaymentNumber } = useGeneratePaymentNumber();
+  const { mutate: markAsPaidMutate } = useMarkAsPaidInvoice();
 
   const { data: companyList } = useDashboardCompany();
   const companyListOption = companyList?.map((item) => {
@@ -63,35 +58,20 @@ const AddEditPayment = () => {
   });
 
   const { data: projectList } = useDashboardProject();
-  const { data: clientList } = useDashboardClient();
-  const clientListOption = clientList?.map((item) => {
-    return {
-      label: item.firstName + ' ' + item.lastName,
-      value: item.id
-    };
-  });
-
-  const handleClientChange = (clientId: number) => {
-    form.setFieldsValue({
-      clientCompanyName: clientList?.find((item) => item.id === clientId)?.clientCompanyName,
-      projectId: null
+  const projectListOption = projectList
+    ?.filter((item) => item.status === ProjectStatusName.Started)
+    ?.map((item) => {
+      return {
+        label: item.name,
+        value: item.id
+      };
     });
-    const filteredProjects = projectList
-      ?.filter(
-        (project) => project.client.id === clientId && project.status === ProjectStatusName.Started
-      )
-      .map((item) => {
-        return {
-          label: item.name,
-          value: item.id
-        };
-      });
-    setProjectListOption(filteredProjects || []);
-  };
 
   useEffect(() => {
     if (invoiceList && invoiceList.length > 0) {
-      const invoiceListData = invoiceList.filter((item) => item.isPaymentReceived === false);
+      const invoiceListData = invoiceList.filter(
+        (item) => item.isPaymentReceived === false && item.markAsPaid === false
+      );
       setInvoiceListData(invoiceListData);
     }
   }, [invoiceList]);
@@ -119,16 +99,16 @@ const AddEditPayment = () => {
     return addPayment(value);
   };
 
-  const setInvoiceAmtChange = (invoiceId: number, newAmount: number) => {
+  const setInvoiceAmtChange = (invoice: IInvoice, newAmount: number) => {
     setInvoiceAmount((prevData: IInvoiceAmount[]) => {
       const updatedData = prevData.map((item) => {
-        if (item.id === invoiceId) {
+        if (item.id === invoice.id) {
           return { ...item, invoicedCost: newAmount };
         }
         return item;
       });
-      if (!updatedData.some((item) => item.id === invoiceId)) {
-        updatedData.push({ id: invoiceId, invoicedCost: newAmount });
+      if (!updatedData.some((item) => item.id === invoice.id)) {
+        updatedData.push({ id: invoice.id, invoicedCost: newAmount });
       }
       return updatedData;
     });
@@ -143,16 +123,38 @@ const AddEditPayment = () => {
       return updatedCrIds;
     });
     if (isChecked) {
-      setInvoiceAmtChange(invoice.id, +paymentAmount);
+      setInvoiceAmtChange(invoice, +paymentAmount);
     } else {
       const invoiceAmountUpdate = invoiceAmount.filter((item) => item.id !== invoice.id);
       setInvoiceAmount(invoiceAmountUpdate);
     }
   };
 
-  const handleInvoiceChange = (e: React.ChangeEvent<HTMLInputElement>, invoiceId: number) => {
+  const handleInvoiceChange = (e: React.ChangeEvent<HTMLInputElement>, invoice: IInvoice) => {
     const newAmount = +e.target.value;
-    setInvoiceAmtChange(invoiceId, newAmount);
+    if (newAmount > invoice.amount)
+      return message.error('Invoice amount cannot be greater than total amount.');
+    setInvoiceAmtChange(invoice, newAmount);
+  };
+
+  const handleMarkAsPaidChange = (invoice: IInvoice) => {
+    markAsPaidMutate(invoice.id, {
+      onSuccess: () => {
+        // invalidate invoice list
+        queryClient.invalidateQueries({
+          predicate: (query) => {
+            return [invoiceKeys.invoiceList({} as IInvoiceReq)].some((key) => {
+              return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
+                key[0]
+              );
+            });
+          }
+        });
+      },
+      onError: (err: IApiError) => {
+        message.error(err.message);
+      }
+    });
   };
 
   const addPayment = (value: IAddPaymentReq) => {
@@ -192,20 +194,20 @@ const AddEditPayment = () => {
     form.setFieldsValue({
       companyId: companyList?.find((item) => item.email === COMPANY_EMAIL)?.id,
       paymentDate: dayjs(new Date()),
-      conversionRate: 1
+      conversionRate: 1,
+      paymentNumber: generatedPaymentNumber
     });
     if (!paymentData) return;
     form.setFieldsValue({
-      uniquePaymentId: paymentData?.uniquePaymentId ?? '',
+      paymentNumber: paymentData?.paymentNumber ?? '',
       paymentMethod: paymentData?.paymentMethod ?? '',
       paymentDate: paymentData?.paymentDate ? dayjs(paymentData?.paymentDate) : null,
       companyId: paymentData?.companyId ?? null,
-      clientId: paymentData?.clientId ?? null,
       receivedINR: paymentData?.receivedINR ?? null,
       conversionRate: paymentData?.conversionRate ?? null,
       comment: paymentData?.comment ?? null
     });
-  }, [paymentData, form, companyList, invoiceAmount]);
+  }, [paymentData, form, companyList, invoiceAmount, generatedPaymentNumber]);
 
   const invoiceTableColumns: ColumnsType<IInvoice> = [
     {
@@ -233,6 +235,12 @@ const AddEditPayment = () => {
       render: (_, record: IInvoice) => <>{record?.project?.name ?? '-'}</>
     },
     {
+      title: 'Currency',
+      dataIndex: 'currency',
+      key: 'currency',
+      render: (_, record: IInvoice) => <>{record?.project?.currency ?? '-'}</>
+    },
+    {
       title: 'Total Amount',
       dataIndex: 'amount',
       key: 'amount',
@@ -249,14 +257,14 @@ const AddEditPayment = () => {
       dataIndex: 'amount',
       key: 'amount',
       sorter: false,
-      render: () => <>{'-'}</>
+      render: (_, record: IInvoice) => <>{record?.paidAmount ?? '-'}</>
     },
     {
       title: 'Due Amount',
       dataIndex: 'amount',
       key: 'amount',
       sorter: false,
-      render: () => <>{'-'}</>
+      render: (_, record: IInvoice) => <>{+record?.amount - +record?.paidAmount}</>
     },
     {
       title: 'Received Amount',
@@ -267,12 +275,21 @@ const AddEditPayment = () => {
         const isDisabled = !selectedInvoiceIds.includes(record.id);
         return (
           <Input
-            defaultValue={+record.amount + +record.additionalAmount}
+            defaultValue={+record.amount - +record.paidAmount}
             disabled={isDisabled}
-            onChange={(e) => handleInvoiceChange(e, record.id)}
+            onChange={(e) => handleInvoiceChange(e, record)}
             ref={(el) => (inputRefs.current[record.id] = el)}
           />
         );
+      }
+    },
+    {
+      title: 'Mark As Paid',
+      dataIndex: 'markAsPaid',
+      key: 'markAsPaid',
+      render: (_, record: IInvoice) => {
+        const isDisabled = !selectedInvoiceIds.includes(record.id);
+        return <Checkbox disabled={isDisabled} onChange={() => handleMarkAsPaidChange(record)} />;
       }
     }
   ];
@@ -298,9 +315,9 @@ const AddEditPayment = () => {
             <Divider orientation="left">Payment Information</Divider>
             <RenderTextInput
               col={{ xs: 12 }}
-              name="uniquePaymentId"
-              placeholder="Unique Payment Id"
-              label="Payment Id"
+              name="paymentNumber"
+              placeholder="Payment No."
+              label="Payment No."
               allowClear={true}
             />
             <RenderSelectInput
@@ -333,21 +350,6 @@ const AddEditPayment = () => {
             />
             <RenderSelectInput
               col={{ xs: 12 }}
-              name="clientId"
-              placeholder="Select client"
-              label="Client"
-              allowClear={true}
-              optionLabel={clientListOption}
-              onSelect={handleClientChange}
-              rules={[
-                {
-                  required: true,
-                  message: 'Please select client'
-                }
-              ]}
-            />
-            <RenderSelectInput
-              col={{ xs: 12 }}
               name="projectId"
               placeholder="Select project"
               label="Select Project"
@@ -362,7 +364,7 @@ const AddEditPayment = () => {
             />
             <RenderDatePicker
               col={{ xs: 12 }}
-              // disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isAfter(new Date())}
+              disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isAfter(new Date())}
               name="paymentDate"
               placeholder="Select payment date"
               label="Payment Date"
@@ -404,7 +406,6 @@ const AddEditPayment = () => {
               label="Conversion Rate"
               allowClear="allowClear"
               size="middle"
-              disabled={true}
               defaultValue="1"
             />
             <RenderTextArea

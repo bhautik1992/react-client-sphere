@@ -47,5 +47,16 @@ export const paymentAPI = {
       .catch((error) => {
         throw error?.response?.data;
       });
+  },
+
+  async generatedPaymentNumber(): Promise<IApiSuccess<string>> {
+    return apiInstance
+      .get(`${ApiEndPoints.payment.generatedPaymentNumber}`)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
   }
 };

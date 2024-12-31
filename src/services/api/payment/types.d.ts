@@ -8,12 +8,9 @@ import { IProject } from '../project/types';
 interface IPayment {
   id: number;
   paymentNumber: string;
-  uniquePaymentId: string;
   paymentDate: string;
   companyId: number;
   company: ICompany;
-  clientId: number;
-  client: IClient;
   projectId: number;
   project: IProject;
   invoices: IInvoice[];
@@ -34,14 +31,16 @@ export interface IPaymentReq {
   sortOrder?: Key;
   sortBy?: Key;
   deletedPayment?: boolean;
+  projectId?: number;
+  paymentNumber?: string;
+  paymentDate?: string;
 }
 
 export interface IAddPaymentReq {
-  uniquePaymentId: string;
+  paymentNumber: string;
   paymentMethod: string;
   paymentDate: string;
   companyId: number;
-  clientId: number;
   projectId: number;
   receivedINR: number;
   paymentAmount: number;

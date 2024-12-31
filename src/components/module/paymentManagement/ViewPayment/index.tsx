@@ -9,7 +9,7 @@ import StyledBreadcrumb from 'components/layout/breadcrumb';
 import { usePaymentDetail } from 'services/hooks/payment';
 
 import { DATE_FORMAT } from 'utils/constants/dayjs';
-import { BillingType, ClientStatus, PaymentMethod, ProjectStatus } from 'utils/constants/enum';
+import { BillingType, PaymentMethod, ProjectStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
@@ -35,15 +35,11 @@ const ViewPayment = () => {
         <DetailWrapper>
           <Divider orientation="left">Payment Information</Divider>
           <Row className="paymentRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Payment Number</h4>
               <p>{paymentData?.paymentNumber ?? '-'}</p>
             </Col>
-            <Col xs={6}>
-              <h4>Unique Payment Id</h4>
-              <p>{paymentData?.uniquePaymentId ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Payment Date</h4>
               <p>
                 {paymentData?.paymentDate
@@ -51,103 +47,44 @@ const ViewPayment = () => {
                   : '-'}
               </p>
             </Col>
-          </Row>
-          <Row className="paymentRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Payment Method</h4>
               <p>
                 {PaymentMethod.find((item) => item.value === paymentData?.paymentMethod)?.label ??
                   '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Conversion Rate</h4>
               <p>{paymentData?.conversionRate ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Comment</h4>
               <p>{paymentData?.comment ?? '-'}</p>
             </Col>
           </Row>
-          <Divider orientation="left">Client Details</Divider>
-          <Row className="paymentRow">
-            <Col xs={6}>
-              <h4>First Name</h4>
-              <p>{paymentData?.client?.firstName ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Last Name</h4>
-              <p>{paymentData?.client?.lastName ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Email</h4>
-              <p>{paymentData?.client?.email}</p>
-            </Col>
-          </Row>
-          <Row className="paymentRow">
-            <Col xs={6}>
-              <h4>Address</h4>
-              <p>{paymentData?.client?.address ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Phone</h4>
-              <p>{paymentData?.client?.phone ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Status</h4>
-              <p>{paymentData?.client?.status === ClientStatus.Active ? 'Active' : 'Inactive'}</p>
-            </Col>
-          </Row>
-          <Row className="paymentRow">
-            <Col xs={6}>
-              <h4>Client Company</h4>
-              <p>{paymentData?.client?.clientCompanyName ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Account Manager</h4>
-              <p>{paymentData?.client?.accountManager ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>Skype Id</h4>
-              <p>{paymentData?.client?.skypeId ?? '-'}</p>
-            </Col>
-          </Row>
-          <Row className="paymentRow">
-            <Col xs={6}>
-              <h4>Country</h4>
-              <p>{paymentData?.client?.countryName ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>State</h4>
-              <p>{paymentData?.client?.stateName ?? '-'}</p>
-            </Col>
-            <Col xs={6}>
-              <h4>City</h4>
-              <p>{paymentData?.client?.cityName ?? '-'}</p>
-            </Col>
-          </Row>
           <Divider orientation="left">Company Details</Divider>
           <Row className="paymentRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Name</h4>
               <p>{paymentData?.company?.name ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Email</h4>
               <p>{paymentData?.company?.email ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Country</h4>
               <p>{paymentData?.company?.countryName ?? '-'}</p>
             </Col>
           </Row>
           <Divider orientation="left">Project Details</Divider>
           <Row className="paymentRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Name</h4>
               <p>{paymentData?.project?.name ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Start Date</h4>
               <p>
                 {paymentData?.project?.startDate
@@ -155,7 +92,7 @@ const ViewPayment = () => {
                   : '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Status</h4>
               <p>
                 {ProjectStatus.find((item) => item.value == paymentData?.project?.status)?.label ??
@@ -164,52 +101,52 @@ const ViewPayment = () => {
             </Col>
           </Row>
           <Row className="paymentRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Project Manager</h4>
               <p>
                 {paymentData?.project?.projectManager?.firstName ?? '-'}{' '}
                 {paymentData?.project?.projectManager?.lastName ?? '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Team Leader</h4>
               <p>
                 {paymentData?.project?.teamLeader?.firstName ?? '-'}{' '}
                 {paymentData?.project?.teamLeader?.lastName ?? '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Is Internal Project?</h4>
               <p>{paymentData?.project.isInternalProject ? 'Yes' : 'No'}</p>
             </Col>
           </Row>
           <Row className="paymentRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Hourly Rate</h4>
               <p>{paymentData?.project?.hourlyMonthlyRate ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Project Hours</h4>
               <p>{paymentData?.project?.projectHours ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Total Cost</h4>
               <p>{paymentData?.project?.projectCost ?? '-'}</p>
             </Col>
           </Row>
           <Row className="paymentRow">
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Billing Type</h4>
               <p>
                 {BillingType.find((item) => item.value == paymentData?.project?.billingType)
                   ?.label ?? '-'}
               </p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Currency</h4>
               <p>{paymentData?.project?.currency ?? '-'}</p>
             </Col>
-            <Col xs={6}>
+            <Col xs={4}>
               <h4>Payment Term Days</h4>
               <p>{paymentData?.project?.paymentTermDays ?? '-'}</p>
             </Col>
@@ -220,17 +157,17 @@ const ViewPayment = () => {
               {paymentData.invoices.map((invoice) => (
                 <InvoiceDetailWrapper key={invoice?.id}>
                   <Row className="paymentRow">
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Invoice No.</h4>
                       <p>{invoice.invoiceNumber}</p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Invoice Date</h4>
                       <p>
                         {invoice.invoiceDate ? dayjs(invoice.invoiceDate).format(DATE_FORMAT) : '-'}
                       </p>
                     </Col>
-                    <Col xs={6}>
+                    <Col xs={4}>
                       <h4>Invoice Amount</h4>
                       <p>{invoice.amount ?? '-'}</p>
                     </Col>

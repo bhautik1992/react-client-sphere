@@ -138,12 +138,17 @@ export const invoiceKeys = {
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
-    `${data?.deletedInvoice ?? ''}`
+    `${data?.deletedInvoice ?? ''}`,
+    `${data?.clientId ?? ''}`,
+    `${data?.projectId ?? ''}`,
+    `${data?.invoiceNumber ?? ''}`,
+    `${data?.invoiceDate ?? ''}`
   ],
   invoiceDetail: (id: number) => [`invoice-detail-${id}`],
   invoiceAdd: [`add-invoice`],
   invoiceDelete: [`invoice-delete`],
-  invoiceByProjectId: (id: number) => [`invoice-by-project-id-${id}`]
+  invoiceByProjectId: (id: number) => [`invoice-by-project-id-${id}`],
+  generatedInvoiceNumber: [`generated-invoice-number`]
 };
 
 export const paymentKeys = {

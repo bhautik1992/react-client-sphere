@@ -20,20 +20,18 @@ import { EmployeeRoleName } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
-  searchDebounce: string;
   args: IInvoiceReq;
   setArgs: React.Dispatch<React.SetStateAction<IInvoiceReq>>;
 }
 
-const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const InvoiceManagementTable: React.FC<IProps> = ({ args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { employeeData } = authStore((state) => state);
 
   const { mutate: deleteMutate } = useDeleteInvoice();
   const { data: invoiceList, isLoading } = useInvoiceList({
-    ...args,
-    search: searchDebounce
+    ...args
   });
   const handleDeleteModal = (id: number) => {
     deleteMutate(id, {
@@ -41,7 +39,7 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         // invalidate invoice list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [invoiceKeys.invoiceList({ ...args, search: searchDebounce })].some((key) => {
+            return [invoiceKeys.invoiceList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -66,13 +64,6 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       key: 'invoiceNumber',
       sorter: true,
       render: (_, record: IInvoice) => <>{record?.invoiceNumber ?? '-'}</>
-    },
-    {
-      title: 'Custom Invoice Number',
-      dataIndex: 'customInvoiceNumber',
-      key: 'customInvoiceNumber',
-      sorter: true,
-      render: (_, record: IInvoice) => <>{record?.customInvoiceNumber ?? '-'}</>
     },
     {
       title: 'Invoice Date',
@@ -152,7 +143,7 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       dataIndex: 'accountManager',
       key: 'accountManager',
       sorter: false,
-      render: (_, record: IInvoice) => <>{record?.client?.accountManager ?? '-'}</>
+      render: (_, record: IInvoice) => <>{record?.client?.accountManager?.firstName ?? '-'}</>
     },
     {
       title: 'Project Amount',
@@ -169,11 +160,11 @@ const InvoiceManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
       render: (_, record: IInvoice) => <>{record?.additionalAmount ?? '-'}</>
     },
     {
-      title: 'Total Amount',
-      dataIndex: 'totalAmount',
-      key: 'totalAmount',
+      title: 'Invoiced Amount',
+      dataIndex: 'invoicedAmount',
+      key: 'invoicedAmount',
       sorter: false,
-      render: (_, record: IInvoice) => <>{+record?.amount + +record?.additionalAmount}</>
+      render: (_, record: IInvoice) => <>{+record?.amount}</>
     },
     {
       title: 'Currency',

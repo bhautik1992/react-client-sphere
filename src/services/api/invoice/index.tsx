@@ -58,5 +58,16 @@ export const invoiceAPI = {
       .catch((error) => {
         throw error?.response?.data;
       });
+  },
+
+  async generatedInvoiceNumber(): Promise<IApiSuccess<string>> {
+    return apiInstance
+      .get(`${ApiEndPoints.invoice.generatedInvoiceNumber}`)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
   }
 };

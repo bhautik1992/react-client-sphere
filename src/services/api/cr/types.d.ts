@@ -29,6 +29,7 @@ interface ICr {
   invoicePaymentCycle: string;
   invoiceDay: string;
   isInvoiced: boolean;
+  invoicedAmount: number;
   deletedAt: string;
   createdAt: string;
   updatedAt: string;
@@ -88,4 +89,5 @@ export interface ICrStatusReq {
 export interface ICrInvoiceAmt {
   id: number;
   crCost: number;
+  isCR: boolean;
 }

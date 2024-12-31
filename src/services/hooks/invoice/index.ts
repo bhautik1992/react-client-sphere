@@ -52,3 +52,10 @@ export const useInvoiceByProjectId = (id: number) => {
     }
   });
 };
+
+export const useGenerateInvoiceNumber = () => {
+  return useFetch({
+    queryFn: () => invoiceAPI.generatedInvoiceNumber(),
+    queryKey: invoiceKeys.generatedInvoiceNumber
+  });
+};

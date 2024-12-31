@@ -12,7 +12,7 @@ const AuthLayout = (props: IAuthProps) => {
   return (
     <AuthWrapper className={`authLayout ${containerClassName}`}>
       <div className={`authWrapper ${!authBg ? 'authBg' : authBg}`}>
-        <img alt="Logo" src="/icons/Logo.svg" />
+        <img alt="Logo" src="/icons/Group_15.svg" />
         <div className="contentWrapper">{children}</div>
       </div>
     </AuthWrapper>

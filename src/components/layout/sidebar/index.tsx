@@ -152,9 +152,9 @@ const Sidebar = () => {
     >
       <div className="logoWrapper">
         {collapsed ? (
-          <img className="logoSm" alt="Logo" src={toAbsoluteUrl('/icons/Logo_Small.svg')} />
+          <img className="logoSm" alt="Logo" src={toAbsoluteUrl('/icons/Group_5.svg')} />
         ) : (
-          <img className="logoLg" alt="Logo" src={toAbsoluteUrl('/icons/Logo.svg')} />
+          <img className="logoLg" alt="Logo" src={toAbsoluteUrl('/icons/Group_3.svg')} />
         )}
       </div>
       <Menu

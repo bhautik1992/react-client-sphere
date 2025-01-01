@@ -1,17 +1,18 @@
-import { Wrapper } from './style';
+import { ButtonWrapper, Wrapper } from './style';
 
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form, Select } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Row } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useDebounce from '../../components/common/useDebounce';
-import { RenderTextInput } from 'components/common/FormField';
+import { RenderSelectInput, RenderTextInput } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 import ClientManagementTable from 'components/module/clientManagement/ClientManagementTable';
 
 import { IClientReq } from 'services/api/client/types';
+import { useDashboardEmployee } from 'services/hooks/dashboard';
 
+import { ClientStatus } from 'utils/constants/enum';
 import { ROUTES } from 'utils/constants/routes';
 
 const BreadcrumbsPath = [
@@ -23,30 +24,27 @@ const BreadcrumbsPath = [
 const ClientManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [deletedClient, setDeletedClient] = useState<boolean>(false);
-  const searchDebounce = useDebounce(searchValue);
+  const [filterVisible, setFilterVisible] = useState(false);
+  const { data: employeeList } = useDashboardEmployee();
+  const accountManagerListOption = employeeList?.map((item) => ({
+    label: `${item.firstName} ${item.lastName}`,
+    value: item.id
+  }));
+
   const [args, setArgs] = useState<IClientReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: '',
-    deletedClient
+    sortOrder: ''
   });
 
-  const handleChange = (value: string) => {
-    const deleted = value === 'deleted';
-    setDeletedClient(deleted);
-    setArgs((prev) => ({
-      ...prev,
-      deletedClient: deleted,
-      offset: 0
-    }));
+  const onSubmit = (value: IClientReq) => {
+    setArgs((prev) => ({ ...prev, ...value, offset: 0 }));
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-    setArgs((prev) => ({ ...prev, offset: 0 }));
+  const resetFilter = (value: IClientReq) => {
+    setFilterVisible(false);
+    setArgs((prev) => ({ ...prev, ...value, offset: 0, limit: 10 }));
   };
 
   return (
@@ -56,25 +54,72 @@ const ClientManagement = () => {
         <div className="pageHeader">
           <h2 className="pageTitle">Clients</h2>
           <div className="pageHeaderButton">
-            <Form form={form}>
-              <RenderTextInput
-                size="middle"
-                placeholder="Search client"
-                allowClear
-                prefix={<SearchOutlined style={{ color: '#FFC7A0' }} />}
-                onChange={onChange}
-              />
-            </Form>
-            <Select defaultValue="all" style={{ width: 120 }} onChange={handleChange}>
-              <Select.Option value="all">All Clients</Select.Option>
-              <Select.Option value="deleted">Deleted Clients</Select.Option>
-            </Select>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setFilterVisible((prev) => !prev)}
+            >
+              Add Filter
+            </Button>
             <Button type="primary" onClick={() => navigate(ROUTES.clientAdd)}>
               Add Client
             </Button>
           </div>
         </div>
-        <ClientManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
+        {filterVisible && (
+          <Form onFinish={onSubmit} form={form} autoComplete="off" className="filterForm">
+            <Row gutter={[0, 30]}>
+              <RenderTextInput
+                col={{ xs: 8 }}
+                name="name"
+                placeholder="Enter Client name"
+                label="Name"
+                allowClear="allowClear"
+                size="middle"
+              />
+              <RenderTextInput
+                col={{ xs: 8 }}
+                name="email"
+                placeholder="Enter email"
+                label="Email"
+                allowClear="allowClear"
+                size="middle"
+              />
+              <RenderSelectInput
+                col={{ xs: 8 }}
+                name="status"
+                placeholder="Select status"
+                label="Status"
+                allowClear={true}
+                optionLabel={ClientStatus}
+              />
+              <RenderSelectInput
+                col={{ xs: 8 }}
+                name="accountManagerId"
+                placeholder="Select account manager"
+                label="Account Manager"
+                allowClear={true}
+                optionLabel={accountManagerListOption}
+              />
+            </Row>
+            <Row justify={'end'}>
+              <ButtonWrapper>
+                <Button className="submitButton" type="primary" size="middle" htmlType="submit">
+                  Apply Filter
+                </Button>
+                <Button
+                  onClick={() => {
+                    form.resetFields();
+                    resetFilter(form.getFieldsValue());
+                  }}
+                >
+                  Reset
+                </Button>
+              </ButtonWrapper>
+            </Row>
+          </Form>
+        )}
+        <ClientManagementTable args={args} setArgs={setArgs} />
       </div>
     </Wrapper>
   );

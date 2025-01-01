@@ -22,7 +22,11 @@ export const clientKeys = {
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
-    `${data?.deletedClient ?? ''}`
+    `${data?.deletedClient ?? ''}`,
+    `${data?.name ?? ''}`,
+    `${data?.email ?? ''}`,
+    `${data?.status ?? ''}`,
+    `${data?.accountManagerId ?? ''}`
   ],
   clientDetail: (id: number) => [`client-detail-${id}`],
   clientStatus: [`client-status`],

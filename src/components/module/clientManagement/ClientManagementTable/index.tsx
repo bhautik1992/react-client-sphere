@@ -19,12 +19,11 @@ import { ROUTES } from 'utils/constants/routes';
 import ClientStatusDropdown from 'utils/renderDropDownStatus/clientStatusDropDown';
 
 interface IProps {
-  searchDebounce: string;
   args: IClientReq;
   setArgs: React.Dispatch<React.SetStateAction<IClientReq>>;
 }
 
-const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const ClientManagementTable: React.FC<IProps> = ({ args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { employeeData } = authStore((state) => state);
@@ -33,8 +32,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
   const { mutate: statusMutate } = useClientStatus();
 
   const { data: clientList, isLoading } = useClientList({
-    ...args,
-    search: searchDebounce
+    ...args
   });
 
   const handleDeleteModal = (id: number) => {
@@ -43,7 +41,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
         // invalidate client list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [clientKeys.clientList({ ...args, search: searchDebounce })].some((key) => {
+            return [clientKeys.clientList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -68,7 +66,7 @@ const ClientManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs
         // invalidate client list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [clientKeys.clientList({ ...args, search: searchDebounce })].some((key) => {
+            return [clientKeys.clientList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );

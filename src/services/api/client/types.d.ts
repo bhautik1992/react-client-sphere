@@ -40,6 +40,10 @@ export interface IClientReq {
   sortOrder?: Key;
   sortBy?: Key;
   deletedClient?: boolean;
+  name?: string;
+  email?: string;
+  accountManagerId?: number;
+  status?: string;
 }
 
 export interface IAddClientReq {

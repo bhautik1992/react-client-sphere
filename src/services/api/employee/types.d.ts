@@ -42,6 +42,10 @@ export interface IEmployeeReq {
   sortOrder?: string;
   sortBy?: Key;
   deletedEmployee?: boolean;
+  employeeCode?: string;
+  name?: string;
+  email?: string;
+  role?: string;
 }
 
 export interface IAddEmployeeReq {

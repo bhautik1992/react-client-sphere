@@ -21,17 +21,16 @@ import { ROUTES } from 'utils/constants/routes';
 import EmployeeStatusDropdown from 'utils/renderDropDownStatus/employeeStatusDropdown';
 
 interface IProps {
-  searchDebounce: string;
   args: IEmployeeReq;
   setArgs: React.Dispatch<React.SetStateAction<IEmployeeReq>>;
 }
 
-const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const EmployeesManagementTable: React.FC<IProps> = ({ args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { employeeData } = authStore((state) => state);
 
-  const { data: employeeList, isLoading } = useEmployeeList({ ...args, search: searchDebounce });
+  const { data: employeeList, isLoading } = useEmployeeList({ ...args });
   const { mutate } = useDeleteEmployee();
   const { mutate: statusMutate } = useEmployeeStatus();
 
@@ -46,7 +45,7 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
         // invalidate project list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [employeeKeys.employeeList({ ...args, search: searchDebounce })].some((key) => {
+            return [employeeKeys.employeeList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );
@@ -80,7 +79,7 @@ const EmployeesManagementTable: React.FC<IProps> = ({ searchDebounce, args, setA
         // invalidate employee list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [employeeKeys.employeeList({ ...args, search: searchDebounce })].some((key) => {
+            return [employeeKeys.employeeList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );

@@ -121,7 +121,11 @@ export const employeeKeys = {
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
-    `${data?.deletedEmployee ?? ''}`
+    `${data?.deletedEmployee ?? ''}`,
+    `${data?.employeeCode ?? ''}`,
+    `${data?.name ?? ''}`,
+    `${data?.email ?? ''}`,
+    `${data?.role ?? ''}`
   ],
   employeeDetail: (id: number) => [`employee-detail-${id}`],
   employeeDelete: [`employee-delete`],

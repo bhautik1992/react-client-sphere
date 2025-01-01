@@ -16,16 +16,15 @@ import { IApiError } from 'utils/Types';
 import { ROUTES } from 'utils/constants/routes';
 
 interface IProps {
-  searchDebounce: string;
   args: ICompanyReq;
   setArgs: React.Dispatch<React.SetStateAction<ICompanyReq>>;
 }
 
-const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArgs }) => {
+const CompanyManagementTable: React.FC<IProps> = ({ args, setArgs }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: companyList, isLoading } = useCompanyList({ ...args, search: searchDebounce });
+  const { data: companyList, isLoading } = useCompanyList({ ...args });
   const { mutate } = useDeleteCompany();
 
   const handleDeleteModal = (id: number) => {
@@ -34,7 +33,7 @@ const CompanyManagementTable: React.FC<IProps> = ({ searchDebounce, args, setArg
         // invalidate company list
         queryClient.invalidateQueries({
           predicate: (query) => {
-            return [companyKeys.companyList({ ...args, search: searchDebounce })].some((key) => {
+            return [companyKeys.companyList({ ...args })].some((key) => {
               return ((query.options.queryKey?.[0] as string) ?? query.options.queryKey)?.includes(
                 key[0]
               );

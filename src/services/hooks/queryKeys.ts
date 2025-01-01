@@ -90,7 +90,9 @@ export const companyKeys = {
     `${data?.search ?? ''}`,
     `${data?.sortBy ?? ''}`,
     `${data?.sortOrder ?? ''}`,
-    `${data?.deletedVendor ?? ''}`
+    `${data?.deletedVendor ?? ''}`,
+    `${data?.name ?? ''}`,
+    `${data?.email ?? ''}`
   ],
   companyDetail: (id: number) => [`company-detail-${id}`],
   companyDelete: [`company-delete`],

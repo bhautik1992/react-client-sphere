@@ -1,11 +1,10 @@
-import { Wrapper } from './style';
+import { ButtonWrapper, Wrapper } from './style';
 
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Form, Select } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Row } from 'antd';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useDebounce from '../../components/common/useDebounce';
 import { RenderTextInput } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 import CompanyManagementTable from 'components/module/companyManagement/CompanyManagementTable';
@@ -23,31 +22,22 @@ const BreadcrumbsPath = [
 const CompanyManagement = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
-  const [deletedVendor, setDeletedVendor] = useState<boolean>(false);
-  const [searchValue, setSearchValue] = useState<string>('');
+  const [filterVisible, setFilterVisible] = useState(false);
 
-  const searchDebounce = useDebounce(searchValue);
   const [args, setArgs] = useState<ICompanyReq>({
     limit: 10,
     offset: 0,
     sortBy: '',
-    sortOrder: '',
-    deletedVendor
+    sortOrder: ''
   });
 
-  const handleChange = (value: string) => {
-    const deleted = value === 'deleted';
-    setDeletedVendor(deleted);
-    setArgs((prev) => ({
-      ...prev,
-      deletedVendor: deleted,
-      offset: 0
-    }));
+  const onSubmit = (value: ICompanyReq) => {
+    setArgs((prev) => ({ ...prev, ...value, offset: 0 }));
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-    setArgs((prev) => ({ ...prev, offset: 0 }));
+  const resetFilter = (value: ICompanyReq) => {
+    setFilterVisible(false);
+    setArgs((prev) => ({ ...prev, ...value, offset: 0, limit: 10 }));
   };
 
   return (
@@ -57,25 +47,56 @@ const CompanyManagement = () => {
         <div className="pageHeader">
           <h2 className="pageTitle">Vendors</h2>
           <div className="pageHeaderButton">
-            <Form form={form}>
-              <RenderTextInput
-                size="middle"
-                placeholder="Search vendor"
-                allowClear
-                prefix={<SearchOutlined style={{ color: '#FFC7A0' }} />}
-                onChange={onChange}
-              />
-            </Form>
-            <Select defaultValue="all" style={{ width: 150 }} onChange={handleChange}>
-              <Select.Option value="all">All Vendors</Select.Option>
-              <Select.Option value="deleted">Deleted Vendors</Select.Option>
-            </Select>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={() => setFilterVisible((prev) => !prev)}
+            >
+              Add Filter
+            </Button>
             <Button type="primary" onClick={() => navigate(ROUTES.companyAdd)}>
               Add Vendor
             </Button>
           </div>
         </div>
-        <CompanyManagementTable searchDebounce={searchDebounce} args={args} setArgs={setArgs} />
+        {filterVisible && (
+          <Form onFinish={onSubmit} form={form} autoComplete="off" className="filterForm">
+            <Row gutter={[0, 30]}>
+              <RenderTextInput
+                col={{ xs: 8 }}
+                name="name"
+                placeholder="Enter Client name"
+                label="Name"
+                allowClear="allowClear"
+                size="middle"
+              />
+              <RenderTextInput
+                col={{ xs: 8 }}
+                name="email"
+                placeholder="Enter email"
+                label="Email"
+                allowClear="allowClear"
+                size="middle"
+              />
+            </Row>
+            <Row justify={'end'}>
+              <ButtonWrapper>
+                <Button className="submitButton" type="primary" size="middle" htmlType="submit">
+                  Apply Filter
+                </Button>
+                <Button
+                  onClick={() => {
+                    form.resetFields();
+                    resetFilter(form.getFieldsValue());
+                  }}
+                >
+                  Reset
+                </Button>
+              </ButtonWrapper>
+            </Row>
+          </Form>
+        )}
+        <CompanyManagementTable args={args} setArgs={setArgs} />
       </div>
     </Wrapper>
   );

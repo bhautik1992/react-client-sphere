@@ -72,13 +72,6 @@ const PaymentManagementTable: React.FC<IProps> = ({ args, setArgs }) => {
       render: (_, record: IPayment) => <>{record?.project?.name ?? '-'}</>
     },
     {
-      title: 'Account Manager',
-      dataIndex: 'accountManager',
-      key: 'accountManager',
-      sorter: false,
-      render: (_, record: IPayment) => <>{record?.client?.accountManager?.firstName ?? '-'}</>
-    },
-    {
       title: 'Payment Method',
       dataIndex: 'paymentMethod',
       key: 'paymentMethod',

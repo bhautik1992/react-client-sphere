@@ -28,6 +28,8 @@ export interface ICompanyReq {
   sortOrder?: string;
   sortBy?: Key;
   deletedVendor?: boolean;
+  name?: string;
+  email?: string;
 }
 
 export interface ICompanyRes {

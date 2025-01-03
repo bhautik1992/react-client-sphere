@@ -5,12 +5,7 @@ import { Button, Form, Row, message } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import {
-  RenderPhoneNumber,
-  RenderSelectInput,
-  RenderTextArea,
-  RenderTextInput
-} from 'components/common/FormField';
+import { RenderSelectInput, RenderTextArea, RenderTextInput } from 'components/common/FormField';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
 import { IAddClientReq, IClient, IClientReq } from 'services/api/client/types';
@@ -33,7 +28,6 @@ const AddEditClient = () => {
   const { mutate, isLoading } = useAddClient();
   const { mutate: editMutate, isLoading: isEditLoading } = useEditClient();
   const { data: clientData } = useClientDetail(Number(id));
-  const [value, setValue] = useState<string>('');
   const { employeeData } = authStore((state) => state);
 
   const { data: employeeList } = useDashboardEmployee();
@@ -232,7 +226,7 @@ const AddEditClient = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your first name'
+                  message: 'Please enter first name'
                 }
               ]}
             />
@@ -246,7 +240,7 @@ const AddEditClient = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your last name'
+                  message: 'Please enter last name'
                 }
               ]}
             />
@@ -269,7 +263,7 @@ const AddEditClient = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your email address'
+                  message: 'Please enter email address'
                 },
                 {
                   type: 'email',
@@ -277,13 +271,13 @@ const AddEditClient = () => {
                 }
               ]}
             />
-            <RenderPhoneNumber
+            <RenderTextInput
               col={{ xs: 12 }}
               name="phone"
-              placeholder="Enter phone number "
+              placeholder="Enter phone number"
               label="Phone Number"
-              onChange={(value: any) => setValue(value)}
-              value={value}
+              allowClear="allowClear"
+              size="middle"
               rules={[
                 {
                   required: true,
@@ -338,7 +332,7 @@ const AddEditClient = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="gender"
-              placeholder="Select your gender"
+              placeholder="select gender"
               label="Gender"
               allowClear={true}
               optionLabel={[
@@ -363,7 +357,7 @@ const AddEditClient = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="status"
-              placeholder="Select your status"
+              placeholder="select status"
               label="Status"
               allowClear={true}
               optionLabel={ClientStatus}

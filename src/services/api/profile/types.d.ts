@@ -2,6 +2,7 @@ export interface IProfileRes {
   id: number;
   firstName: string;
   lastName: string;
+  middleName: string;
   role: string;
   personalEmail: string;
   companyEmail: string;
@@ -20,5 +21,6 @@ export interface IProfileEditReq {
   id: number;
   firstName: string;
   lastName: string;
+  middleName: string;
   email: string;
 }

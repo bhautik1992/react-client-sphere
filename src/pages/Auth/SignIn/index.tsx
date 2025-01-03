@@ -63,7 +63,7 @@ const SignIn: React.FC = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please enter your email'
+                      message: 'Please enter email'
                     },
                     {
                       type: 'email',
@@ -83,7 +83,7 @@ const SignIn: React.FC = () => {
                     () => ({
                       validator: (_: any, value: string) => {
                         if (!value) {
-                          return Promise.reject(new Error('Please enter your password'));
+                          return Promise.reject(new Error('Please enter password'));
                         } else if (!validation.strong_password.test(value)) {
                           return Promise.reject(
                             new Error(

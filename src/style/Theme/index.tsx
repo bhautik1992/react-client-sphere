@@ -1,7 +1,7 @@
 export const theme = {
   color: {
-    primary: '#FFC7A0', // #696cff
-    primaryLight: '#FEECDF',
+    primary: '#00239C', // #2727e2
+    primaryLight: '#4e4ed8',
     secondary: '#33009D',
     secondaryLight: '#96c11e4c',
     transparent: 'transparent',

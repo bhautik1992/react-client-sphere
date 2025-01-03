@@ -16,7 +16,7 @@ describe('ForgotPassword', () => {
 
   test('ForgotPassword page should render input element', () => {
     waitFor(() => {
-      const emailInput = screen.getByPlaceholderText(/enter your email id here\.\.\./i);
+      const emailInput = screen.getByPlaceholderText(/enter email id here\.\.\./i);
       expect(emailInput).toBeInTheDocument();
     });
   });

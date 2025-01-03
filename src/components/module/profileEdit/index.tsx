@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { Button, Form, Row, message } from 'antd';
 import { useEffect, useState } from 'react';
-import { isValidPhoneNumber } from 'react-phone-number-input';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { RenderPhoneNumber, RenderTextInput } from 'components/common/FormField';
@@ -29,6 +28,7 @@ const EditProfile = () => {
     form.setFieldsValue({
       ['firstName']: data?.firstName ?? '',
       ['lastName']: data?.lastName ?? '',
+      ['middleName']: data?.middleName ?? '',
       ['personalEmail']: data?.personalEmail ?? '',
       ['companyEmail']: data?.companyEmail ?? '',
       ['phone']: data?.phone ?? ''
@@ -40,7 +40,8 @@ const EditProfile = () => {
       id: data?.id ?? 0,
       email: value?.email,
       firstName: value?.firstName,
-      lastName: value?.lastName
+      lastName: value?.lastName,
+      middleName: value?.middleName
     };
 
     mutate(editData, {
@@ -85,7 +86,21 @@ const EditProfile = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your first name'
+                  message: 'Please enter first name'
+                }
+              ]}
+            />
+            <RenderTextInput
+              col={{ xs: 12 }}
+              name="middleName"
+              placeholder="Enter middle name"
+              label="Middle Name"
+              allowClear="allowClear"
+              size="middle"
+              rules={[
+                {
+                  required: true,
+                  message: 'Please enter middle name'
                 }
               ]}
             />
@@ -99,7 +114,7 @@ const EditProfile = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your last name'
+                  message: 'Please enter last name'
                 }
               ]}
             />
@@ -114,7 +129,7 @@ const EditProfile = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your personal email address'
+                  message: 'Please enter personal email address'
                 }
               ]}
             />
@@ -129,7 +144,7 @@ const EditProfile = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your company email address'
+                  message: 'Please enter company email address'
                 }
               ]}
             />
@@ -141,15 +156,10 @@ const EditProfile = () => {
               onChange={(value: any) => setValue(value)}
               value={value}
               rules={[
-                () => ({
-                  validator: (_: any, value: string) => {
-                    if (!value || isValidPhoneNumber(value)) {
-                      return Promise.resolve();
-                    } else {
-                      return Promise.reject(new Error('Please enter valid phone number'));
-                    }
-                  }
-                })
+                {
+                  required: true,
+                  message: 'Please enter phone number'
+                }
               ]}
             />
           </Row>

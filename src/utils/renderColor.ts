@@ -2,7 +2,7 @@ export const renderTagColor = (status: string | boolean) => {
   if (status === 'active' || status === true || status === 'success' || status === 'completed') {
     return 'green';
   } else if (
-    status === 'Inactive' ||
+    status === 'inactive' ||
     status === false ||
     status === 'In Progress' ||
     status === 'error' ||
@@ -19,7 +19,8 @@ export const renderTagColor = (status: string | boolean) => {
     status === 'confirm' ||
     status === 'warning' ||
     status === 'pending' ||
-    status === 'on_hold'
+    status === 'on_hold' ||
+    status === 'hold'
   ) {
     return 'yellow';
   } else if (status === 'info' || status === 'start' || status === 'started') {

@@ -17,7 +17,7 @@ const changePasswordRoute = [
 
 const dashboardRoutes = [
   {
-    path: '/dashboard',
+    path: ROUTES.dashboard,
     component: () => import('../pages/Dashboard'),
     roles: [
       EmployeeRoleName.Admin,
@@ -34,7 +34,7 @@ const dashboardRoutes = [
 
 const myProfileRoute = [
   {
-    path: '/my-profile',
+    path: ROUTES.myProfile,
     component: () => import('../pages/MyProfile'),
     roles: [
       EmployeeRoleName.Admin,
@@ -51,8 +51,8 @@ const myProfileRoute = [
 
 const editMyProfile = [
   {
-    path: '/edit-my-profile',
-    component: () => import('../pages/MyProfile'),
+    path: ROUTES.editMyProfile,
+    component: () => import('../components/module/profileEdit'),
     roles: [
       EmployeeRoleName.Admin,
       EmployeeRoleName.Sales_Executive,

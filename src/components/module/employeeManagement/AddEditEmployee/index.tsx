@@ -195,7 +195,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your first name'
+                  message: 'Please enter first name'
                 }
               ]}
             />
@@ -209,7 +209,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your middle name'
+                  message: 'Please enter middle name'
                 }
               ]}
             />
@@ -223,7 +223,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your last name'
+                  message: 'Please enter last name'
                 }
               ]}
             />
@@ -238,7 +238,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your personal email'
+                  message: 'Please enter personal email'
                 },
                 {
                   type: 'email',
@@ -257,7 +257,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your company email'
+                  message: 'Please enter company email'
                 },
                 {
                   type: 'email',
@@ -282,7 +282,7 @@ const AddEditEmployee = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="role"
-              placeholder="Select your role"
+              placeholder="select role"
               label="Role"
               allowClear={true}
               optionLabel={EmployeeRole}
@@ -296,7 +296,7 @@ const AddEditEmployee = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="department"
-              placeholder="Select your department"
+              placeholder="select department"
               label="Department"
               allowClear={true}
               optionLabel={Department}
@@ -310,7 +310,7 @@ const AddEditEmployee = () => {
             <RenderDatePicker
               col={{ xs: 12 }}
               name="joiningDate"
-              placeholder="Select your joining date"
+              placeholder="select joining date"
               label="Joining Date"
               allowClear="allowClear"
               size="middle"
@@ -325,7 +325,7 @@ const AddEditEmployee = () => {
             <RenderDatePicker
               col={{ xs: 12 }}
               name="dateOfBirth"
-              placeholder="Select your date of birth"
+              placeholder="select date of birth"
               label="Date of Birth"
               allowClear={true}
               size="middle"
@@ -334,7 +334,7 @@ const AddEditEmployee = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="reportingPersonId"
-              placeholder="Select your reporting person"
+              placeholder="select reporting person"
               label="Reporting Person"
               allowClear={true}
               showSearch={true}
@@ -349,7 +349,7 @@ const AddEditEmployee = () => {
             <RenderSelectInput
               col={{ xs: 12 }}
               name="status"
-              placeholder="Select your status"
+              placeholder="select status"
               label="Status"
               allowClear={true}
               optionLabel={EmployeeStatus}
@@ -411,14 +411,14 @@ const AddEditEmployee = () => {
             <RenderTextArea
               col={{ xs: 12 }}
               name="address"
-              placeholder="Enter your address"
+              placeholder="enter address"
               label="Address"
               allowClear="allowClear"
               size="middle"
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your address'
+                  message: 'Please enter address'
                 }
               ]}
             />
@@ -448,6 +448,15 @@ const AddEditEmployee = () => {
                 {
                   required: true,
                   message: 'Please enter account number'
+                },
+                {
+                  validator: (_: any, value: string) => {
+                    const regex = pattern.accountNumber;
+                    if (value && !regex.test(value)) {
+                      return Promise.reject(new Error('Please enter a valid account number'));
+                    }
+                    return Promise.resolve();
+                  }
                 }
               ]}
             />

@@ -53,7 +53,7 @@ const ForgotPassword: React.FC = () => {
                   rules={[
                     {
                       required: true,
-                      message: 'Please enter your email'
+                      message: 'Please enter email'
                     },
                     {
                       type: 'email',

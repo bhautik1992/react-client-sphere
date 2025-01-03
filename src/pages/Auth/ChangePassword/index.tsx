@@ -94,7 +94,7 @@ const ChangePassword = () => {
                     () => ({
                       validator: (_: any, value: string) => {
                         if (!value) {
-                          return Promise.reject(new Error('Please enter your current password'));
+                          return Promise.reject(new Error('Please enter current password'));
                         } else if (!pattern.strong_password.test(value)) {
                           return Promise.reject(
                             new Error(
@@ -132,7 +132,7 @@ const ChangePassword = () => {
                             containsNumber: false,
                             containsSymbol: false
                           });
-                          return Promise.reject(new Error('Please enter your new password'));
+                          return Promise.reject(new Error('Please enter new password'));
                         }
                       }
                     })
@@ -153,7 +153,7 @@ const ChangePassword = () => {
                         if (value && getFieldValue('newPassword') === value) {
                           return Promise.resolve();
                         } else if (!value) {
-                          return Promise.reject(new Error('Please enter your confirm password'));
+                          return Promise.reject(new Error('Please enter confirm password'));
                         } else {
                           return Promise.reject(
                             new Error('New password and confirm password do not match')

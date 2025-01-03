@@ -1,9 +1,9 @@
 import { ButtonWrapper } from './style';
 
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Divider, Form, Row, message } from 'antd';
+import { Button, Col, Divider, Form, Row, message } from 'antd';
 import dayjs from 'dayjs';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import {
@@ -12,14 +12,21 @@ import {
   RenderTextArea,
   RenderTextInput
 } from 'components/common/FormField';
+import ImageUpload from 'components/common/ImageUpload';
 import StyledBreadcrumb from 'components/layout/breadcrumb';
 
 import { IAddEmployeeReq, IEmployee, IEmployeeReq } from 'services/api/employee/types';
 import { useDashboardEmployee } from 'services/hooks/dashboard';
-import { useAddEmployee, useEditEmployee, useEmployeeDetail } from 'services/hooks/employee';
+import {
+  useAddEmployee,
+  useEditEmployee,
+  useEmployeeDetail,
+  useUploadProfile
+} from 'services/hooks/employee';
 import { dashboardKey, employeeKeys } from 'services/hooks/queryKeys';
 
 import { IApiError } from 'utils/Types';
+import { API_BASE } from 'utils/constants';
 import { DATE_FORMAT } from 'utils/constants/dayjs';
 import { Department, EmployeeRole, EmployeeStatus } from 'utils/constants/enum';
 import pattern from 'utils/constants/pattern';
@@ -33,6 +40,10 @@ const AddEditEmployee = () => {
   const { mutate, isLoading } = useAddEmployee();
   const { mutate: editMutate, isLoading: isEditLoading } = useEditEmployee();
   const { data: employeeData } = useEmployeeDetail(Number(id));
+  const { mutate: mutateUploadImage, isLoading: isImageUploadLoading } = useUploadProfile();
+
+  const [imagePath, setImagePath] = useState<string | null>(null);
+  // const [showImageError, setShowImageError] = useState<boolean>(false);
 
   const { data: employeeList } = useDashboardEmployee();
   const employeeListOption = employeeList?.map((item) => {
@@ -53,7 +64,15 @@ const AddEditEmployee = () => {
   };
 
   const addEmployee = (value: IAddEmployeeReq) => {
-    mutate(value, {
+    // if (!imagePath || !employeeData?.imageUrl) {
+    //   setShowImageError(true);
+    //   return;
+    // }
+    const empData = {
+      ...value,
+      imageUrl: imagePath ?? employeeData?.imageUrl
+    };
+    mutate(empData, {
       onSuccess: () => {
         // invalidate employee list
         queryClient.invalidateQueries({
@@ -98,6 +117,7 @@ const AddEditEmployee = () => {
   const editEmployee = (value: IAddEmployeeReq) => {
     const data = {
       ...value,
+      imageUrl: imagePath ?? employeeData?.imageUrl,
       id: employeeData?.id ?? 0
     };
     editMutate(data, {
@@ -140,6 +160,11 @@ const AddEditEmployee = () => {
     });
   };
 
+  // useEffect(() => {
+  //   if (!imagePath) return;
+  //   setShowImageError(false);
+  // }, [imagePath]);
+
   useEffect(() => {
     if (!employeeData) return;
     form.setFieldsValue({
@@ -164,6 +189,7 @@ const AddEditEmployee = () => {
       emergencyContactName: employeeData?.emergencyContactName ?? null,
       emergencyContactNumber: employeeData?.emergencyContactNumber ?? null
     });
+    setImagePath(employeeData?.imageUrl ?? null);
   }, [employeeData, form]);
 
   const BreadcrumbsPath = [
@@ -195,7 +221,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your first name'
+                  message: 'Please enter first name'
                 }
               ]}
             />
@@ -209,7 +235,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your middle name'
+                  message: 'Please enter middle name'
                 }
               ]}
             />
@@ -223,7 +249,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your last name'
+                  message: 'Please enter last name'
                 }
               ]}
             />
@@ -238,7 +264,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your personal email'
+                  message: 'Please enter personal email'
                 },
                 {
                   type: 'email',
@@ -257,7 +283,7 @@ const AddEditEmployee = () => {
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your company email'
+                  message: 'Please enter company email'
                 },
                 {
                   type: 'email',
@@ -310,6 +336,7 @@ const AddEditEmployee = () => {
             <RenderDatePicker
               col={{ xs: 12 }}
               name="joiningDate"
+              disabledDate={(currentDate: dayjs.Dayjs) => currentDate.isAfter(new Date())}
               placeholder="Select your joining date"
               label="Joining Date"
               allowClear="allowClear"
@@ -399,7 +426,7 @@ const AddEditEmployee = () => {
                 },
                 {
                   validator: (_: any, value: string) => {
-                    const regex = pattern.aadhar; // assuming pattern.aadhar is your regex
+                    const regex = pattern.aadhar;
                     if (value && !regex.test(value)) {
                       return Promise.reject(new Error('Please enter a valid Aadhar number'));
                     }
@@ -411,17 +438,43 @@ const AddEditEmployee = () => {
             <RenderTextArea
               col={{ xs: 12 }}
               name="address"
-              placeholder="Enter your address"
+              placeholder="enter address"
               label="Address"
               allowClear="allowClear"
               size="middle"
               rules={[
                 {
                   required: true,
-                  message: 'Please enter your address'
+                  message: 'Please enter address'
                 }
               ]}
             />
+            <Col xs={12}>
+              <Row>
+                <Col xs={6} className="d-flex justify-content-end">
+                  <label style={{ marginRight: '10px' }}>Image : </label>
+                </Col>
+                <ImageUpload
+                  maxCount={1}
+                  profileUrl={
+                    employeeData?.imageUrl
+                      ? `${API_BASE}/${'upload'}/${employeeData?.imageUrl}`
+                      : ''
+                  }
+                  setImagePath={setImagePath}
+                  mutate={mutateUploadImage}
+                />
+              </Row>
+            </Col>
+            {/* {showImageError && (
+              <Col xs={18} className="mt-15p">
+                <Row className="d-flex justify-content-end">
+                  <Col xs={18}>
+                    <span className="w-100 text-danger ">Resource image is required</span>
+                  </Col>
+                </Row>
+              </Col>
+            )} */}
             <Divider orientation="left">Bank Details</Divider>
             <RenderTextInput
               col={{ xs: 12 }}
@@ -448,6 +501,15 @@ const AddEditEmployee = () => {
                 {
                   required: true,
                   message: 'Please enter account number'
+                },
+                {
+                  validator: (_: any, value: string) => {
+                    const regex = pattern.accountNumber;
+                    if (value && !regex.test(value)) {
+                      return Promise.reject(new Error('Please enter a valid account number'));
+                    }
+                    return Promise.resolve();
+                  }
                 }
               ]}
             />
@@ -513,7 +575,7 @@ const AddEditEmployee = () => {
                 type="primary"
                 size="middle"
                 htmlType="submit"
-                disabled={isLoading ?? isEditLoading}
+                disabled={isLoading ?? isEditLoading ?? isImageUploadLoading}
               >
                 {employeeData?.id ? 'Update' : 'Create'}
               </Button>

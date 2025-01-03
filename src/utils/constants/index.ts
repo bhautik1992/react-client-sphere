@@ -99,5 +99,8 @@ export const ApiEndPoints = {
   },
   milestone: {
     deleteMilestone: `milestone/delete`
+  },
+  uploadImage: {
+    uploadImage: `upload/image`
   }
 };

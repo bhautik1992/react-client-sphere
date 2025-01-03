@@ -24,6 +24,7 @@ export interface IEmployee {
   IFSC: string;
   emergencyContactName: string;
   emergencyContactNumber: string;
+  imageUrl: string;
   createdBy: number;
   createdAt: string;
   updatedAt: string;
@@ -80,4 +81,8 @@ export interface IAddEmployeeRes {}
 export interface IEmployeeStatusReq {
   id: number;
   status: string;
+}
+
+export interface IUploadImageRes {
+  filename: string;
 }

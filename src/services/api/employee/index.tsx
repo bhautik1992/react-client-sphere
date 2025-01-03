@@ -11,7 +11,8 @@ import {
   IEmployee,
   IEmployeeReq,
   IEmployeeRes,
-  IEmployeeStatusReq
+  IEmployeeStatusReq,
+  IUploadImageRes
 } from './types';
 
 export const employeeAPI = {
@@ -88,16 +89,16 @@ export const employeeAPI = {
       .catch((error) => {
         throw error?.response?.data;
       });
-  }
+  },
 
-  // async uploadImage(data: FormData): Promise<IUploadImageRes[]> {
-  //   return apiInstance
-  //     .post(`${ApiEndPoints.uploadImage.uploadImage}`, data)
-  //     .then((response) => {
-  //       return response?.data;
-  //     })
-  //     .catch((error) => {
-  //       throw error?.response?.data;
-  //     });
-  // }
+  async uploadImage(data: FormData): Promise<IUploadImageRes> {
+    return apiInstance
+      .post(`${ApiEndPoints.uploadImage.uploadImage}`, data)
+      .then((response) => {
+        return response?.data;
+      })
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
 };

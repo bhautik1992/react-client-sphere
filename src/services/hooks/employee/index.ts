@@ -74,3 +74,10 @@ export const useExportEmployees = () => {
     }
   });
 };
+
+export const useUploadProfile = () => {
+  return useRequest({
+    mutationFn: employeeAPI.uploadImage,
+    mutationKey: employeeKeys.employeeImage
+  });
+};

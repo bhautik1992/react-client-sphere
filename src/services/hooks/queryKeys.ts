@@ -137,7 +137,8 @@ export const employeeKeys = {
   employeeDelete: [`employee-delete`],
   employeeAdd: [`add-employee`],
   employeeEdit: [`edit-employee`],
-  employeeStatus: [`employee-status`]
+  employeeStatus: [`employee-status`],
+  employeeImage: [`employee-image`]
 };
 
 export const invoiceKeys = {
